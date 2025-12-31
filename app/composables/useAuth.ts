@@ -24,8 +24,8 @@ export const useAuth = () => {
 
     try {
       const res = await loginUser(credentials) as any;
-      const token = res?.data?.token;
-      const userInfo = res?.data?.userInfo || {};
+      const token = res?.data?.data?.token;
+      const userInfo = res?.data?.data?.userInfo || {};
 
       if (!token) {
         throw new Error("Missing token in login response");
