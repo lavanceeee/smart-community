@@ -2,13 +2,16 @@ const $api = $fetch.create({
     baseURL: 'http://localhost:8080',
     onRequest({ options }) {
         const userStore = useUserStore()
-
         if (userStore.isLoggedIn && userStore.token) {
-            const headers = new Headers(options.headers)
-            headers.set('Authorization', `Bearer ${userStore.token}`)
-            options.headers = headers
+            options.headers = options.headers || {};
+            options.headers = {
+                ...options.headers,
+                Authorization: `Bearer ${userStore.token}`
+            } as any
         } else {
-            ElMessage.error("token为空")
+            if (import.meta.client) {
+                ElMessage.error("token为空")
+            }
         }
     }
 })
@@ -20,7 +23,7 @@ export const registerUser = (data: any) => {
     })
 }
 
-export const loginUser = (body:any) => {
+export const loginUser = (body: any) => {
     return $api('api/user/login', {
         method: "POST",
         body
