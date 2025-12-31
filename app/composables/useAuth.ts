@@ -24,11 +24,23 @@ export const useAuth = () => {
 
     try {
       const res = await loginUser(credentials) as any;
-      const token = res?.data?.data?.token;
-      const userInfo = res?.data?.data?.userInfo || {};
 
-      if (!token) {
-        throw new Error("Missing token in login response");
+      if (res?.data.code != 200) {
+        throw new Error(res?.data.message);
+      }
+
+      const token = res?.data?.data?.token;
+
+      const userInfo = {
+        userId: res?.data?.data?.userId,
+        phone: res?.data?.data?.phone,
+        emial: res?.data?.data?.emial,
+        avatar: res?.data?.data?.avatar,
+        gender: res?.data?.data?.gender,
+        age: res?.data?.data?.age,
+        userType: res?.data?.data?.userType,
+        status: res?.data?.data?.status,
+        userName: res?.data?.data?.userName,
       }
 
       const userStore = useUserStore();

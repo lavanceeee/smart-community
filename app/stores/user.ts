@@ -1,11 +1,14 @@
 interface UserInfo {
-  id: string;
-  username: string;
+  userId: string;
+  phone: string;
+  emial: string;
   avatar: string;
-  nickname: string;
+  gender: string;
+  age: number;
+  userType: number;
+  status: number;
+  userName: string;
 }
-
-
 
 export const useUserStore = defineStore('user', ()=> {
   const token = ref<string | null>(null);
