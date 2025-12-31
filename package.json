@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.1.4",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.11.3",
     "@tresjs/cientos": "^5.2.1",
     "@tresjs/nuxt": "^5.1.3",

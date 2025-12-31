@@ -10,7 +10,7 @@ interface UserInfo {
   userName: string;
 }
 
-export const useUserStore = defineStore('user', ()=> {
+export const useUserStore = defineStore('user', () => {
   const token = ref<string | null>(null);
   const userInfo = ref<UserInfo | null>(null);
 
@@ -29,4 +29,8 @@ export const useUserStore = defineStore('user', ()=> {
     displayName,
     setLoginState,
   }
-})
+}, {
+  persist: true,
+
+}
+)
