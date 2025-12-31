@@ -3,13 +3,10 @@ const $api = $fetch.create({
     onRequest({ options }) {
         const userStore = useUserStore()
         if (userStore.isLoggedIn && userStore.token) {
-            options.headers = options.headers || {};
-            options.headers = {
-                ...options.headers,
-                Authorization: `Bearer ${userStore.token}`
-            } as any
+            options.headers = new Headers(options.headers);
+            options.headers.set('Authorization', `Bearer ${userStore.token}`)
 
-            console.log(options.headers);
+            console.log(options.headers.get('Authorization'));
         } else {
             if (import.meta.client) {
                 ElMessage.error("token为空")
