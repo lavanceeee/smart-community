@@ -25,22 +25,22 @@ export const useAuth = () => {
     try {
       const res = await loginUser(credentials) as any;
 
-      if (res?.data.code != 200) {
-        throw new Error(res?.data.message);
+      if (res?.code != 200) {
+        throw new Error(res?.message);
       }
 
-      const token = res?.data?.data?.token;
+      const token = res?.data?.token;
 
       const userInfo = {
-        userId: res?.data?.data?.userId,
-        phone: res?.data?.data?.phone,
-        emial: res?.data?.data?.emial,
-        avatar: res?.data?.data?.avatar,
-        gender: res?.data?.data?.gender,
-        age: res?.data?.data?.age,
-        userType: res?.data?.data?.userType,
-        status: res?.data?.data?.status,
-        userName: res?.data?.data?.userName,
+        userId: res?.data?.userId,
+        phone: res?.data?.phone,
+        emial: res?.data?.emial,
+        avatar: res?.data?.avatar,
+        gender: res?.data?.gender,
+        age: res?.data?.age,
+        userType: res?.data?.userType,
+        status: res?.data?.status,
+        userName: res?.data?.userName,
       }
 
       const userStore = useUserStore();
