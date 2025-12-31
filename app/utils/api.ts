@@ -8,6 +8,8 @@ const $api = $fetch.create({
                 ...options.headers,
                 Authorization: `Bearer ${userStore.token}`
             } as any
+
+            console.log(options.headers);
         } else {
             if (import.meta.client) {
                 ElMessage.error("token为空")
