@@ -3,7 +3,7 @@ const $api = $fetch.create({
 })
 
 export const registerUser = (data: any) => {
-    return $api('api/register', {
+    return $api('api/user/register', {
         method: 'POST',
         body: data
     })

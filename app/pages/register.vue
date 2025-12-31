@@ -71,6 +71,31 @@
 
           <div class="space-y-1">
             <label class="block text-sm font-bold text-slate-700"
+              >确认密码</label
+            >
+            <input
+              v-model="form.confirmPassword"
+              type="password"
+              placeholder="请再次输入登录密码"
+              class="w-full h-12 px-4 border border-slate-300 rounded-md focus:border-[#ff5000] focus:ring-1 focus:ring-[#ff5000] outline-none transition-all placeholder:text-slate-400"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-sm font-bold text-slate-700">
+              电子邮箱
+              <span class="text-slate-400 font-normal text-xs ml-1">(选填)</span>
+            </label>
+            <input
+              v-model="form.email"
+              type="email"
+              placeholder="例如: example@email.com"
+              class="w-full h-12 px-4 border border-slate-300 rounded-md focus:border-[#ff5000] focus:ring-1 focus:ring-[#ff5000] outline-none transition-all placeholder:text-slate-400"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-sm font-bold text-slate-700"
               >真实姓名</label
             >
             <input
@@ -166,6 +191,8 @@
 const form = reactive({
   phone: "",
   password: "",
+  confirmPassword: "", // 新增：确认密码
+  email: "", // 新增：邮箱
   realName: "",
   age: "",
   gender: "male",
@@ -174,25 +201,49 @@ const form = reactive({
 
 const { registerAction, loading } = useAuth();
 
-//提交登录
+// 提交注册
 const handleRegister = async () => {
+  // 1. 协议勾选检查
   if (!form.agreed) {
     ElMessage.error("请先同意服务条款");
     return;
   }
 
-  if (!form.phone || !form.password || !form.realName) {
-    ElMessage.error("请填写完整信息");
+  // 2. 必填项检查
+  if (!form.phone || !form.password || !form.realName || !form.age) {
+    ElMessage.error("请填写完整必填信息");
     return;
   }
 
+  // 3. 密码一致性检查
+  if (form.password !== form.confirmPassword) {
+    ElMessage.error("两次输入的密码不一致");
+    return;
+  }
+  
+  // 4. 构造提交给后端的数据格式
+  // 按照你的要求:
+  // userName -> 对应 realName
+  // gender -> 1 (男) / 0 (女)
+  // confirmPassword 也要提交
+  const payload = {
+    phone: form.phone,
+    password: form.password,
+    confirmPassword: form.confirmPassword,
+    userName: form.realName,
+    age: Number(form.age), // 确保是数字
+    gender: form.gender === 'male' ? 1 : 0,
+    email: form.email || undefined // 如果没填就不传或者传空字符串，看后端需求
+  };
+
   try {
-    await registerAction(form);
+    await registerAction(payload);
+    ElMessage.success("注册成功，请登录");
     await navigateTo("/login");
   } catch (err: any) {
     ElNotification({
-      title: "登录失败",
-      message: err,
+      title: "注册失败",
+      message: err.message || err,
       type: "error",
     });
   }
