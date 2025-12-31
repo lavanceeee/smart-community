@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', ()=> {
   const userInfo = ref<UserInfo | null>(null);
 
   const isLoggedIn = computed(() => !!token.value)
-  const displayName = computed(() => userInfo.value?.nickname || userInfo.value?.username || '未登录')
+  const displayName = computed(() => userInfo.value?.userName)
 
   function setLoginState(newToken: string, newUser: UserInfo) {
     token.value = newToken
