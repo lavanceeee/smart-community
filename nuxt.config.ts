@@ -4,8 +4,16 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss', 
     '@nuxtjs/color-mode',
-    '@element-plus/nuxt'
+    '@element-plus/nuxt',
+    '@tresjs/nuxt',
+    '@nuxt/icon',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
   ],
+
+  pinia: {
+    storesDirs: ['./stores/**'], // 自动导入 stores 文件夹下的 store
+  },
 
   elementPlus: {
     icon: 'el-icon', 

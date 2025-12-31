@@ -191,7 +191,7 @@ const handleRegister = async () => {
     await navigateTo("/login");
   } catch (err: any) {
     ElNotification({
-      title: "失败",
+      title: "登录失败",
       message: err,
       type: "error",
     });

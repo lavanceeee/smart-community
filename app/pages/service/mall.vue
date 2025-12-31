@@ -1,0 +1,5 @@
+<template>
+    <MallTopBar/>
+
+    <MallMainBanner/>
+</template>
