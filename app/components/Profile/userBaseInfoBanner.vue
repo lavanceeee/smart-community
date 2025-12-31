@@ -3,8 +3,10 @@
 
     <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="true" :http-request="uploadAvatar">
       <div class="relative group cursor-pointer">
-        <el-avatar :size="72" :src="userInfo?.avatar" :icon="UserFilled"
-          class="text-xl bg-white border-4 border-white dark:border-white/10 dark:bg-slate-700" />
+        <el-avatar :size="72" :src="userInfo?.avatar"
+          class="text-xl bg-white border-4 border-white dark:border-white/10 dark:bg-slate-700">
+          <Icon name="lucide:user" size="32" class="text-slate-400" />
+        </el-avatar>
 
         <div
           class="absolute inset-0 rounded-full bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs backdrop-blur-sm">
@@ -35,6 +37,8 @@
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 
+import { uploadAvatarApi } from '@/utils/api'
+
 
 
 const uploadAvatar = async (options: any) => {
@@ -48,11 +52,12 @@ const uploadAvatar = async (options: any) => {
     if (res.code == 200) {
       const newAvatarUrl = res.data.url;
 
-      if (userStore.userInfo?.avatar) {
+      if (userStore.userInfo) {
         userStore.userInfo.avatar = newAvatarUrl;
       }
 
-      ElMessage.success('头像上传成功')
+      ElMessage.success('头像上传成功');
+
     } else {
       ElMessage.error(res.message)
     }
