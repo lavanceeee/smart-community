@@ -10,7 +10,7 @@ export const registerUser = (data: any) => {
 }
 
 export const loginUser = (body:any) => {
-    return $api('api/login', {
+    return $api('api/user/login', {
         method: "POST",
         body
     })

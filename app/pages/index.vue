@@ -7,14 +7,20 @@ const colorMode = useColorMode()
     
     <MainPageNavigator class="sticky top-0 z-50 shadow-sm" />
 
-    <div class="max-w-[1500px] mx-auto px-4 py-6 flex items-start gap-4">
+    <div class="max-w-[1500px] mx-auto px-4 py-6 flex items-start gap-6">
       
-      <aside class="sticky top-0 shrink-0">
+      <aside class="sticky top-20 shrink-0 w-60">
         <MainPageLeftSiderBar />
       </aside>
 
-      <main class="flex-1 min-w-0">
+      <main class="flex-1 min-w-0 flex flex-col gap-6">
+        
+        <MainPageDataCharts />
+        
+        <MainPageCommunityNews />
+
         <NuxtPage /> 
+
       </main>
 
     </div>

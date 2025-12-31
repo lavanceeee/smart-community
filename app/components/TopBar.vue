@@ -1,7 +1,6 @@
 <template>
   <nav
-    class="h-10 px-4 flex items-center justify-between bg-white dark:bg-[oklch(13%_0.028_261.692)] border-b border-slate-100 dark:border-slate-800 transition-colors"
-  >
+    class="h-10 px-4 flex items-center justify-between bg-white dark:bg-[oklch(13%_0.028_261.692)] border-b border-slate-100 dark:border-slate-800 transition-colors">
     <nuxt-link to="/">
       <div class="text-sm font-bold text-[#ff5000]">
         {{ topBarTitle }}
@@ -9,19 +8,19 @@
     </nuxt-link>
 
     <div class="flex items-center gap-4 text-xs">
-      <button
-        @click="
-          colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-        "
-        class="text-slate-500 hover:text-[#ff5000] cursor-pointer"
-      >
+      <button @click="
+        colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+        " class="text-slate-500 hover:text-[#ff5000] cursor-pointer">
         {{ colorMode.value === "dark" ? "显示浅色" : "显示深色" }}
       </button>
 
-      <NuxtLink
-        to="/login"
-        class="h-6 px-4 flex items-center bg-[#ff5000] text-white rounded-full hover:opacity-90 transition-all tracking-widest"
-      >
+      <template v-if="userStore.isLoggedIn">
+        <NuxtLink to="/profile" class="text-slate-500 hover:text-[#ff5000] cursor-pointer">
+          您好，{{ userStore.displayName }}
+        </NuxtLink>
+      </template>
+
+      <NuxtLink v-else to="/login" class="text-slate-500 hover:text-[#ff5000] cursor-pointer">
         登录
       </NuxtLink>
     </div>
@@ -31,6 +30,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
 const route = useRoute();
+const userStore = useUserStore();
 
 const topBarTitle = computed(() => {
   const path = route.path || "";

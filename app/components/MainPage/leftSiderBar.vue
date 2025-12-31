@@ -1,25 +1,22 @@
 <template>
   <div class="w-60 flex flex-col gap-4 shrink-0">
-    
+
     <div class="bg-white dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2 text-[#ff5000]">
           <Icon name="lucide:megaphone" size="16" />
           <span class="font-bold text-sm">平台公告</span>
         </div>
-        <NuxtLink to="/news" class="text-xs text-slate-400 hover:text-[#ff5000]">更多</NuxtLink>
+        <NuxtLink to="service/community/news" class="text-xs text-slate-400 hover:text-[#ff5000]">更多</NuxtLink>
       </div>
 
       <div class="flex flex-col gap-3">
-        <NuxtLink 
-          v-for="item in announcements" 
-          :key="item.id"
-          :to="`/news/${item.id}`"
-          class="group block"
-        >
+        <NuxtLink v-for="item in announcements" :key="item.id" :to="`/news/${item.id}`" class="group block">
           <div class="flex items-start gap-2">
-            <span class="w-1 h-1 rounded-full bg-slate-300 group-hover:bg-[#ff5000] mt-2 shrink-0 transition-colors"></span>
-            <span class="text-xs text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000] leading-relaxed line-clamp-2 transition-colors">
+            <span
+              class="w-1 h-1 rounded-full bg-slate-300 group-hover:bg-[#ff5000] mt-2 shrink-0 transition-colors"></span>
+            <span
+              class="text-xs text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000] leading-relaxed line-clamp-2 transition-colors">
               <span v-if="item.isTop" class="text-[#ff5000] scale-90 inline-block mr-0.5">[置顶]</span>
               {{ item.title }}
             </span>
@@ -32,29 +29,34 @@
     <div class="bg-white dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/5 shadow-sm">
       <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3">快捷服务</h3>
       <div class="grid grid-cols-2 gap-2">
-        <div v-for="tool in quickTools" :key="tool.name" 
-             class="flex flex-col items-center justify-center gap-1 bg-slate-50 dark:bg-white/5 rounded-lg py-3 cursor-pointer hover:bg-orange-50 dark:hover:bg-[#ff5000]/10 hover:text-[#ff5000] transition-colors group">
+        <div v-for="tool in quickTools" :key="tool.name"
+          class="flex flex-col items-center justify-center gap-1 bg-slate-50 dark:bg-white/5 rounded-lg py-3 cursor-pointer hover:bg-orange-50 dark:hover:bg-[#ff5000]/10 hover:text-[#ff5000] transition-colors group">
           <Icon :name="tool.icon" size="18" class="text-slate-500 dark:text-slate-400 group-hover:text-[#ff5000]" />
-          <span class="text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000]">{{ tool.name }}</span>
+          <span class="text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000]">{{ tool.name
+          }}</span>
         </div>
       </div>
     </div>
 
-    <div class="bg-gradient-to-br from-[#FFF9F5] to-white dark:from-white/10 dark:to-white/5 rounded-xl p-4 border border-orange-100/50 dark:border-white/5 shadow-sm relative overflow-hidden group">
+    <div
+      class="bg-gradient-to-br from-[#FFF9F5] to-white dark:from-white/10 dark:to-white/5 rounded-xl p-4 border border-orange-100/50 dark:border-white/5 shadow-sm relative overflow-hidden group">
       <div class="relative z-10">
         <h3 class="font-bold text-sm text-slate-800 dark:text-white mb-1">每日签到</h3>
         <p class="text-[10px] text-slate-500 dark:text-slate-400 mb-3">连续签到领金币，抵扣现金</p>
-        <button class="bg-[#ff5000] text-white text-xs px-4 py-1.5 rounded-full font-bold shadow-md shadow-orange-500/20 hover:bg-[#ff6000] hover:scale-105 transition-all active:scale-95">
+        <button
+          class="bg-[#ff5000] text-white text-xs px-4 py-1.5 rounded-full font-bold shadow-md shadow-orange-500/20 hover:bg-[#ff6000] hover:scale-105 transition-all active:scale-95">
           立即签到
         </button>
       </div>
-      <Icon name="lucide:calendar-check" size="64" class="absolute -right-3 -bottom-3 text-orange-100 dark:text-white/5 -rotate-12 group-hover:rotate-0 transition-transform duration-500" />
+      <Icon name="lucide:calendar-check" size="64"
+        class="absolute -right-3 -bottom-3 text-orange-100 dark:text-white/5 -rotate-12 group-hover:rotate-0 transition-transform duration-500" />
     </div>
 
-    <div class="bg-white dark:bg-white/5 rounded-xl px-4 py-3 border border-slate-100 dark:border-white/5 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
+    <div
+      class="bg-white dark:bg-white/5 rounded-xl px-4 py-3 border border-slate-100 dark:border-white/5 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-           <Icon name="lucide:headphones" size="16" />
+          <Icon name="lucide:headphones" size="16" />
         </div>
         <div class="flex flex-col">
           <span class="text-xs font-bold text-slate-700 dark:text-slate-200">联系客服</span>

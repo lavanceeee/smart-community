@@ -4,6 +4,7 @@
 
     <TopBar/>
     <NuxtPage />
+    <MainPageFooter />
 
   </div>
 </template>

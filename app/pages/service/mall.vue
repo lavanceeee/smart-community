@@ -2,4 +2,8 @@
     <MallTopBar/>
 
     <MallMainBanner/>
+
+    <MallGoodsList />
+
+    <MallSiderAgentBar />
 </template>

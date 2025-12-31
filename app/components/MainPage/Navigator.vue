@@ -54,14 +54,13 @@ const communityServices = [
           </NuxtLink>
 
           <div class="relative group">
-            <NuxtLink
-              to="/service/community"
+            <div
               class="flex items-center gap-1 px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 font-medium hover:bg-orange-50 hover:text-[#ff5000] transition-all cursor-pointer"
               active-class="bg-orange-50 !text-[#ff5000]"
             >
               社区服务
               <Icon name="lucide:chevron-down" size="14" class="transition-transform group-hover:rotate-180" />
-            </NuxtLink>
+          </div>
 
             <div class="absolute top-full left-0 pt-2 w-[480px] invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 transform origin-top-left">
               
