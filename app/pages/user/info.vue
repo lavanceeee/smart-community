@@ -24,7 +24,7 @@
 
                             <div class="grid grid-cols-2 gap-4">
                                 <el-form-item label="手机号" prop="phone">
-                                    <el-input v-model="infoForm.phone" disabled placeholder="不可修改">
+                                    <el-input :value="userStore.userInfo?.phone" disabled placeholder="不可修改">
                                         <template #suffix>
                                             <Icon name="lucide:lock" size="14" class="text-slate-400" />
                                         </template>
@@ -107,7 +107,6 @@ const infoFormRef = ref<FormInstance>()
 
 const infoForm = reactive({
     userName: '',
-    phone: '',
     email: '',
     gender: '1',
     age: 18,
