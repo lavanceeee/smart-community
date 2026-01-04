@@ -1,55 +1,63 @@
 <template>
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-12">
         <!-- New Search Header -->
-        <TopSearchBar :total="total" @search="handleSearch" />
+        <div class="bg-white dark:bg-slate-800 shadow-sm mb-6">
+            <TopSearchBar :total="total" @search="handleSearch" />
+        </div>
 
-        <div class="max-w-[1000px] mx-auto px-4 pb-12">
-            <!-- Loading Skeleton -->
-            <div v-if="loading" class="max-w-[800px] mx-auto space-y-8 mt-6">
-                <div v-for="i in 4" :key="i" class="animate-pulse">
-                    <div class="h-6 bg-slate-100 rounded w-2/3 mb-3"></div>
-                    <div class="h-4 bg-slate-100 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-slate-100 rounded w-5/6 mb-2"></div>
-                    <div class="h-4 bg-slate-100 rounded w-1/4 mt-3"></div>
-                </div>
-            </div>
+        <div class="max-w-[1000px] mx-auto px-4">
 
-            <!-- News List (Search Result Style) -->
-            <div v-else class="max-w-[800px] mx-auto space-y-8 mt-6">
-                <div v-for="item in newsList" :key="item.announceId" class="group">
-                    <!-- Title -->
-                    <h3 class="text-xl mb-2 font-medium">
-                        <span @click="goToDetail(item.announceId)"
-                            class="text-[#1a0dab] hover:text-[#ff5000] hover:underline cursor-pointer transition-colors"
-                            v-html="highlightKeyword(item.title)"></span>
-                    </h3>
+            <!-- White Card Container for Content -->
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-6 min-h-[600px]">
 
-                    <!-- Content Summary -->
-                    <div class="text-sm text-slate-600 leading-relaxed mb-2 line-clamp-3"
-                        v-html="highlightKeyword(item.content)"></div>
-
-                    <!-- Footer Info -->
-                    <div class="text-xs text-slate-400 flex items-center gap-4">
-                        <span>发布时间：{{ item.publishTime ? item.publishTime.split(' ')[0] : '' }}</span>
-                        <!-- Optional: Add more meta info if needed, kept minimal as per image -->
+                <!-- Loading Skeleton -->
+                <div v-if="loading" class="max-w-[800px] mx-auto space-y-10 mt-2">
+                    <div v-for="i in 4" :key="i" class="animate-pulse">
+                        <div class="h-6 bg-slate-100 dark:bg-slate-700 rounded w-2/3 mb-4"></div>
+                        <div class="h-4 bg-slate-100 dark:bg-slate-700 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-slate-100 dark:bg-slate-700 rounded w-5/6 mb-3"></div>
+                        <div class="h-4 bg-slate-100 dark:bg-slate-700 rounded w-1/4 mt-2"></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Empty State -->
-            <div v-if="!loading && newsList.length === 0" class="py-20 text-center">
-                <div
-                    class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                    <Icon name="lucide:search-x" size="40" />
+                <!-- News List (Search Result Style) -->
+                <div v-else class="max-w-[800px] mx-auto space-y-8">
+                    <div v-for="item in newsList" :key="item.announceId"
+                        class="group border-b border-dashed border-slate-100 dark:border-slate-700 pb-8 last:border-0">
+                        <!-- Title -->
+                        <h3 class="text-xl mb-3 font-medium">
+                            <span @click="goToDetail(item.announceId)"
+                                class="text-[#1a0dab] dark:text-blue-400 hover:text-[#ff5000] dark:hover:text-[#ff5000] hover:underline cursor-pointer transition-colors"
+                                v-html="highlightKeyword(item.title)"></span>
+                        </h3>
+
+                        <!-- Content Summary -->
+                        <div class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3 line-clamp-3 text-justify"
+                            v-html="highlightKeyword(item.content)"></div>
+
+                        <!-- Footer Info -->
+                        <div class="text-xs text-slate-400 flex items-center gap-4">
+                            <span>发布时间：{{ item.publishTime ? item.publishTime.split(' ')[0] : '' }}</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-slate-400 text-sm">暂无相关结果，换个关键词试试？</p>
-            </div>
 
-            <!-- Pagination -->
-            <div class="mt-12 flex justify-center max-w-[800px] mx-auto">
-                <el-pagination v-if="total > 0" background layout="prev, pager, next" :total="total"
-                    :page-size="pagination.pageSize" :current-page="pagination.pageNum"
-                    @current-change="handlePageChange" class="custom-pagination" />
+                <!-- Empty State -->
+                <div v-if="!loading && newsList.length === 0" class="py-32 text-center">
+                    <div
+                        class="w-20 h-20 bg-slate-50 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300 dark:text-slate-500">
+                        <Icon name="lucide:search-x" size="40" />
+                    </div>
+                    <p class="text-slate-400 text-sm">暂无相关结果，换个关键词试试？</p>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-12 flex justify-center max-w-[800px] mx-auto">
+                    <el-pagination v-if="total > 0" background layout="prev, pager, next" :total="total"
+                        :page-size="pagination.pageSize" :current-page="pagination.pageNum"
+                        @current-change="handlePageChange" class="custom-pagination" />
+                </div>
+
             </div>
         </div>
     </div>
