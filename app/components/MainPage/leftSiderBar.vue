@@ -42,13 +42,26 @@
 </template>
 
 <script setup lang="ts">
-// 1. 模拟公告数据
-const announcements = [
-  { id: 1, title: '关于春节期间发货时效调整的通知', date: '2025-01-15', isTop: true },
-  { id: 2, title: '防诈骗提醒：请勿轻信刷单返利信息', date: '2025-01-12', isTop: false },
-  { id: 3, title: '新版本功能更新说明 v2.0', date: '2025-01-10', isTop: false },
-  { id: 4, title: '部分地区物流延迟配送致歉信', date: '2025-01-08', isTop: false },
-]
+import { getCommunityNewsApi } from '@/utils/api'
+
+const announcements = ref<any[]>([])
+
+onMounted(async () => {
+  try {
+    const res = await getCommunityNewsApi({ pageNum: 1, pageSize: 4 }) as any
+    if (res.code === 200 && res.data?.records) {
+      announcements.value = res.data.records.map((item: any) => ({
+        id: item.announceId,
+        title: item.title,
+        // Simplest date formatting without external libs
+        date: item.publishTime ? item.publishTime.split(' ')[0] : '',
+        isTop: false
+      }))
+    }
+  } catch (error) {
+    console.error('Fetch announcements error:', error)
+  }
+})
 
 // 2. 快捷工具数据
 const quickTools = [

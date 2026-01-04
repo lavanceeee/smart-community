@@ -100,3 +100,11 @@ export const logoutUser = () => {
         method: 'POST'
     })
 }
+
+// 获取社区公告列表
+export const getCommunityNewsApi = (params: any) => {
+    return $api('/api/announcement/list', {
+        method: 'GET',
+        params
+    })
+}

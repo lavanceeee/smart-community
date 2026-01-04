@@ -88,7 +88,10 @@ const handleLogout = () => {
 
     logoutUser().then(() => {
       userStore.logout();
-      // router.push('/login')
+      ElMessage.success('退出登陆成功，即将跳转到主界面')
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
     })
   }
 }
