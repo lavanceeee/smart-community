@@ -38,16 +38,26 @@
                         <div class="text-[10px] opacity-75 truncate w-full text-center">
                             {{ getSpotData(i).userName }}
                         </div>
+                        <div v-if="getSpotData(i).statusText"
+                            class="mt-1 text-[10px] scale-90 px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/20 font-medium whitespace-nowrap">
+                            {{ getSpotData(i).statusText }}
+                        </div>
                     </div>
 
                     <!-- Empty State -->
                     <div v-else
-                        class="flex items-center justify-center flex-1 opacity-20 group-hover:opacity-100 transition-opacity relative">
-                        <span class="text-xs group-hover:hidden">空闲</span>
-                        <button @click="$emit('apply', getSpotLabel(i))"
-                            class="hidden group-hover:flex bg-[#ff5000] text-white text-xs px-2 py-1 rounded shadow-sm hover:bg-[#ff3d00] transition-colors z-10 w-full h-full items-center justify-center absolute inset-0 opacity-0 group-hover:opacity-100 animate-in fade-in zoom-in duration-200">
-                            申请此车位
-                        </button>
+                        class="flex items-center justify-center flex-1 opacity-60 group-hover:opacity-100 transition-all relative">
+                        <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">空闲</span>
+
+                        <!-- Hover Action -->
+                        <div @click="$emit('apply', getSpotLabel(i))"
+                            class="hidden group-hover:flex absolute inset-0 bg-emerald-50/90 dark:bg-emerald-900/80 backdrop-blur-[1px] items-center justify-center z-10 rounded-lg animate-in fade-in duration-200 cursor-pointer">
+                            <div
+                                class="bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm border border-emerald-100 dark:border-emerald-800 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transform scale-90 group-hover:scale-100 transition-transform">
+                                <Icon name="lucide:plus-circle" size="14" />
+                                <span>申请</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,11 +103,11 @@ const getSpotLabel = (index: number) => {
 const getSpotStatusClass = (index: number) => {
     const data = getSpotData(index)
     if (data) {
-        // Occupied style
+        // Occupied style (Keep Red)
         return 'border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400'
     } else {
-        // Empty style
-        return 'border-dashed border-slate-200 bg-slate-50/50 text-slate-400 dark:border-slate-700 dark:bg-slate-800/50'
+        // Empty style (Light Green)
+        return 'border-emerald-100 bg-emerald-50/50 dark:border-emerald-900/30 dark:bg-emerald-900/10 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-sm'
     }
 }
 </script>
