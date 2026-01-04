@@ -18,6 +18,7 @@
         <!-- News List -->
         <div v-else class="space-y-6">
             <div v-for="item in newsList" :key="item.announceId"
+                @click="navigateTo('/service/community/news/' + item.announceId)"
                 class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-lg hover:border-[#ff5000]/20 hover:-translate-y-1 transition-all duration-300 group cursor-pointer relative overflow-hidden">
 
                 <!-- Decorative accent -->
