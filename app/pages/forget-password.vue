@@ -1,8 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#f0f2f5] flex flex-col font-sans">
         <header class="w-full max-w-[1200px] mx-auto py-6 px-4 flex justify-between items-center">
-            <div class="text-[#ff5000] text-3xl font-extrabold tracking-tighter cursor-pointer"
-                @click="navigateTo('/')">
+            <div class="text-[#ff5000] text-3xl font-extrabold tracking-tighter">
                 Neuedu<span class="text-2xl ml-2">智慧社区</span>
             </div>
             <div class="flex gap-4 text-xs text-slate-500 cursor-pointer">
@@ -11,7 +10,7 @@
             </div>
         </header>
 
-        <main class="flex-1 flex justify-center items-center pb-20">
+        <main class="flex-1 flex justify-center items-center">
             <div class="bg-white w-[500px] rounded-[20px] shadow-2xl shadow-slate-200/50 p-10 relative">
                 <h2 class="text-2xl font-bold text-slate-700 mb-2 text-center">重置密码</h2>
                 <p class="text-center text-slate-400 text-sm mb-8">我们将发送验证码到您的邮箱</p>
@@ -72,7 +71,11 @@
 </template>
 
 <script setup lang="ts">
-import { resetPasswordApi } from '@/utils/api'
+import { resetPasswordApi, sendResetPasswordEmailApi } from '@/utils/api'
+
+definePageMeta({
+    layout: 'auth'
+})
 
 // Auto-imports from Nuxt and Element Plus are available
 // We might need a sendCodeApi as well, mocking for now or adding to api.ts if needed.
@@ -93,7 +96,6 @@ const sendVerifyCode = async () => {
         ElMessage.warning('请先输入邮箱地址')
         return
     }
-    // Mock sending code
 
     try {
         const res = await sendResetPasswordEmailApi(form.email) as any;

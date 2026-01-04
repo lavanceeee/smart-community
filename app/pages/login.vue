@@ -4,13 +4,9 @@
       <div class="text-[#ff5000] text-3xl font-extrabold tracking-tighter">
         Neuedu<span class="text-2xl ml-2">智慧社区</span>
       </div>
-      <div class="flex gap-4 text-xs text-slate-500 cursor-pointer">
-        <span class="hover:text-[#ff5000]">网站无障碍</span>
-        <span class="hover:text-[#ff5000]">"登录页面"改进建议</span>
-      </div>
     </header>
 
-    <main class="flex-1 flex justify-center items-center pb-20">
+    <main class="flex-1 flex justify-center items-center">
       <div class="bg-white w-[950px] h-[500px] rounded-[20px] shadow-2xl shadow-slate-200/50 flex p-10 relative">
         <div class="flex-1 flex flex-col items-center justify-center border-r border-slate-100 pr-10">
           <h2 class="text-lg font-bold text-slate-700 mb-8">手机扫码登录</h2>
@@ -96,6 +92,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'auth'
+})
+
 const form = reactive({
   phone: "",
   password: "",

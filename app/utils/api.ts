@@ -45,10 +45,10 @@ export const updateUserInfoApi = (body: any) => {
 }
 
 //忘记密码重置邮箱Api
-export const sendResetPasswordEmailApi = (body: string) => {
+export const sendResetPasswordEmailApi = (email: string) => {
     return $api('/api/user/send-verify-code', {
         method: "POST",
-        body
+        body: { email }
     })
 }
 
