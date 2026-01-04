@@ -32,6 +32,7 @@ export const useCommunityNews = () => {
     const newsList = ref<any[]>([])
     const total = ref(0)
     const loading = ref(false)
+    const searchKeyword = ref('')
 
     // Pagination state
     const pagination = reactive({
@@ -43,10 +44,15 @@ export const useCommunityNews = () => {
     const fetchNews = async () => {
         loading.value = true
         try {
-            const res = await getCommunityNewsApi({
+            const params: any = {
                 pageNum: pagination.pageNum,
                 pageSize: pagination.pageSize
-            }) as any
+            }
+            if (searchKeyword.value) {
+                params.keyword = searchKeyword.value
+            }
+
+            const res = await getCommunityNewsApi(params) as any
 
             if (res.code === 200) {
                 newsList.value = res.data.records
@@ -73,6 +79,7 @@ export const useCommunityNews = () => {
         total,
         loading,
         pagination,
+        searchKeyword,
         fetchNews,
         handlePageChange
     }
