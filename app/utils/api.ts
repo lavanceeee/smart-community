@@ -108,3 +108,10 @@ export const getCommunityNewsApi = (params: any) => {
         params
     })
 }
+
+// 获取公告详情
+export const getAnnouncementDetailApi = (announceId: string | number) => {
+    return $api(`/api/announcement/${announceId}`, {
+        method: 'GET'
+    })
+}

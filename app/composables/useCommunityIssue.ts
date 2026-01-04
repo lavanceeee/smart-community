@@ -1,4 +1,32 @@
-import { getCommunityNewsApi } from '@/utils/api'
+import { getCommunityNewsApi, getAnnouncementDetailApi } from '@/utils/api'
+
+export const useAnnouncementDetail = () => {
+    const detail = ref<any>(null)
+    const loading = ref(false)
+
+    const fetchDetail = async (id: string | number) => {
+        loading.value = true
+        try {
+            const res = await getAnnouncementDetailApi(id) as any
+            if (res.code === 200) {
+                detail.value = res.data
+            } else {
+                ElMessage.error(res.message || '获取公告详情失败')
+            }
+        } catch (error) {
+            console.error('Fetch detail error:', error)
+            ElMessage.error('网络请求失败')
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return {
+        detail,
+        loading,
+        fetchDetail
+    }
+}
 
 export const useCommunityNews = () => {
     const newsList = ref<any[]>([])

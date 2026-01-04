@@ -59,6 +59,7 @@ onMounted(async () => {
       }))
     }
   } catch (error) {
+    ElMessage.error('获取公告列表失败');
     console.error('Fetch announcements error:', error)
   }
 })
