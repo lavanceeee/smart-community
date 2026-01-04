@@ -52,7 +52,7 @@
             </div>
 
             <footer class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
-                <button @click="navigateTo('/service/community/news')"
+                <button @click="goBack"
                     class="flex items-center gap-2 text-slate-500 hover:text-[#ff5000] transition-colors">
                     <Icon name="lucide:arrow-left" size="16" />
                     返回列表
@@ -63,8 +63,7 @@
         <!-- Error/Empty State -->
         <div v-else class="text-center py-20">
             <p class="text-slate-400">未找到该公告信息</p>
-            <button @click="navigateTo('/service/community/news')"
-                class="mt-4 text-[#ff5000] hover:underline">返回列表</button>
+            <button @click="goBack" class="mt-4 text-[#ff5000] hover:underline">返回列表</button>
         </div>
     </div>
 </template>
@@ -88,4 +87,7 @@ onMounted(() => {
 useHead({
     title: computed(() => detail.value ? `${detail.value.title} - 社区公告` : '加载中...')
 })
+const goBack = () => {
+    navigateTo('/service/community/news')
+}
 </script>
