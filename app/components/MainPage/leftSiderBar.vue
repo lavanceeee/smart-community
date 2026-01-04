@@ -38,34 +38,6 @@
       </div>
     </div>
 
-    <div
-      class="bg-gradient-to-br from-[#FFF9F5] to-white dark:from-white/10 dark:to-white/5 rounded-xl p-4 border border-orange-100/50 dark:border-white/5 shadow-sm relative overflow-hidden group">
-      <div class="relative z-10">
-        <h3 class="font-bold text-sm text-slate-800 dark:text-white mb-1">每日签到</h3>
-        <p class="text-[10px] text-slate-500 dark:text-slate-400 mb-3">连续签到领金币，抵扣现金</p>
-        <button
-          class="bg-[#ff5000] text-white text-xs px-4 py-1.5 rounded-full font-bold shadow-md shadow-orange-500/20 hover:bg-[#ff6000] hover:scale-105 transition-all active:scale-95">
-          立即签到
-        </button>
-      </div>
-      <Icon name="lucide:calendar-check" size="64"
-        class="absolute -right-3 -bottom-3 text-orange-100 dark:text-white/5 -rotate-12 group-hover:rotate-0 transition-transform duration-500" />
-    </div>
-
-    <div
-      class="bg-white dark:bg-white/5 rounded-xl px-4 py-3 border border-slate-100 dark:border-white/5 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-          <Icon name="lucide:headphones" size="16" />
-        </div>
-        <div class="flex flex-col">
-          <span class="text-xs font-bold text-slate-700 dark:text-slate-200">联系客服</span>
-          <span class="text-[10px] text-slate-400">9:00 - 22:00</span>
-        </div>
-      </div>
-      <Icon name="lucide:chevron-right" size="14" class="text-slate-300" />
-    </div>
-
   </div>
 </template>
 

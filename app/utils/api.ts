@@ -93,3 +93,10 @@ export const changePasswordApi = (body: any) => {
         body
     })
 }
+
+//退出登录 /api/user/logout
+export const logoutUser = () => {
+    return $api('api/user/logout', {
+        method: 'POST'
+    })
+}

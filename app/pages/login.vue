@@ -30,8 +30,8 @@
               class="pb-1">
               邮箱登录
             </button>
-            <button @click="loginMethod = 'password'"
-              :class="loginMethod === 'password' ? 'font-bold text-slate-800 border-b-2 border-[#ff5000] text-[#ff5000]' : 'text-slate-500 hover:text-[#ff5000] cursor-pointer transition-colors'"
+            <button @click="loginMethod = 'phone'"
+              :class="loginMethod === 'phone' ? 'font-bold text-slate-800 border-b-2 border-[#ff5000] text-[#ff5000]' : 'text-slate-500 hover:text-[#ff5000] cursor-pointer transition-colors'"
               class="pb-1">
               密码登录
             </button>
@@ -65,7 +65,7 @@
             </div>
 
             <!-- 密码登录表单 -->
-            <div v-show="loginMethod === 'password'" class="space-y-5">
+            <div v-show="loginMethod === 'phone'" class="space-y-5">
               <div class="relative group">
                 <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -131,7 +131,7 @@ definePageMeta({
   layout: 'auth'
 })
 
-const loginMethod = ref<'email' | 'password'>('email')
+const loginMethod = ref<'email' | 'phone'>('email')
 const countdown = ref(0)
 let timer: any = null
 
@@ -179,7 +179,7 @@ const handleLogin = async () => {
 
   let payload = {}
 
-  if (loginMethod.value === 'password') {
+  if (loginMethod.value === 'phone') {
     if (!form.phone || !form.password) {
       ElMessage.error("请填写手机号和密码");
       return;

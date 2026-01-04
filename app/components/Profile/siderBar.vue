@@ -85,8 +85,11 @@ const router = useRouter()
 
 const handleLogout = () => {
   if (confirm('确定要退出登录吗？')) {
-    userStore.logout();
-    // router.push('/login')
+
+    logoutUser().then(() => {
+      userStore.logout();
+      // router.push('/login')
+    })
   }
 }
 </script>
