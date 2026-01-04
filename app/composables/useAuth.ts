@@ -34,7 +34,7 @@ export const useAuth = () => {
       const userInfo = {
         userId: res?.data?.userId,
         phone: res?.data?.phone,
-        emial: res?.data?.emial,
+        email: res?.data?.email,
         avatar: res?.data?.avatar,
         gender: res?.data?.gender,
         age: res?.data?.age,
