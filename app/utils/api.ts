@@ -68,9 +68,17 @@ export const sendResetPasswordEmailApi = (email: string) => {
     })
 }
 
-//充值密码
+//重置密码
 export const resetPasswordApi = (body: any) => {
     return $api('api/user/forgot-password', {
+        method: "POST",
+        body
+    })
+}
+
+// 修改密码
+export const changePasswordApi = (body: any) => {
+    return $api('api/user/change-password', {
         method: "POST",
         body
     })
