@@ -131,3 +131,20 @@ export const createVisitorApi = (data: any) => {
         body: data
     })
 }
+
+// 取消访客登记
+export const cancelVisitorApi = (registerId: number | string) => {
+    return $api(`/api/visitor/${registerId}`, {
+        method: 'DELETE' // Spec usually implies DELETE for cancellation/deletion, checking spec logic.
+        // Spec says "请求数据类型application/x-www-form-urlencoded" but path param is used.
+        // Typically REST cancellation is DELETE.
+        // Wait, "取消待审核的访客登记". If I look at the request types, it doesn't specify method but RESTful usually uses DELETE for resource removal/invalidation. 
+        // User said "请求方式" not explicitly but path is `/api/visitor/{registerId}`. 
+        // Let's assume DELETE or PUT/POST?  Usually DELETE for "cancel/delete".
+        // Let me check if I can infer from context. Assuming DELETE based on standard REST for "cancel/remove".
+        // Wait, actually, let me double check the user request provided text again.
+        // It says "/api/visitor/{registerId}".
+        // It does not explicitly state METHOD in the text provided.
+        // However, standard is DELETE. I'll use DELETE.
+    })
+}

@@ -62,6 +62,25 @@ export const useVisitorList = () => {
         }
     }
 
+    // Cancel visitor registration
+    const cancelVisitor = async (registerId: number | string) => {
+        try {
+            const res = await cancelVisitorApi(registerId) as any
+            if (res.code === 200) {
+                ElMessage.success('撤销申请成功')
+                fetchVisitorList() // Refresh list
+                return true
+            } else {
+                ElMessage.error(res.message || '撤销失败')
+                return false
+            }
+        } catch (error) {
+            console.error('Cancel visitor error:', error)
+            ElMessage.error('网络请求失败')
+            return false
+        }
+    }
+
     return {
         visitorList,
         total,
@@ -69,6 +88,7 @@ export const useVisitorList = () => {
         pagination,
         fetchVisitorList,
         handlePageChange,
-        createVisitor
+        createVisitor,
+        cancelVisitor
     }
 }
