@@ -67,10 +67,34 @@ export const useParking = () => {
         return groups
     })
 
+    // Create parking application
+    const createParkingApplication = async (data: any) => {
+        isFetching.value = true
+        try {
+            const res = await registerParkingApi(data) as any
+            if (res.code === 200) {
+                ElMessage.success(res.message || '提交车位登记申请成功，请等待审核')
+                // Optionally refresh list if needed
+                await fetchAllParking()
+                return true
+            } else {
+                ElMessage.error(res.message || '提交申请失败')
+                return false
+            }
+        } catch (error) {
+            console.error('Create parking application error:', error)
+            ElMessage.error('网络请求失败')
+            return false
+        } finally {
+            isFetching.value = false
+        }
+    }
+
     return {
         parkingList,
         isFetching,
         fetchAllParking,
-        groupedZones
+        groupedZones,
+        createParkingApplication
     }
 }

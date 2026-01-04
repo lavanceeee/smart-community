@@ -22,7 +22,7 @@
             <!-- Grid Display -->
             <div v-if="currentZone" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
                 <div v-for="i in 20" :key="i"
-                    class="aspect-square relative rounded-lg border-2 transition-all p-3 flex flex-col justify-between"
+                    class="aspect-square relative rounded-lg border-2 transition-all p-3 flex flex-col justify-between group cursor-pointer"
                     :class="getSpotStatusClass(i)">
                     <!-- Spot Number -->
                     <div class="text-xs font-bold opacity-50">
@@ -41,8 +41,13 @@
                     </div>
 
                     <!-- Empty State -->
-                    <div v-else class="flex items-center justify-center flex-1 opacity-20">
-                        <span class="text-xs">空闲</span>
+                    <div v-else
+                        class="flex items-center justify-center flex-1 opacity-20 group-hover:opacity-100 transition-opacity relative">
+                        <span class="text-xs group-hover:hidden">空闲</span>
+                        <button @click="$emit('apply', getSpotLabel(i))"
+                            class="hidden group-hover:flex bg-[#ff5000] text-white text-xs px-2 py-1 rounded shadow-sm hover:bg-[#ff3d00] transition-colors z-10 w-full h-full items-center justify-center absolute inset-0 opacity-0 group-hover:opacity-100 animate-in fade-in zoom-in duration-200">
+                            申请此车位
+                        </button>
                     </div>
                 </div>
             </div>
@@ -58,6 +63,7 @@
 const { fetchAllParking, isFetching: loading, groupedZones } = useParking()
 
 const currentZone = ref('')
+const emit = defineEmits(['apply'])
 
 // Initialize
 onMounted(async () => {

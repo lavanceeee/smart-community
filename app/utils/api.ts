@@ -146,3 +146,11 @@ export const getAllParkingApi = (params: any) => {
         params
     })
 }
+
+// 提交车位登记申请
+export const registerParkingApi = (data: any) => {
+    return $api('/api/parking/register', {
+        method: 'POST',
+        body: data
+    })
+}
