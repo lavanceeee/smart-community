@@ -70,7 +70,7 @@ export const sendResetPasswordEmailApi = (email: string) => {
 
 //充值密码
 export const resetPasswordApi = (body: any) => {
-    return $api('api/user/password/reset', {
+    return $api('api/user/forgot-password', {
         method: "POST",
         body
     })
