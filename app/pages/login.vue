@@ -25,36 +25,69 @@
 
         <div class="flex-1 pl-10 flex flex-col justify-center">
           <div class="flex items-center gap-6 mb-8 text-lg">
-            <button class="font-bold text-slate-800 border-b-2 border-transparent hover:text-[#ff5000]">
-              密码登录
+            <button @click="loginMethod = 'email'"
+              :class="loginMethod === 'email' ? 'font-bold text-slate-800 border-b-2 border-[#ff5000] text-[#ff5000]' : 'text-slate-500 hover:text-[#ff5000] cursor-pointer transition-colors'"
+              class="pb-1">
+              邮箱登录
             </button>
-            <button class="text-slate-500 hover:text-[#ff5000]">
-              短信登录
+            <button @click="loginMethod = 'password'"
+              :class="loginMethod === 'password' ? 'font-bold text-slate-800 border-b-2 border-[#ff5000] text-[#ff5000]' : 'text-slate-500 hover:text-[#ff5000] cursor-pointer transition-colors'"
+              class="pb-1">
+              密码登录
             </button>
           </div>
 
           <form class="space-y-5" @submit.prevent="handleLogin">
-            <div class="relative group">
-              <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clip-rule="evenodd" />
-                </svg>
+
+            <!-- 邮箱登录表单 -->
+            <div v-show="loginMethod === 'email'" class="space-y-5">
+              <div class="relative group">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <Icon name="lucide:mail" size="20" />
+                </div>
+                <input type="email" placeholder="请输入邮箱地址" v-model="form.email"
+                  class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
               </div>
-              <input type="text" placeholder="用户手机号" v-model="form.phone"
-                class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
+
+              <div class="flex gap-3">
+                <div class="relative group flex-1">
+                  <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                    <Icon name="lucide:shield-check" size="20" />
+                  </div>
+                  <input type="text" placeholder="验证码" v-model="form.verifyCode"
+                    class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
+                </div>
+                <button type="button" :disabled="countdown > 0" @click="handleSendCode"
+                  class="h-12 px-4 rounded-md bg-[#ff5000]/10 text-[#ff5000] text-sm font-medium hover:bg-[#ff5000]/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap">
+                  {{ countdown > 0 ? `${countdown}s 后重发` : '获取验证码' }}
+                </button>
+              </div>
             </div>
 
-            <div class="relative">
-              <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clip-rule="evenodd" />
-                </svg>
+            <!-- 密码登录表单 -->
+            <div v-show="loginMethod === 'password'" class="space-y-5">
+              <div class="relative group">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <input type="text" placeholder="用户手机号" v-model="form.phone"
+                  class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
               </div>
-              <input type="password" v-model="form.password" placeholder="登录密码"
-                class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
+
+              <div class="relative">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <input type="password" v-model="form.password" placeholder="登录密码"
+                  class="w-full bg-[#e8f0fe] text-slate-700 h-12 pl-10 pr-4 rounded-md outline-none focus:ring-1 focus:ring-[#ff5000] placeholder:text-slate-400 text-sm transition-all" />
+              </div>
             </div>
 
             <el-button native-type="submit" type="primary" :loading="loading"
@@ -92,17 +125,51 @@
 </template>
 
 <script setup lang="ts">
+import { sendResetPasswordEmailApi } from '@/utils/api'
+
 definePageMeta({
   layout: 'auth'
 })
 
+const loginMethod = ref<'email' | 'password'>('email')
+const countdown = ref(0)
+let timer: any = null
+
 const form = reactive({
   phone: "",
   password: "",
+  email: "",
+  verifyCode: "",
   agreed: false,
 });
 
 const { loginAction, loading } = useAuth();
+
+const handleSendCode = async () => {
+  if (!form.email) {
+    ElMessage.warning('请先输入邮箱地址');
+    return
+  }
+
+  // Reuse the send verify code API (assuming it's generic)
+  try {
+    const res = await sendResetPasswordEmailApi(form.email) as any
+    if (res.code === 200) {
+      ElMessage.success('验证码发送成功')
+      countdown.value = 60
+      timer = setInterval(() => {
+        countdown.value--
+        if (countdown.value <= 0) {
+          clearInterval(timer)
+        }
+      }, 1000)
+    } else {
+      ElMessage.error(res.message || '发送失败')
+    }
+  } catch (error) {
+    ElMessage.error('发送验证码失败')
+  }
+}
 
 const handleLogin = async () => {
   if (!form.agreed) {
@@ -110,19 +177,32 @@ const handleLogin = async () => {
     return;
   }
 
-  if (!form.phone || !form.password) {
-    ElMessage.error("填写字段不完整");
-    return;
+  let payload = {}
+
+  if (loginMethod.value === 'password') {
+    if (!form.phone || !form.password) {
+      ElMessage.error("请填写手机号和密码");
+      return;
+    }
+    payload = { phone: form.phone, password: form.password }
+  } else {
+    if (!form.email || !form.verifyCode) {
+      ElMessage.error("请填写邮箱和验证码");
+      return;
+    }
+    // Assuming backend supports { email, verifyCode } or similar
+    // If backend only has one login endpoint, we send what it expects.
+    // Usually smart backends detect fields.
+    payload = { email: form.email, verifyCode: form.verifyCode }
   }
 
   try {
-    await loginAction(form);
-
+    await loginAction(payload, loginMethod.value);
     await navigateTo("/");
   } catch (err: any) {
     ElNotification({
       title: "登录失败",
-      message: err,
+      message: err.message || err,
       type: "error",
     });
   }

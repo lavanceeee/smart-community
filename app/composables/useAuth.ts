@@ -18,12 +18,12 @@ export const useAuth = () => {
   };
 
   //登录逻辑
-  const loginAction = async (credentials: any) => {
+  const loginAction = async (credentials: any, loginMethod: string) => {
     loading.value = true;
     error.value = null;
 
     try {
-      const res = await loginUser(credentials) as any;
+      const res = await loginUser(credentials, loginMethod) as any;
 
       if (res?.code != 200) {
         throw new Error(res?.message);

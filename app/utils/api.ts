@@ -38,11 +38,21 @@ export const registerUser = (data: any) => {
     })
 }
 
-export const loginUser = (body: any) => {
-    return $api('api/user/login', {
-        method: "POST",
-        body
-    })
+export const loginUser = (body: any, loginMethod: string) => {
+
+    if (loginMethod === 'phone') {
+        return $api('api/user/login', {
+            method: "POST",
+            body
+        })
+    }
+    else {
+        return $api('api/user/login-by-email', {
+            method: "POST",
+            body
+        })
+    }
+
 }
 
 //api/user/avatar/upload
