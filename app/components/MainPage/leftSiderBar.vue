@@ -7,11 +7,12 @@
           <Icon name="lucide:megaphone" size="16" />
           <span class="font-bold text-sm">平台公告</span>
         </div>
-        <NuxtLink to="service/community/news" class="text-xs text-slate-400 hover:text-[#ff5000]">更多</NuxtLink>
+        <NuxtLink to="/service/community/news" class="text-xs text-slate-400 hover:text-[#ff5000]">更多</NuxtLink>
       </div>
 
       <div class="flex flex-col gap-3">
-        <NuxtLink v-for="item in announcements" :key="item.id" :to="`/news/${item.id}`" class="group block">
+        <NuxtLink v-for="item in announcements" :key="item.id" :to="`/service/community/news/${item.id}`"
+          class="group block">
           <div class="flex items-start gap-2">
             <span
               class="w-1 h-1 rounded-full bg-slate-300 group-hover:bg-[#ff5000] mt-2 shrink-0 transition-colors"></span>
