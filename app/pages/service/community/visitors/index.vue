@@ -39,7 +39,7 @@
                                     </span>
                                 </h3>
                                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">来访目的：{{ item.visitPurpose
-                                }}</p>
+                                    }}</p>
                             </div>
                         </div>
 
@@ -130,7 +130,6 @@ const openCreateModal = () => {
 }
 
 onMounted(() => {
-    console.log('Visitor page mounted')
     fetchVisitorList()
 })
 
