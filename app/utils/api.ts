@@ -115,3 +115,11 @@ export const getAnnouncementDetailApi = (announceId: string | number) => {
         method: 'GET'
     })
 }
+
+// 获取访客登记列表
+export const getVisitorListApi = (params: any) => {
+    return $api('/api/visitor/list', {
+        method: 'GET',
+        params
+    })
+}
