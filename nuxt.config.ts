@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   // 必须把模块都写进去
   modules: [
-    '@nuxtjs/tailwindcss', 
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
     '@tresjs/nuxt',
@@ -16,13 +16,13 @@ export default defineNuxtConfig({
   },
 
   elementPlus: {
-    icon: 'el-icon', 
+    icon: 'el-icon',
   },
 
   colorMode: {
-    preference: 'system', 
-    fallback: 'light',    
-    classSuffix: '',      
+    preference: 'system',
+    fallback: 'light',
+    classSuffix: '',
     storageKey: 'nuxt-color-mode'
   },
 

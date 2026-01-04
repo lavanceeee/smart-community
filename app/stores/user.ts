@@ -22,12 +22,19 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = newUser
   }
 
+  function logout() {
+    token.value = null
+    userInfo.value = null
+    // Clean up local storage persistence if needed, though setting to null usually suffices with persist plugin
+  }
+
   return {
     token,
     userInfo,
     isLoggedIn,
     displayName,
     setLoginState,
+    logout,
   }
 }, {
   persist: true,

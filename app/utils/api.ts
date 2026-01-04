@@ -36,3 +36,26 @@ export const uploadAvatarApi = (body: any) => {
         body
     })
 }
+
+export const updateUserInfoApi = (body: any) => {
+    return $api('api/user/update', {
+        method: "POST",
+        body
+    })
+}
+
+//忘记密码重置邮箱Api
+export const sendResetPasswordEmailApi = (body: string) => {
+    return $api('/api/user/send-verify-code', {
+        method: "POST",
+        body
+    })
+}
+
+//充值密码
+export const resetPasswordApi = (body: any) => {
+    return $api('api/user/password/reset', {
+        method: "POST",
+        body
+    })
+}

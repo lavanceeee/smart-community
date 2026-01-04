@@ -1,49 +1,42 @@
 <template>
   <div class="w-48 shrink-0 bg-white dark:bg-white/5 rounded-xl py-4 select-none">
-    
+
     <div v-for="(item, index) in menuItems" :key="index" class="mb-1">
-      
-      <NuxtLink 
-        v-if="!item.children" 
-        :to="item.path"
+
+      <NuxtLink v-if="!item.children" :to="item.path"
         class="flex items-center justify-between px-6 py-2.5 text-sm cursor-pointer transition-colors border-l-[3px] border-transparent hover:text-[#ff5000]"
-        :class="isActive(item.path) ? 'text-[#ff5000] font-bold border-[#ff5000] bg-orange-50 dark:bg-[#ff5000]/10' : 'text-slate-700 dark:text-slate-300'"
-      >
+        :class="isActive(item.path) ? 'text-[#ff5000] font-bold border-[#ff5000] bg-orange-50 dark:bg-[#ff5000]/10' : 'text-slate-700 dark:text-slate-300'">
         <span class="flex items-center gap-2">
           {{ item.title }}
-        </span>
-        <span v-if="item.badge" class="text-[10px] text-white px-1.5 py-0.5 rounded" :class="item.badgeColor || 'bg-[#ff5000]'">
-          {{ item.badge }}
         </span>
       </NuxtLink>
 
       <div v-else>
-        <div 
-          @click="toggleExpand(item.title)"
-          class="flex items-center justify-between px-6 py-2.5 text-sm font-bold text-slate-800 dark:text-slate-100 cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
-        >
+        <div @click="toggleExpand(item.title)"
+          class="flex items-center justify-between px-6 py-2.5 text-sm font-bold text-slate-800 dark:text-slate-100 cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
           <span>{{ item.title }}</span>
-          <Icon 
-            name="lucide:chevron-down" 
-            size="14" 
-            class="text-slate-400 transition-transform duration-200"
-            :class="expandedKeys.includes(item.title) ? 'rotate-180' : ''"
-          />
+          <Icon name="lucide:chevron-down" size="14" class="text-slate-400 transition-transform duration-200"
+            :class="expandedKeys.includes(item.title) ? 'rotate-180' : ''" />
         </div>
 
         <div v-show="expandedKeys.includes(item.title)" class="flex flex-col gap-0.5 mt-0.5 mb-2 transition-all">
-          <NuxtLink
-            v-for="sub in item.children"
-            :key="sub.title"
-            :to="sub.path"
+          <NuxtLink v-for="sub in item.children" :key="sub.title" :to="sub.path"
             class="pl-10 pr-4 py-2 text-[13px] text-slate-600 dark:text-slate-400 hover:text-[#ff5000] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors block"
-            :class="{ 'text-[#ff5000] font-bold': isActive(sub.path) }"
-          >
+            :class="{ 'text-[#ff5000] font-bold': isActive(sub.path) }">
             {{ sub.title }}
           </NuxtLink>
         </div>
       </div>
 
+    </div>
+
+    <!-- 退出登录按钮 -->
+    <div class="mt-4 px-4 border-t border-slate-100 dark:border-white/10 pt-4">
+      <button @click="handleLogout"
+        class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-slate-600 hover:text-red-500 hover:bg-red-50 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-red-400 rounded-lg transition-colors">
+        <Icon name="lucide:log-out" size="16" />
+        退出登录
+      </button>
     </div>
   </div>
 </template>
@@ -53,13 +46,10 @@ const route = useRoute()
 
 // 定义菜单结构
 const menuItems = [
-  { title: '关于我', path: '/profile' }, 
+  { title: '关于我', path: '/profile' },
   { title: '我的购物车', path: '/cart' },
   { title: '我的订单', path: '/user/orders' },
-  { title: '商品收藏', path: '/user/favorites', badge: '有降价', badgeColor: 'bg-[#ff5000]' },
-  { title: '关注店铺', path: '/user/shops', badge: '4家上新', badgeColor: 'bg-[#ff5000]' },
-  { title: '评价管理', path: '/user/reviews' },
-  
+
   // 可展开项
   {
     title: '账户设置',
@@ -88,5 +78,15 @@ const toggleExpand = (title: string) => {
 // 判断当前路由是否激活 (支持子路由高亮)
 const isActive = (path: string) => {
   return route.path === path
+}
+
+const userStore = useUserStore()
+const router = useRouter()
+
+const handleLogout = () => {
+  if (confirm('确定要退出登录吗？')) {
+    userStore.logout();
+    // router.push('/login')
+  }
 }
 </script>
