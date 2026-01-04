@@ -163,9 +163,8 @@ onMounted(() => {
 
 const resetInfoForm = () => {
     if (userStore.userInfo) {
-        const { userName, phone, email, gender, age } = userStore.userInfo
+        const { userName, email, gender, age } = userStore.userInfo
         infoForm.userName = userName || ''
-        infoForm.phone = phone || ''
         infoForm.email = email || ''
         infoForm.gender = String(gender) || '1'
         infoForm.age = age || 18
