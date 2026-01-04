@@ -40,12 +40,35 @@ export const useVisitorList = () => {
         fetchVisitorList()
     }
 
+    // Create visitor registration
+    const createVisitor = async (data: any) => {
+        loading.value = true
+        try {
+            const res = await createVisitorApi(data) as any
+            if (res.code === 200) {
+                ElMessage.success('访客登记提交成功')
+                fetchVisitorList() // Refresh list
+                return true
+            } else {
+                ElMessage.error(res.message || '提交失败')
+                return false
+            }
+        } catch (error) {
+            console.error('Create visitor error:', error)
+            ElMessage.error('网络请求失败')
+            return false
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         visitorList,
         total,
         loading,
         pagination,
         fetchVisitorList,
-        handlePageChange
+        handlePageChange,
+        createVisitor
     }
 }

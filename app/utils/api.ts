@@ -123,3 +123,11 @@ export const getVisitorListApi = (params: any) => {
         params
     })
 }
+
+// 创建访客登记
+export const createVisitorApi = (data: any) => {
+    return $api('/api/visitor/register', {
+        method: 'POST',
+        body: data
+    })
+}

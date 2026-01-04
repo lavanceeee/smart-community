@@ -1,12 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-12">
         <!-- Header -->
-        <div class="bg-white dark:bg-slate-800 shadow-sm mb-6">
-            <div class="max-w-[1000px] mx-auto px-4 h-16 flex items-center justify-between">
-                <h1 class="text-lg font-medium text-slate-800 dark:text-slate-100">访客登记记录</h1>
-                <!-- Future: Register Button -->
-            </div>
-        </div>
+        <TopBar @create="openCreateModal" />
 
         <div class="max-w-[1000px] mx-auto px-4">
             <!-- Loading Skeleton -->
@@ -44,7 +39,7 @@
                                     </span>
                                 </h3>
                                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">来访目的：{{ item.visitPurpose
-                                }}</p>
+                                    }}</p>
                             </div>
                         </div>
 
@@ -59,10 +54,18 @@
                         class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-300">
                         <div class="flex items-center gap-2">
                             <Icon name="lucide:clock" size="14" class="text-slate-400" />
+                            <span>放行时间：{{ item.allowTime || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <Icon name="lucide:calendar-clock" size="14" class="text-slate-400" />
+                            <span>有效日期：{{ item.validDate || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <Icon name="lucide:edit-3" size="14" class="text-slate-400" />
                             <span>申请时间：{{ item.createTime || '-' }}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <Icon name="lucide:calendar-check" size="14" class="text-slate-400" />
+                            <Icon name="lucide:check-circle" size="14" class="text-slate-400" />
                             <span>审核时间：{{ item.auditTime || '-' }}</span>
                         </div>
                     </div>
@@ -92,19 +95,113 @@
                     @current-change="handlePageChange" class="custom-pagination" />
             </div>
         </div>
+
+        <!-- Create Modal -->
+        <el-dialog v-model="modalVisible" title="新建访客登记" width="500px" :close-on-click-modal="false"
+            class="custom-dialog">
+            <el-form label-position="top" :model="form" :rules="rules" ref="formRef">
+                <el-form-item label="访客姓名" prop="visitorName">
+                    <el-input v-model="form.visitorName" placeholder="请输入访客姓名" />
+                </el-form-item>
+                <el-form-item label="访客电话" prop="visitorPhone">
+                    <el-input v-model="form.visitorPhone" placeholder="请输入访客电话" />
+                </el-form-item>
+                <el-form-item label="来访目的" prop="visitPurpose">
+                    <el-input v-model="form.visitPurpose" type="textarea" placeholder="请输入来访目的" />
+                </el-form-item>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="放行时间" prop="allowTime">
+                            <input v-model="form.allowTime" type="datetime-local"
+                                class="w-full h-[32px] px-3 border border-[#dcdfe6] rounded bg-white dark:bg-slate-900 dark:border-slate-700 focus:border-[#ff5000] outline-none transition-colors text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="有效期至" prop="validDate">
+                            <input v-model="form.validDate" type="datetime-local"
+                                class="w-full h-[32px] px-3 border border-[#dcdfe6] rounded bg-white dark:bg-slate-900 dark:border-slate-700 focus:border-[#ff5000] outline-none transition-colors text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="modalVisible = false">取消</el-button>
+                    <el-button type="primary" :loading="createLoading" @click="handleSubmit">提交登记</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
-const { visitorList, total, loading, pagination, fetchVisitorList, handlePageChange } = useVisitorList()
+import TopBar from '~/components/Visitors/TopBar.vue'
+const { visitorList, total, loading, pagination, fetchVisitorList, handlePageChange, createVisitor } = useVisitorList()
 
 useHead({
     title: '访客登记列表 - 智慧社区'
 })
 
+// Modal & Form
+const modalVisible = ref(false)
+const createLoading = ref(false)
+const formRef = ref()
+
+const form = reactive({
+    visitorName: '',
+    visitorPhone: '',
+    visitPurpose: '',
+    allowTime: '',
+    validDate: ''
+})
+
+const rules = {
+    visitorName: [{ required: true, message: '请输入访客姓名', trigger: 'blur' }],
+    visitorPhone: [{ required: true, message: '请输入访客电话', trigger: 'blur' }],
+    visitPurpose: [{ required: true, message: '请输入来访目的', trigger: 'blur' }],
+    allowTime: [{ required: true, message: '请选择放行时间', trigger: 'change' }],
+    validDate: [{ required: true, message: '请选择有效期', trigger: 'change' }]
+}
+
 onMounted(() => {
+    console.log('Visitor page mounted')
     fetchVisitorList()
 })
+
+const openCreateModal = () => {
+    // Reset form
+    form.visitorName = ''
+    form.visitorPhone = ''
+    form.visitPurpose = ''
+    form.allowTime = ''
+    form.validDate = ''
+
+    modalVisible.value = true
+}
+
+const handleSubmit = async () => {
+    if (!formRef.value) return
+
+    await formRef.value.validate(async (valid: boolean) => {
+        if (valid) {
+            createLoading.value = true
+
+            // Format datetime-local string (YYYY-MM-DDTHH:mm) to backend format (YYYY-MM-DD HH:mm:ss)
+            const submitData = {
+                ...form,
+                allowTime: form.allowTime ? form.allowTime.replace('T', ' ') + ':00' : '',
+                validDate: form.validDate ? form.validDate.replace('T', ' ') + ':00' : ''
+            }
+
+            const success = await createVisitor(submitData)
+            createLoading.value = false
+
+            if (success) {
+                modalVisible.value = false
+            }
+        }
+    })
+}
 
 const statusClass = (status: number) => {
     switch (status) {
@@ -127,5 +224,16 @@ const statusClass = (status: number) => {
 
 :deep(.custom-pagination .el-pager li:hover) {
     color: #ff5000 !important;
+}
+
+/* Customize Element Plus Dialog to match theme partially if needed */
+:deep(.el-button--primary) {
+    background-color: #ff5000;
+    border-color: #ff5000;
+}
+
+:deep(.el-button--primary:hover) {
+    background-color: #ff3d00;
+    border-color: #ff3d00;
 }
 </style>
