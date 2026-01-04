@@ -54,7 +54,7 @@ export const uploadAvatarApi = (body: any) => {
 }
 
 export const updateUserInfoApi = (body: any) => {
-    return $api('api/user/update', {
+    return $api('api/user/profile', {
         method: "POST",
         body
     })
