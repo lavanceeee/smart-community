@@ -31,8 +31,8 @@
                                     </el-input>
                                 </el-form-item>
 
-                                <el-form-item label="邮箱" prop="emial">
-                                    <el-input v-model="infoForm.emial" placeholder="请输入邮箱" />
+                                <el-form-item label="邮箱" prop="email">
+                                    <el-input v-model="infoForm.email" placeholder="请输入邮箱" />
                                 </el-form-item>
                             </div>
 
@@ -108,7 +108,7 @@ const infoFormRef = ref<FormInstance>()
 const infoForm = reactive({
     userName: '',
     phone: '',
-    emial: '',
+    email: '',
     gender: '1',
     age: 18,
 })
@@ -164,10 +164,10 @@ onMounted(() => {
 
 const resetInfoForm = () => {
     if (userStore.userInfo) {
-        const { userName, phone, emial, gender, age } = userStore.userInfo
+        const { userName, phone, email, gender, age } = userStore.userInfo
         infoForm.userName = userName || ''
         infoForm.phone = phone || ''
-        infoForm.emial = emial || ''
+        infoForm.email = email || ''
         infoForm.gender = String(gender) || '1'
         infoForm.age = age || 18
     }

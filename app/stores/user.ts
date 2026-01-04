@@ -1,7 +1,7 @@
 interface UserInfo {
   userId: string;
   phone: string;
-  emial: string;
+  email: string;
   avatar: string;
   gender: string;
   age: number;
