@@ -1,46 +1,47 @@
 <template>
-    <div class="flex items-center gap-6 text-sm text-slate-500">
+    <div class="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400">
         <!-- Font Size Controls -->
         <div class="flex items-center gap-2">
-            <span class="text-slate-400">字号:</span>
+            <span class="text-slate-400 dark:text-slate-500">字号:</span>
             <button @click="$emit('change-font-size', 'normal')"
-                :class="currentFontSize === 'normal' ? 'text-[#1e40af] font-bold' : 'hover:text-[#1e40af] transition-colors'">
+                :class="currentFontSize === 'normal' ? 'text-[#1e40af] dark:text-blue-400 font-bold' : 'hover:text-[#1e40af] dark:hover:text-blue-400 transition-colors'">
                 默认
             </button>
             <button @click="$emit('change-font-size', 'large')"
-                :class="currentFontSize === 'large' ? 'text-[#1e40af] font-bold' : 'hover:text-[#1e40af] transition-colors'">
+                :class="currentFontSize === 'large' ? 'text-[#1e40af] dark:text-blue-400 font-bold' : 'hover:text-[#1e40af] dark:hover:text-blue-400 transition-colors'">
                 大
             </button>
             <button @click="$emit('change-font-size', 'xlarge')"
-                :class="currentFontSize === 'xlarge' ? 'text-[#1e40af] font-bold' : 'hover:text-[#1e40af] transition-colors'">
+                :class="currentFontSize === 'xlarge' ? 'text-[#1e40af] dark:text-blue-400 font-bold' : 'hover:text-[#1e40af] dark:hover:text-blue-400 transition-colors'">
                 超大
             </button>
         </div>
 
-        <span class="text-slate-200">|</span>
+        <span class="text-slate-200 dark:text-slate-700">|</span>
 
         <!-- Action Buttons -->
         <div class="flex items-center gap-4">
-            <button @click="handlePrint" class="flex items-center gap-1 hover:text-[#1e40af] transition-colors">
+            <button @click="handlePrint"
+                class="flex items-center gap-1 hover:text-[#1e40af] dark:hover:text-blue-400 transition-colors">
                 <span>打印</span>
                 <Icon name="lucide:printer" size="14" />
             </button>
         </div>
 
-        <span class="text-slate-200">|</span>
+        <span class="text-slate-200 dark:text-slate-700">|</span>
 
         <!-- Social Share (Mock) -->
         <div class="flex items-center gap-2 text-slate-400">
             <button
-                class="hover:text-[#ff5000] transition-colors bg-slate-100 rounded-full w-6 h-6 flex items-center justify-center">
+                class="hover:text-[#ff5000] transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
                 <Icon name="lucide:share-2" size="12" />
             </button>
             <button
-                class="hover:text-green-500 transition-colors bg-slate-100 rounded-full w-6 h-6 flex items-center justify-center">
+                class="hover:text-green-500 transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
                 <Icon name="lucide:message-circle" size="12" />
             </button>
             <button
-                class="hover:text-amber-500 transition-colors bg-slate-100 rounded-full w-6 h-6 flex items-center justify-center">
+                class="hover:text-amber-500 transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
                 <Icon name="lucide:star" size="12" />
             </button>
         </div>

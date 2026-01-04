@@ -1,7 +1,7 @@
 <template>
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen bg-white dark:bg-slate-900">
         <!-- Breadcrumb -->
-        <div class="bg-[#f5f7fa] py-3 border-b border-slate-100 mb-8">
+        <div class="bg-[#f5f7fa] dark:bg-slate-900 py-3 border-b border-slate-100 dark:border-slate-800 mb-8">
             <div class="max-w-[1000px] mx-auto px-4 flex items-center gap-2 text-sm text-slate-500">
                 <NuxtLink to="/" class="hover:text-[#1e40af]">首页</NuxtLink>
                 <Icon name="lucide:chevron-right" size="14" />
@@ -27,13 +27,15 @@
             </div>
 
             <!-- Content -->
-            <article v-else-if="detail" class="bg-white">
-                <header class="mb-10 text-center border-b border-slate-100 pb-6">
-                    <h1 class="text-3xl md:text-[34px] font-medium text-[#333] mb-8 leading-tight tracking-tight">
+            <article v-else-if="detail" class="bg-white dark:bg-slate-800 dark:text-gray-200">
+                <header class="mb-10 text-center border-b border-slate-100 dark:border-slate-700 pb-6">
+                    <h1
+                        class="text-3xl md:text-[34px] font-medium text-[#333] dark:text-gray-100 mb-8 leading-tight tracking-tight">
                         {{ detail.title }}
                     </h1>
 
-                    <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-[#999]">
+                    <div
+                        class="flex flex-wrap items-center justify-between gap-4 text-sm text-[#999] dark:text-slate-400">
                         <div class="flex items-center gap-6">
                             <span>{{ detail.publishTime }}</span>
                             <span>来源：物业服务中心</span>
@@ -45,7 +47,7 @@
                     </div>
                 </header>
 
-                <div class="prose max-w-none text-[#333]" :class="{
+                <div class="prose dark:prose-invert max-w-none text-[#333] dark:text-gray-200 font-serif" :class="{
                     'prose-base': currentFontSize === 'normal',
                     'prose-lg': currentFontSize === 'large',
                     'prose-xl': currentFontSize === 'xlarge'
@@ -58,9 +60,9 @@
                     </div>
                 </div>
 
-                <footer class="mt-16 pt-8 border-t border-slate-100 flex justify-center">
+                <footer class="mt-16 pt-8 border-t border-slate-100 dark:border-slate-700 flex justify-center">
                     <button @click="goBack"
-                        class="px-8 py-2 bg-[#f5f7fa] hover:bg-[#ff5000] text-slate-600 hover:text-white rounded transition-colors text-sm">
+                        class="px-8 py-2 bg-[#f5f7fa] dark:bg-slate-700 hover:bg-[#ff5000] dark:hover:bg-[#ff5000] text-slate-600 dark:text-slate-200 hover:text-white rounded transition-colors text-sm">
                         关闭窗口
                     </button>
                 </footer>
