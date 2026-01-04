@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-12">
         <!-- New Search Header -->
         <div class="bg-white dark:bg-slate-800 shadow-sm mb-6">
-            <TopSearchBar :total="total" @search="handleSearch" />
+            <TopSearchBar :total="total" v-model:queryParams="queryParams" @search="handleSearch" />
         </div>
 
         <div class="max-w-[1000px] mx-auto px-4">
@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- News List (Search Result Style) -->
-                <div v-else class="max-w-[800px] mx-auto space-y-8">
+                <div v-else class="max-w-[800px] mx-auto space-y-8 border-b border-current pb-5 text-blue-800">
                     <div v-for="item in newsList" :key="item.announceId"
                         class="group border-b border-dashed border-slate-100 dark:border-slate-700 pb-8 last:border-0">
                         <!-- Title -->
@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import TopSearchBar from '~/components/News/TopSearchBar.vue'
-const { newsList, total, loading, pagination, fetchNews, handlePageChange, searchKeyword } = useCommunityNews()
+const { newsList, total, loading, pagination, fetchNews, handlePageChange, queryParams } = useCommunityNews()
 
 useHead({
     title: '社区公告 - 智慧社区 Search'
@@ -79,18 +79,18 @@ const goToDetail = (id: string | number) => {
     navigateTo(`/service/community/news/${id}`)
 }
 
-const handleSearch = (keyword: string) => {
-    searchKeyword.value = keyword
-    pagination.pageNum = 1 // Reset to first page
+const handleSearch = () => {
+    // When search is triggered from TopSearchBar
+    pagination.pageNum = 1
     fetchNews()
 }
 
 // Helper to highlight keyword
 const highlightKeyword = (text: string) => {
     if (!text) return ''
-    if (!searchKeyword.value) return text
+    if (!queryParams.keyword) return text
 
-    const regex = new RegExp(searchKeyword.value, 'gi')
+    const regex = new RegExp(queryParams.keyword, 'gi')
     return text.replace(regex, (match) => `<span class="text-[#c00] font-bold">${match}</span>`)
 }
 </script>

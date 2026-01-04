@@ -32,7 +32,13 @@ export const useCommunityNews = () => {
     const newsList = ref<any[]>([])
     const total = ref(0)
     const loading = ref(false)
-    const searchKeyword = ref('')
+    // Search params state
+    const queryParams = reactive({
+        keyword: '',
+        searchScope: 'ALL', // ALL, TITLE
+        timeRange: 'ALL',   // ALL, WEEK, MONTH, YEAR
+        sortType: 'TIME'    // TIME, RELEVANCE
+    })
 
     // Pagination state
     const pagination = reactive({
@@ -46,11 +52,11 @@ export const useCommunityNews = () => {
         try {
             const params: any = {
                 pageNum: pagination.pageNum,
-                pageSize: pagination.pageSize
+                pageSize: pagination.pageSize,
+                ...queryParams
             }
-            if (searchKeyword.value) {
-                params.keyword = searchKeyword.value
-            }
+            // Remove empty keyword if preferred, or backend handles empty string
+            if (!params.keyword) delete params.keyword
 
             const res = await getCommunityNewsApi(params) as any
 
@@ -79,7 +85,7 @@ export const useCommunityNews = () => {
         total,
         loading,
         pagination,
-        searchKeyword,
+        queryParams,
         fetchNews,
         handlePageChange
     }
