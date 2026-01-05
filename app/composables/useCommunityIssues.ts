@@ -48,7 +48,6 @@ export const useCommunityIssues = () => {
         fetchRepairList()
     }
 
-    // --- Complaint State ---
     const complaintList = ref<any[]>([])
     const complaintTotal = ref(0)
     const complaintLoading = ref(false)

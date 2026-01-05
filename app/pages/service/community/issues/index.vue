@@ -56,7 +56,7 @@
                                         class="bg-[#ff5000]/10 text-[#ff5000] text-[10px] px-1.5 py-0.5 rounded-sm font-bold border border-[#ff5000]/20">报修</span>
                                     <h3
                                         class="font-bold text-slate-800 dark:text-slate-100 text-base line-clamp-1 group-hover:text-[#ff5000] transition-colors">
-                                        {{ item.reportType || '物业报修' }}</h3>
+                                        {{ item.reportType }}</h3>
                                 </div>
                             </div>
                             <p
@@ -65,7 +65,7 @@
                             </p>
                             <div class="flex items-center gap-4 text-xs text-slate-400">
                                 <span class="flex items-center gap-1">
-                                    <Icon name="lucide:hash" size="12" /> 单号：{{ item.reportId }}
+                                    <Icon name="lucide:hash" size="12" /> 位置：{{ item.location }}
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <Icon name="lucide:clock" size="12" /> {{ item.createTime }}
@@ -80,12 +80,7 @@
                                 <Icon v-if="item.status === 2" name="lucide:check-circle-2" size="12" />
                                 <Icon v-else-if="item.status === 1" name="lucide:loader-2" size="12" />
                                 <Icon v-else name="lucide:hourglass" size="12" />
-                                {{ item.statusText || '待处理' }}
-                            </div>
-                            <div v-if="item.handleResult"
-                                class="text-[10px] text-slate-500 max-w-[120px] text-right line-clamp-2"
-                                :title="item.handleResult">
-                                处理结果: {{ item.handleResult }}
+                                {{ item.statusText }}
                             </div>
                             <button
                                 class="text-slate-400 hover:text-[#ff5000] transition-colors text-xs flex items-center gap-1">
