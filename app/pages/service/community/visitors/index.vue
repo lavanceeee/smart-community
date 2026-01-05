@@ -3,7 +3,7 @@
         <!-- Header -->
         <TopBar @create="openCreateModal" />
 
-        <div class="max-w-[1000px] mx-auto px-4">
+        <div class="max-w-[1300px] mx-auto px-4">
             <!-- Loading Skeleton -->
             <div v-if="loading" class="grid gap-4">
                 <div v-for="i in 4" :key="i" class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm animate-pulse">
@@ -39,7 +39,7 @@
                                     </span>
                                 </h3>
                                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">来访目的：{{ item.visitPurpose
-                                    }}</p>
+                                }}</p>
                             </div>
                         </div>
 

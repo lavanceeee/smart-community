@@ -1,10 +1,5 @@
-
-// Re-importing necessary APIs. Assuming auto-import or explicit import if Nuxt.
-// In Nuxt 3 composables are auto-imported, but APIs from utils?
-// Usually Nuxt utils are auto-imported.
-
 export const useCommunityIssues = () => {
-    // --- Repair State ---
+
     const repairList = ref<any[]>([])
     const repairTotal = ref(0)
     const repairLoading = ref(false)
@@ -18,9 +13,6 @@ export const useCommunityIssues = () => {
         try {
             const res = await getRepairListApi(repairPagination) as any
             if (res.code === 200) {
-                // Map new API structure to UI expectations if necessary, 
-                // OR just use new structure in template.
-                // New structure: reportId, reportType, description, statusText, createTime.
                 repairList.value = res.data.records
                 repairTotal.value = res.data.total
             }
@@ -73,6 +65,7 @@ export const useCommunityIssues = () => {
                 complaintList.value = res.data.records
                 complaintTotal.value = res.data.total
             }
+
         } catch (error) {
             console.error('Fetch complaint list error:', error)
         } finally {

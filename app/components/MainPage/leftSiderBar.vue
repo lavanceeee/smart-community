@@ -1,7 +1,7 @@
 <template>
-  <div class="w-60 flex flex-col gap-4 shrink-0">
+  <div class="w-60 flex flex-col gap-3 shrink-0">
 
-    <div class="bg-white dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/5 shadow-sm">
+    <div class="bg-white dark:bg-white/5 rounded p-4 border border-slate-100 dark:border-white/5">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2 text-[#ff5000]">
           <Icon name="lucide:megaphone" size="16" />
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="bg-white dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/5 shadow-sm">
+    <div class="bg-white dark:bg-white/5 rounded p-4 border border-slate-100 dark:border-white/5">
       <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3">快捷服务</h3>
       <div class="grid grid-cols-2 gap-2">
         <div v-for="tool in quickTools" :key="tool.name"

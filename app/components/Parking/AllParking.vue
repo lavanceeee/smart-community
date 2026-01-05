@@ -22,7 +22,7 @@
             <!-- Grid Display -->
             <div v-if="currentZone" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
                 <div v-for="i in 20" :key="i"
-                    class="aspect-square relative rounded-lg border-2 transition-all p-3 flex flex-col justify-between group cursor-pointer"
+                    class="aspect-square relative rounded-sm border-2 transition-all p-3 flex flex-col justify-between group cursor-pointer"
                     :class="getSpotStatusClass(i)">
                     <!-- Spot Number -->
                     <div class="text-xs font-bold opacity-50">

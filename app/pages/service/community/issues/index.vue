@@ -3,18 +3,10 @@
         <!-- Header / Top Bar -->
         <div
             class="pt-8 pb-4 mb-6 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shadow-sm sticky top-0 z-10">
-            <div class="max-w-[1000px] mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="max-w-[1300px] mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 bg-[#ff5000] text-white flex items-center justify-center rounded-md shadow-sm">
-                        <Icon name="lucide:building-2" size="24" />
-                    </div>
                     <div>
                         <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">物业服务中心</h1>
-                        <p class="text-slate-500 dark:text-slate-400 text-xs flex items-center gap-1 mt-0.5">
-                            <Icon name="lucide:shield-check" size="12" />
-                            竭诚为您服务，处理您的报修与投诉
-                        </p>
                     </div>
                 </div>
 
@@ -36,9 +28,8 @@
                     </div>
 
                     <button @click="openCreateModal"
-                        class="bg-[#ff5000] hover:bg-[#ff3d00] text-white px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm font-medium">
-                        <Icon name="lucide:plus-square" size="16" />
-                        {{ activeTab === 'repair' ? '提交报修' : '发起投诉' }}
+                        class="bg-[#ff5000] hover:bg-[#ff3d00] text-white px-4 h-10 rounded-md shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm font-medium">
+                        <Icon name="lucide:plus-square" size="14" />
                     </button>
                 </div>
             </div>
@@ -56,7 +47,7 @@
 
                 <div v-else-if="repairList.length > 0" class="grid grid-cols-1 gap-4">
                     <div v-for="item in repairList" :key="item.reportId"
-                        class="bg-white dark:bg-slate-800 rounded-md shadow-sm hover:shadow transition-all border-l-4 border-l-[#ff5000] border-y border-r border-slate-100 dark:border-y-slate-700 dark:border-r-slate-700 p-5 group flex flex-col md:flex-row gap-4">
+                        class="bg-white dark:bg-slate-800 rounded-md shadow-sm hover:shadow transition-all border-y border-r border-slate-100 dark:border-y-slate-700 dark:border-r-slate-700 p-5 group flex flex-col md:flex-row gap-2">
 
                         <div class="flex-1">
                             <div class="flex justify-between items-start mb-2">
@@ -122,6 +113,13 @@
                 </div>
             </div>
 
+
+
+
+
+
+
+
             <!-- Complaint List -->
             <div v-else class="space-y-4">
                 <div v-if="complaintLoading && complaintList.length === 0" class="grid gap-4">
@@ -132,7 +130,7 @@
 
                 <div v-else-if="complaintList.length > 0" class="grid grid-cols-1 gap-4">
                     <div v-for="item in complaintList" :key="item.id"
-                        class="bg-white dark:bg-slate-800 rounded-md shadow-sm hover:shadow transition-all border-l-4 border-l-[#ff5000] border-y border-r border-slate-100 dark:border-y-slate-700 dark:border-r-slate-700 p-5 group flex flex-col md:flex-row gap-4">
+                        class="bg-white dark:bg-slate-800 rounded-md shadow-sm hover:shadow transition-all border-y border-r border-slate-100 dark:border-y-slate-700 dark:border-r-slate-700 p-5 group flex flex-col md:flex-row gap-2">
 
                         <div class="flex-1">
                             <div class="flex justify-between items-start mb-2">
@@ -141,16 +139,17 @@
                                         class="bg-red-50 text-red-600 text-[10px] px-1.5 py-0.5 rounded-sm font-bold border border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/40">投诉</span>
                                     <h3
                                         class="font-bold text-slate-800 dark:text-slate-100 text-base line-clamp-1 group-hover:text-[#ff5000] transition-colors">
-                                        {{ item.title || '无标题投诉' }}</h3>
+                                        {{ item.complaintType }}</h3>
                                 </div>
                             </div>
                             <p
                                 class="text-slate-600 dark:text-slate-300 text-sm mb-3 line-clamp-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-sm border border-slate-100 dark:border-slate-700/50">
-                                {{ item.content }}
+                                {{ item.description }}
                             </p>
                             <div class="flex items-center gap-4 text-xs text-slate-400">
+
                                 <span class="flex items-center gap-1">
-                                    <Icon name="lucide:tag" size="12" /> 类型：{{ item.type || '一般投诉' }}
+                                    <Icon name="lucide:hash" size="12" /> {{ item.location }}
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <Icon name="lucide:clock" size="12" /> {{ item.createTime }}
@@ -165,7 +164,7 @@
                                 <Icon v-if="item.status === 2" name="lucide:check-circle-2" size="12" />
                                 <Icon v-else-if="item.status === 1" name="lucide:loader-2" size="12" />
                                 <Icon v-else name="lucide:hourglass" size="12" />
-                                {{ item.statusDesc || '待处理' }}
+                                {{ item.statusText }}
                             </div>
                             <button
                                 class="text-slate-400 hover:text-[#ff5000] transition-colors text-xs flex items-center gap-1">
