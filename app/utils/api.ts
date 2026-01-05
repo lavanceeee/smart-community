@@ -154,3 +154,46 @@ export const registerParkingApi = (data: any) => {
         body: data
     })
 }
+
+
+
+
+
+
+
+// --- 物业报事维修 ---
+
+// 获取报事维修列表
+export const getRepairListApi = (params: any) => {
+    return $api('/api/repair/my-list', {
+        method: 'GET',
+        params
+    })
+}
+
+// 提交报事维修
+export const createRepairApi = (data: any) => {
+    return $api('/api/repair/submit', {
+        method: 'POST',
+        body: data
+    })
+}
+
+// --- 物业事项投诉 ---
+
+// 获取投诉列表
+export const getComplaintListApi = (params: any) => {
+    return $api('/api/complaint/my-list', {
+        method: 'GET',
+        params
+    })
+}
+
+// 提交投诉
+export const createComplaintApi = (data: any) => {
+    return $api('/api/complaint/submit', {
+        method: 'POST',
+        body: data
+    })
+}
+

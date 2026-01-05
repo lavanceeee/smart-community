@@ -20,8 +20,7 @@ const communityServices = [
     title: '物业管理',
     icon: 'lucide:wrench',
     items: [
-      { name: '报事维修', path: '/service/community/repair' },
-      { name: '事项投诉', path: '/service/community/complaint' }
+      { name: '生活缴费与报修', path: '/service/community/issues' },
     ]
   },
   {
