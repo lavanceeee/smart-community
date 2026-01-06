@@ -59,6 +59,7 @@ const userStore = useUserStore();
 const canVisitSc = computed(() => {
   const roleTypeId = userStore.userRole?.roleId;
 
+  console.log("当前ID为：", roleTypeId);
   if (roleTypeId == 4 || roleTypeId == null) return false;
   return true;
 })

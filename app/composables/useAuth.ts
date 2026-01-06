@@ -52,10 +52,10 @@ export const useAuth = () => {
         const usersPermission = await getCurrentUser() as any;
 
         if (usersPermission.code == 200) {
-          const role = usersPermission.data.roles;
+          const roles = usersPermission.data.roles;
           const permission = usersPermission.data.permissions;
 
-          userStore.setRole(role);
+          userStore.setRoles(roles);
           userStore.setPermissions(permission);
         }
       }

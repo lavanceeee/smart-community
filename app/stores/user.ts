@@ -29,7 +29,8 @@ interface UserPermission {
 export const useUserStore = defineStore('user', () => {
   const token = ref<string | null>(null);
   const userInfo = ref<UserInfo | null>(null);
-  const userRole = ref<UserRole | null>(null);
+  const userRole = ref<UserRole | null>(null); // Keep for compatibility if needed, or just use plural
+  const userRoles = ref<UserRole[] | null>(null);
   const userPermissions = ref<UserPermission[] | null>(null);
 
   const isLoggedIn = computed(() => !!token.value)
@@ -44,6 +45,11 @@ export const useUserStore = defineStore('user', () => {
     userRole.value = newRole;
   }
 
+  function setRoles(newRoles: UserRole[]) {
+    userRoles.value = newRoles;
+    userRole.value = newRoles.length > 0 ? (newRoles[0] as UserRole) : null;
+  }
+
   function setPermissions(newPermissions: UserPermission[]) {
     userPermissions.value = newPermissions;
   }
@@ -53,6 +59,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = null
 
     userRole.value = null;
+    userRoles.value = null;
     userPermissions.value = null;
     // Clean up local storage persistence if needed, though setting to null usually suffices with persist plugin
   }
@@ -64,9 +71,11 @@ export const useUserStore = defineStore('user', () => {
     displayName,
     setLoginState,
     setRole,
+    setRoles,
     setPermissions,
     logout,
     userRole,
+    userRoles,
     userPermissions
   }
 }, {
