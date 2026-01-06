@@ -65,7 +65,7 @@
                             </p>
                             <div class="flex items-center gap-4 text-xs text-slate-400">
                                 <span class="flex items-center gap-1">
-                                    <Icon name="lucide:hash" size="12" /> 位置：{{ item.location }}
+                                    <Icon name="lucide:hash" size="12" /> {{ item.location }}
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <Icon name="lucide:clock" size="12" /> {{ item.createTime }}
@@ -76,9 +76,9 @@
                         <div
                             class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-3 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-700 pt-3 md:pt-0 md:pl-4 min-w-[100px]">
                             <div class="px-3 py-1 rounded-sm text-xs font-bold border flex items-center gap-1"
-                                :class="getStatusClass(item.status)">
-                                <Icon v-if="item.status === 2" name="lucide:check-circle-2" size="12" />
-                                <Icon v-else-if="item.status === 1" name="lucide:loader-2" size="12" />
+                                :class="getStatusClass(Number(item.status))">
+                                <Icon v-if="Number(item.status) === 2" name="lucide:check-circle-2" size="12" />
+                                <Icon v-else-if="Number(item.status) === 1" name="lucide:loader-2" size="12" />
                                 <Icon v-else name="lucide:hourglass" size="12" />
                                 {{ item.statusText }}
                             </div>
@@ -155,9 +155,9 @@
                         <div
                             class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-3 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-700 pt-3 md:pt-0 md:pl-4 min-w-[100px]">
                             <div class="px-3 py-1 rounded-sm text-xs font-bold border flex items-center gap-1"
-                                :class="getStatusClass(item.status)">
-                                <Icon v-if="item.status === 2" name="lucide:check-circle-2" size="12" />
-                                <Icon v-else-if="item.status === 1" name="lucide:loader-2" size="12" />
+                                :class="getStatusClass(Number(item.status))">
+                                <Icon v-if="Number(item.status) === 2" name="lucide:check-circle-2" size="12" />
+                                <Icon v-else-if="Number(item.status) === 1" name="lucide:loader-2" size="12" />
                                 <Icon v-else name="lucide:hourglass" size="12" />
                                 {{ item.statusText }}
                             </div>

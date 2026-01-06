@@ -27,6 +27,7 @@
   "devDependencies": {
     "@nuxt/icon": "^2.1.1",
     "@nuxtjs/color-mode": "^4.0.0",
-    "@nuxtjs/tailwindcss": "^6.14.0"
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@types/node": "^25.0.3"
   }
 }

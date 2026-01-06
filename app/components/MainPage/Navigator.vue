@@ -3,7 +3,7 @@
 const communityServices = [
   {
     title: '消息管理',
-    icon: 'lucide:bell', // 这里的 icon 是可选的，配合你之前的图标库
+    icon: 'lucide:bell',
     items: [
       { name: '公告列表查询', path: '/service/community/news' }
     ]
@@ -20,7 +20,7 @@ const communityServices = [
     title: '物业管理',
     icon: 'lucide:wrench',
     items: [
-      { name: '生活缴费与报修', path: '/service/community/issues' },
+      { name: '报修与投诉', path: '/service/community/issues' },
     ]
   },
   {

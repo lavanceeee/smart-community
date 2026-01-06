@@ -1,6 +1,14 @@
 const $api = $fetch.create({
-    baseURL: 'http://localhost:8080',
     onRequest({ request, options }) {
+        const config = useRuntimeConfig()
+        // 优先使用运行时配置，如果没有则回退
+        const baseUrl = config.public.apiBase
+        console.log('Current API Base:', baseUrl) // Debug log
+
+        if (baseUrl) {
+            options.baseURL = baseUrl
+        }
+
         const userStore = useUserStore()
 
         // 不需要 Token 的接口白名单
@@ -156,11 +164,6 @@ export const registerParkingApi = (data: any) => {
 }
 
 
-
-
-
-
-
 // --- 物业报事维修 ---
 
 // 获取报事维修列表
@@ -197,3 +200,77 @@ export const createComplaintApi = (data: any) => {
     })
 }
 
+
+
+
+//商城
+//获取商品列表
+export const getMallGoodsListApi = (data: any) => {
+    return $api('/api/mall/list', {
+        method: 'POST',
+        body: data
+    })
+}
+
+//获取商品详情
+export const getMallProductDetailApi = (productId: string | number) => {
+    return $api(`/api/mall/products/${productId}`, { method: 'GET' })
+}
+
+//商品收藏
+export const collectProductApi = (productId: string | number) => {
+    return $api(`/api/mall/products/${productId}/collect`, { method: 'POST' })
+}
+
+//取消收藏DELET请求
+export const cancelCollectProductApi = (productId: string | number) => {
+    return $api(`/api/mall/products/${productId}/collect`, { method: 'DELETE' })
+}
+
+//获取商品图片
+export const getProductImagesApi = (ProductId: string | number) => {
+    return $api(`/api/product/${ProductId}/images`, { method: 'GET' })
+}
+
+
+// --- 物业缴费相关 ---
+
+// 缴纳物业费
+export const payPropertyFeeApi = (data: any) => {
+    return $api('/api/property-fee/pay', {
+        method: 'POST',
+        body: data
+    })
+}
+
+// 查询缴费记录
+export const getPaymentHistoryApi = (params: any) => {
+    return $api('/api/property-fee/payments', {
+        method: 'GET',
+        params
+    })
+}
+
+// 查询我的物业费账单
+export const getMyBillsApi = (params: any) => {
+    return $api('/api/property-fee/bills', {
+        method: 'GET',
+        params
+    })
+}
+
+// 获取账单详情
+export const getBillDetailApi = (billId: string | number) => {
+    return $api(`/api/property-fee/bills/${billId}`, {
+        method: 'GET'
+    })
+}
+
+
+
+//钱包组件
+
+//1. //api/wallet/info 获取钱包信息
+export const getWalletInfoApi = () => {
+    return $api('/api/wallet/info', { method: 'GET' })
+}

@@ -3,8 +3,13 @@
     class="h-10 px-4 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 transition-colors z-50 relative">
     <nuxt-link to="/">
       <div class="text-sm font-bold text-[#ff5000] flex items-center gap-2">
-        <Icon name="lucide:layout-grid" size="14" />
-        {{ topBarTitle }}
+        <Icon name="lucide:layout-grid" size="14" class="shrink-0" />
+        <div class="flex items-center">
+          <span>{{ titleParts.base }}</span>
+          <Transition name="title-slide" mode="out-in">
+            <span :key="titleParts.sub" class="whitespace-nowrap block">{{ titleParts.sub }}</span>
+          </Transition>
+        </div>
       </div>
     </nuxt-link>
 
@@ -40,18 +45,50 @@ const colorMode = useColorMode();
 const route = useRoute();
 const userStore = useUserStore();
 
-const topBarTitle = computed(() => {
+const titleParts = computed(() => {
   const path = route.path || "";
+  const communityPrefix = "Neuedu智慧社区";
+
   if (path.startsWith("/service/mall")) {
-    return "Neuedu智慧商城";
+    return { base: "Neuedu智慧商城", sub: "" };
   }
-  if (path.startsWith("/service/community")) {
-    return "Neuedu智慧社区";
-  }
-  return "Neuedu智慧社区";
+
+  if (path.startsWith("/service/community/news"))
+    return { base: communityPrefix, sub: " - 公告" };
+  if (path.startsWith("/service/community/payment"))
+    return { base: communityPrefix, sub: " - 缴费" };
+  if (path.startsWith("/service/community/issues"))
+    return { base: communityPrefix, sub: " - 报修与投诉" };
+  if (path.startsWith("/service/community/parking"))
+    return { base: communityPrefix, sub: " - 停车服务" };
+  if (path.startsWith("/service/community/visitors"))
+    return { base: communityPrefix, sub: " - 访客管理" };
+  if (path.startsWith("/wallet"))
+    return { base: communityPrefix, sub: " - 我的钱包" };
+  if (path.startsWith("/profile"))
+    return { base: communityPrefix, sub: " - 我的" };
+
+  return { base: communityPrefix, sub: "" };
 });
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 </script>
+
+<style scoped>
+.title-slide-enter-active,
+.title-slide-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.title-slide-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.title-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+</style>

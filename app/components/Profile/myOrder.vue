@@ -25,40 +25,9 @@
       </div>
     </div>
 
-    <div
-      class="flex-1 bg-white dark:bg-white/5 rounded-2xl p-3 flex flex-col border border-slate-100 dark:border-white/5 shadow-sm cursor-pointer hover:shadow-md transition-shadow group">
-      <div class="flex items-center justify-between mb-2">
-        <span class="font-bold text-sm text-slate-800 dark:text-slate-200 group-hover:text-[#ff5000]">我的收藏</span>
-        <Icon name="lucide:chevron-right" size="14" class="text-slate-300" />
-      </div>
-      <div class="flex-1 flex flex-col items-center justify-center gap-2">
-        <div class="w-16 h-16 bg-slate-50 rounded-lg p-1">
-          <img :src="mockData.fav.image"
-            class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
-        </div>
-        <div class="text-center w-full">
-          <div class="text-[10px] text-slate-500 truncate w-full px-2">{{ mockData.fav.title }}</div>
-          <div class="text-[#ff5000] text-xs font-bold mt-0.5">收藏后降 ¥{{ mockData.fav.priceDiff }}</div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="flex-1 bg-white dark:bg-white/5 rounded-2xl p-3 flex flex-col border border-slate-100 dark:border-white/5 shadow-sm cursor-pointer hover:shadow-md transition-shadow group">
-      <div class="flex items-center justify-between mb-2">
-        <span class="font-bold text-sm text-slate-800 dark:text-slate-200 group-hover:text-[#ff5000]">购物车</span>
-        <Icon name="lucide:chevron-right" size="14" class="text-slate-300" />
-      </div>
-      <div class="flex-1 flex flex-col items-center justify-center gap-2">
-        <div class="w-16 h-16 bg-slate-50 rounded-lg p-1">
-          <img :src="mockData.cart.image"
-            class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
-        </div>
-        <div class="text-center w-full">
-          <div class="text-[10px] text-slate-500 truncate w-full px-2">{{ mockData.cart.title }}</div>
-          <div class="text-[#ff5000] text-xs font-bold mt-0.5">券后价 ¥{{ mockData.cart.price }}</div>
-        </div>
-      </div>
+    <!-- 钱包组件 -->
+    <div class="flex-1">
+      <WalletMyWallet />
     </div>
 
   </div>
@@ -73,24 +42,4 @@ const orderStats = [
   { label: '待评价', count: 0 },
   { label: '退款/售后', count: 0 }
 ]
-
-// 2. 模拟商品数据 (图片使用了 Placehold.co 或 网上公开图，你可以直接替换)
-const mockData = {
-  fav: {
-    title: '澳大利亚SPEQT 运动水壶',
-    priceDiff: '7.00',
-    // 替换为你的真实图片 URL
-    image: 'https://img.alicdn.com/bao/uploaded/i4/2216506362540/O1CN01eJk2qH1QfWp5x6y5z_!!2216506362540.jpg_200x200q90.jpg_.webp'
-  },
-  footprint: {
-    title: '深海鳕鱼片250g 零食',
-    price: '18.8',
-    image: 'https://img.alicdn.com/bao/uploaded/i2/725677994/O1CN018y3k5z28vIgP4q8y5_!!725677994.jpg_200x200q90.jpg_.webp'
-  },
-  cart: {
-    title: '霸王何首乌控油洗发水',
-    price: '34.9',
-    image: 'https://img.alicdn.com/bao/uploaded/i3/2200742939268/O1CN01l8z5z21q5y5x6y5z_!!2200742939268.jpg_200x200q90.jpg_.webp'
-  }
-}
 </script>

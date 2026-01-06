@@ -7,12 +7,17 @@
     </div>
 
     <!-- Goods Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
-      <div v-for="item in goods" :key="item.id"
-        class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-transparent hover:border-[#ff5000] transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex flex-col">
+    <div v-if="loading && goodsList.length === 0"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+      <div v-for="i in 10" :key="i" class="bg-gray-100 dark:bg-slate-800 rounded-xl h-64 animate-pulse"></div>
+    </div>
+
+    <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+      <div v-for="item in goodsList" :key="item.productId" @click="goToDetail(item.productId)"
+        class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-transparent cursor-pointer shadow-sm hover:shadow-md flex flex-col">
         <!-- Product Image -->
         <div class="aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
-          <img :src="item.image" :alt="item.name"
+          <img :src="productMainImages[item.productId] || item.coverImg" :alt="item.productName"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
           <!-- Optional Hover Action Overlay -->
           <div
@@ -23,33 +28,23 @@
 
         <!-- Product Details -->
         <div class="p-3 flex-1 flex flex-col">
-          <!-- Title with Platform Tag -->
+          <!-- Title -->
           <h3
-            class="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2 leading-snug mb-2 min-h-[2.5rem]">
-            <span v-if="item.platform === '天猫'"
-              class="bg-red-500 text-white text-[9px] px-1 rounded mr-1 inline-block transform translate-y-[-1px]">天猫</span>
-            <span v-else-if="item.platform === '天猫国际'"
-              class="bg-purple-600 text-white text-[9px] px-1 rounded mr-1 inline-block transform translate-y-[-1px]">天猫国际</span>
-            {{ item.name }}
+            class="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2 leading-snug mb-1 min-h-[2.5rem]">
+            {{ item.productName }}
           </h3>
 
-          <!-- Promotion Section -->
-          <div class="flex flex-wrap gap-1 mb-2">
-            <span v-if="item.promotion" class="text-[#ff5000] text-[10px] font-bold">{{ item.promotion }}</span>
-            <span v-for="tag in item.tags.slice(0, 2)" :key="tag"
-              class="border border-[#ff5000]/30 text-[#ff5000] text-[9px] px-1 rounded leading-tight">{{ tag }}</span>
-          </div>
+          <!-- Description (Replacing tags since real data has description) -->
+          <p class="text-xs text-slate-400 line-clamp-1 mb-2">{{ item.description }}</p>
 
           <!-- Price and Sales -->
           <div class="mt-auto flex items-baseline justify-between gap-1 flex-wrap">
             <div class="flex items-baseline text-[#ff5000]">
               <span class="text-xs font-bold font-sans">¥</span>
-              <span class="text-lg font-bold">{{ item.price.split('.')[0] }}</span>
-              <span v-if="item.price.includes('.')" class="text-xs font-bold">.{{ item.price.split('.')[1] || '0'
-                }}</span>
-            </div>
-            <div class="text-[10px] text-slate-400 dark:text-slate-500">
-              {{ item.sales }}人购买
+              <span class="text-lg font-bold">{{ String(item.price).split('.')[0] }}</span>
+              <span v-if="String(item.price).includes('.')" class="text-xs font-bold">.{{
+                String(item.price).split('.')[1] || '0'
+              }}</span>
             </div>
           </div>
         </div>
@@ -57,34 +52,51 @@
     </div>
 
     <!-- Load More Placeholder -->
-    <div class="mt-12 text-center">
-      <button
-        class="px-8 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm hover:border-[#ff5000] hover:text-[#ff5000] transition-colors">
-        加载更多
+    <div class="mt-12 text-center" v-if="goodsList.length > 0">
+      <button v-if="hasMore" @click="loadMore" :disabled="loading"
+        class="px-8 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm hover:border-[#ff5000] hover:text-[#ff5000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ loading ? '加载中...' : '加载更多' }}
       </button>
+      <span v-else class="text-slate-400 text-sm">没有更多商品了</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import goodsData from './goods.json'
+import { useMallGoods } from '@/composables/mall/useMallGoods'
 
-interface Good {
-  id: number
-  name: string
-  image: string
-  price: string
-  sales: string
-  platform: string
-  promotion: string
-  tags: string[]
+const { goodsList, loading, fetchGoodsList, loadMore, hasMore, fetchProductImages } = useMallGoods()
+
+const productMainImages = ref<Record<string, string>>({})
+
+const goToDetail = (productId: string | number) => {
+  navigateTo(`/service/mall/${productId}`)
 }
 
-const goods = goodsData as Good[]
+// 获取单个商品的主图
+const preloadItemImage = async (productId: number | string) => {
+  if (productMainImages.value[productId]) return
+  const images = await fetchProductImages(productId)
+  if (images && images.length > 0) {
+    productMainImages.value[productId] = images[0].imageUrl
+  }
+}
+
+// 监听列表变化，自动拉取新到货商品图片
+watch(goodsList, (newList) => {
+  newList.forEach(item => {
+    preloadItemImage(item.productId)
+  })
+}, { immediate: true, deep: true })
+
+onMounted(() => {
+  if (goodsList.value.length === 0) {
+    fetchGoodsList()
+  }
+})
 </script>
 
 <style scoped>
-/* Ensure smooth line clamping */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

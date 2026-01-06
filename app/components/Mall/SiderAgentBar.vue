@@ -1,5 +1,6 @@
 <template>
-  <div class="fixed right-4 top-1/2 -translate-y-1/2 z-[150] flex flex-col items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl py-4 px-2 w-16 gap-6 select-none">
+  <div
+    class="fixed right-4 top-1/2 -translate-y-1/2 z-[150] flex flex-col items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl py-4 px-2 w-16 gap-6 select-none">
 
     <!-- Messages -->
     <div class="flex flex-col items-center gap-1 cursor-pointer group relative">
@@ -8,7 +9,8 @@
       </div>
       <span class="text-[11px] text-slate-500 group-hover:text-[#ff5000]">消息</span>
       <!-- Badge -->
-      <div class="absolute -top-1 -right-1 bg-[#ff5000] text-white text-[9px] font-bold px-1 rounded-full border-2 border-white dark:border-slate-900">
+      <div
+        class="absolute -top-1 -right-1 bg-[#ff5000] text-white text-[9px] font-bold px-1 rounded-full border-2 border-white dark:border-slate-900">
         29
       </div>
     </div>
@@ -20,7 +22,8 @@
       </div>
       <span class="text-[11px] text-slate-500 group-hover:text-[#ff5000]">购物车</span>
       <!-- Badge -->
-      <div class="absolute -top-1 -right-1 bg-[#ff5000] text-white text-[9px] font-bold px-1 rounded-full border-2 border-white dark:border-slate-900">
+      <div
+        class="absolute -top-1 -right-1 bg-[#ff5000] text-white text-[9px] font-bold px-1 rounded-full border-2 border-white dark:border-slate-900">
         6
       </div>
     </div>

@@ -26,6 +26,12 @@ export default defineNuxtConfig({
     storageKey: 'nuxt-color-mode'
   },
 
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:8080' // 默认值，会被 NUXT_PUBLIC_API_BASE 覆盖
+    }
+  },
+
   future: {
     compatibilityVersion: 4, // 既然你用 Nuxt 4 规范，建议开启这个
   },
