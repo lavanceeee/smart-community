@@ -1,6 +1,6 @@
 <template>
     <NuxtLink to="/wallet"
-        class="block group relative overflow-hidden bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        class="block group relative overflow-hidden bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm h-full">
 
         <!-- Decorative background elements -->
         <div
@@ -9,7 +9,7 @@
         <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-[#ff5000]/5 dark:bg-[#ff5000]/10 rounded-full blur-2xl">
         </div>
 
-        <div class="relative z-10">
+        <div class="relative z-10 flex flex-col h-full">
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
@@ -19,8 +19,8 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">我的钱包</h3>
-                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wider">WALLET
-                            SERVICES</p>
+                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wider uppercase">
+                            Wallet Services</p>
                     </div>
                 </div>
                 <div
@@ -30,35 +30,28 @@
             </div>
 
             <!-- Balance Section -->
-            <div class="flex items-end justify-between">
+            <div class="flex items-end justify-between mt-auto">
                 <div>
                     <div
                         class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold mb-1 uppercase tracking-widest text-opacity-80">
                         账户余额 (元)
                     </div>
                     <div class="flex items-baseline gap-1">
-                        <span class="text-2xl font-black text-slate-900 dark:text-white">{{ balance.toFixed(2) }}</span>
+                        <template v-if="loading && !walletInfo">
+                            <div class="h-8 w-24 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg"></div>
+                        </template>
+                        <template v-else>
+                            <span class="text-2xl font-black text-slate-900 dark:text-white">{{ (walletInfo?.balance ||
+                                0).toFixed(2) }}</span>
+                        </template>
                     </div>
                 </div>
 
-                <!-- Stats/Misc -->
+                <!-- Total Expense/Recharge or static Points -->
                 <div class="text-right">
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mb-1">积分余额</div>
-                    <div class="text-sm font-bold text-[#ff5000]">862</div>
-                </div>
-            </div>
-
-            <!-- Bottom Decorative Line -->
-            <div class="mt-6 pt-4 border-t border-slate-50 dark:border-slate-800/50 flex items-center gap-4">
-                <div class="flex items-center gap-1.5">
-                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                    <span
-                        class="text-[10px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tighter">支付安全保护中</span>
-                </div>
-                <div class="flex -space-x-1.5 ml-auto">
-                    <div v-for="icon in ['lucide:shield-check', 'lucide:coins', 'lucide:badge-percent']" :key="icon"
-                        class="w-5 h-5 rounded-full border border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-                        <Icon :name="icon" size="10" class="text-slate-400" />
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mb-1">本月消耗</div>
+                    <div class="text-sm font-bold text-[#ff5000]">
+                        {{ walletInfo ? `¥${walletInfo.totalExpense}` : '---' }}
                     </div>
                 </div>
             </div>
@@ -67,12 +60,10 @@
 </template>
 
 <script setup lang="ts">
-// In a real app, this would come from a store or prop
-const props = defineProps({
-    balance: {
-        type: Number,
-        default: 1258.40
-    }
+const { walletInfo, fetchWalletInfo, loading } = useWallet();
+
+onMounted(() => {
+    fetchWalletInfo();
 });
 </script>
 

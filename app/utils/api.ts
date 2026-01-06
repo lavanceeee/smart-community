@@ -274,3 +274,9 @@ export const getBillDetailApi = (billId: string | number) => {
 export const getWalletInfoApi = () => {
     return $api('/api/wallet/info', { method: 'GET' })
 }
+
+//查询交易记录
+// /api/wallet/transactions
+export const getTransactionsApi = () => {
+    return $api('/api/wallet/transactions', { method: 'GET' })
+}

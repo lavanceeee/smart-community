@@ -16,19 +16,24 @@
             <!-- Balance Card -->
             <div class="lg:col-span-1 space-y-6">
                 <div
-                    class="bg-gradient-to-br from-[#ff5000] to-[#ff8c00] rounded-[2rem] p-8 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden">
+                    class="bg-gradient-to-br from-[#ff5000] to-[#ff8c00] rounded-[2rem] p-8 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden h-[300px] flex flex-col justify-between">
                     <div class="absolute top-0 right-0 p-8 opacity-20">
                         <Icon name="lucide:wallet" size="120" />
                     </div>
                     <div class="relative z-10">
                         <p class="text-sm font-medium opacity-80 mb-2">账户余额 (元)</p>
-                        <h2 class="text-4xl font-black mb-8">1258.40</h2>
-                        <div class="flex gap-4">
-                            <button
-                                class="flex-1 py-3 px-6 bg-white text-[#ff5000] rounded-2xl font-bold hover:bg-slate-50 transition-colors shadow-lg">充值</button>
-                            <button
-                                class="flex-1 py-3 px-6 bg-white/20 backdrop-blur-md text-white rounded-2xl font-bold hover:bg-white/30 transition-colors border border-white/30">提现</button>
-                        </div>
+                        <h2 class="text-4xl font-black mb-2">
+                            {{ loading && !walletInfo ? '---' : (walletInfo?.balance || 0).toFixed(2) }}
+                        </h2>
+                        <p v-if="walletInfo?.frozenAmount" class="text-xs opacity-70">
+                            冻结金额: ¥{{ walletInfo.frozenAmount.toFixed(2) }}
+                        </p>
+                    </div>
+                    <div class="relative z-10 flex gap-4">
+                        <button
+                            class="flex-1 py-3 px-6 bg-white text-[#ff5000] rounded-2xl font-bold hover:bg-slate-50 transition-colors shadow-lg">充值</button>
+                        <button
+                            class="flex-1 py-3 px-6 bg-white/20 backdrop-blur-md text-white rounded-2xl font-bold hover:bg-white/30 transition-colors border border-white/30">提现</button>
                     </div>
                 </div>
 
@@ -37,54 +42,68 @@
                     <div
                         class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
                         <p
-                            class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2">
-                            积分</p>
-                        <p class="text-xl font-black text-slate-800 dark:text-white">862</p>
+                            class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
+                            总消耗</p>
+                        <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalExpense || 0
+                        }}</p>
                     </div>
                     <div
                         class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
                         <p
-                            class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2">
-                            优惠券</p>
-                        <p class="text-xl font-black text-slate-800 dark:text-white">5</p>
+                            class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
+                            总充值</p>
+                        <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalRecharge || 0
+                        }}</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Transaction History / Detail -->
+            <!-- Transaction History -->
             <div class="lg:col-span-2">
                 <div
-                    class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-800">
+                    class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-800 min-h-[500px]">
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">账单明细</h3>
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span>全部</span>
-                            <Icon name="lucide:chevron-down" size="16" />
+                        <div class="flex items-center gap-2 text-sm text-slate-500 cursor-pointer">
+                            <span>筛选</span>
+                            <Icon name="lucide:filter" size="16" />
                         </div>
                     </div>
 
-                    <!-- Placeholder for list -->
-                    <div class="space-y-6">
+                    <!-- Transaction List -->
+                    <div v-if="loading && transactions.length === 0" class="space-y-6">
                         <div v-for="i in 5" :key="i"
-                            class="flex items-center justify-between py-4 border-b border-slate-50 dark:border-slate-800/50 last:border-0">
+                            class="h-20 bg-slate-50 dark:bg-slate-800/50 animate-pulse rounded-2xl"></div>
+                    </div>
+
+                    <div v-else-if="transactions.length === 0"
+                        class="flex flex-col items-center justify-center py-20 text-slate-400">
+                        <Icon name="lucide:receipt-text" size="48" class="mb-4 opacity-20" />
+                        <p>暂无交易记录</p>
+                    </div>
+
+                    <div v-else class="space-y-6">
+                        <div v-for="item in transactions" :key="item.transactionId"
+                            class="flex items-center justify-between py-4 border-b border-slate-50 dark:border-slate-800/50 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors px-4 -mx-4 rounded-2xl">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
-                                    <Icon :name="i % 2 === 0 ? 'lucide:shopping-bag' : 'lucide:arrow-down-to-line'"
-                                        size="20" />
+                                    class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+                                    <Icon :name="getTransactionIcon(item.transactionType)" size="20" />
                                 </div>
                                 <div>
-                                    <p class="font-bold text-slate-800 dark:text-slate-100">{{ i % 2 === 0 ? '商品支付' :
-                                        '余额充值' }}</p>
-                                    <p class="text-xs text-slate-400">2026-01-06 12:34:56</p>
+                                    <p class="font-bold text-slate-800 dark:text-slate-100">{{ item.description ||
+                                        item.transactionType }}</p>
+                                    <p class="text-xs text-slate-400">{{ formatDate(item.createTime) }}</p>
+                                    <p class="text-[10px] text-slate-300 dark:text-slate-600 font-mono mt-0.5">{{
+                                        item.transactionNo }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="font-black text-lg"
-                                    :class="i % 2 === 0 ? 'text-slate-800 dark:text-white' : 'text-green-500'">
-                                    {{ i % 2 === 0 ? '-128.00' : '+500.00' }}
+                                    :class="item.amount >= 0 ? 'text-green-500' : 'text-slate-800 dark:text-white'">
+                                    {{ item.amount >= 0 ? '+' : '' }}{{ item.amount.toFixed(2) }}
                                 </p>
-                                <p class="text-[10px] text-slate-400">交易成功</p>
+                                <p class="text-[10px] text-slate-400">余额: ¥{{ item.balanceAfter.toFixed(2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -95,5 +114,27 @@
 </template>
 
 <script setup lang="ts">
-// Page logic here
+const { walletInfo, transactions, loading, fetchWalletInfo, fetchTransactions } = useWallet();
+
+onMounted(async () => {
+    await Promise.all([
+        fetchWalletInfo(),
+        fetchTransactions()
+    ]);
+});
+
+const getTransactionIcon = (type: string) => {
+    switch (type?.toLowerCase()) {
+        case 'recharge': return 'lucide:arrow-down-to-line';
+        case 'expense': return 'lucide:shopping-bag';
+        case 'refund': return 'lucide:rotate-ccw';
+        default: return 'lucide:receipt';
+    }
+};
+
+const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleString();
+};
 </script>
