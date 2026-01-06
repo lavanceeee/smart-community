@@ -14,14 +14,23 @@
     </nuxt-link>
 
     <div class="flex items-center gap-4 text-xs font-medium">
+
+      <NuxtLink to="/wallet" class="text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
+        钱包
+      </NuxtLink>
+
+      <NuxtLink to="/superCommunity" v-show="canVisitSc"
+        class="text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
+        {{ roleType }} 管理
+      </NuxtLink>
+
+      <div class="h-3 w-px bg-slate-200 dark:bg-slate-700"></div>
+
       <button @click="toggleTheme"
         class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#ff5000] transition-all">
         <Icon v-if="colorMode.value === 'dark'" name="lucide:moon" size="14" />
         <Icon v-else name="lucide:sun" size="14" />
       </button>
-
-      <div class="h-3 w-px bg-slate-200 dark:bg-slate-700"></div>
-
       <template v-if="userStore.isLoggedIn">
         <NuxtLink to="/profile"
           class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
@@ -44,6 +53,20 @@
 const colorMode = useColorMode();
 const route = useRoute();
 const userStore = useUserStore();
+
+
+//canVisitSc
+const canVisitSc = computed(() => {
+  const roleTypeId = userStore.userRole?.roleId;
+
+  if (roleTypeId == 4) return false;
+  return true;
+})
+
+//RoleType
+const roleType = computed(() => {
+  return userStore.userRole?.roleName;
+})
 
 const titleParts = computed(() => {
   const path = route.path || "";

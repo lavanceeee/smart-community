@@ -13,93 +13,10 @@ export const usePayment = () => {
             const res = await getMyBillsApi({ status }) as any
             if (res.code === 200 && res.data && res.data.length > 0) {
                 pendingBills.value = res.data
-            } else {
-                // Mock data
-                pendingBills.value = [
-                    {
-                        "billId": 1,
-                        "billNo": "BILL20260105151526095526d3",
-                        "userId": 12,
-                        "billingPeriod": "2026-01",
-                        "propertyFee": 300,
-                        "waterFee": 45.5,
-                        "electricityFee": 120,
-                        "gasFee": 35,
-                        "parkingFee": 200,
-                        "otherFee": 0,
-                        "totalAmount": 700.5,
-                        "paidAmount": 0,
-                        "status": 0,
-                        "dueDate": "2026-02-10 00:00:00",
-                        "paidTime": null,
-                        "createTime": "2026-01-05 15:15:26",
-                        "updateTime": "2026-01-05 15:15:26"
-                    },
-                    {
-                        "billId": 2,
-                        "billNo": "BILL20260105151526095526d3",
-                        "userId": 12,
-                        "billingPeriod": "2026-01",
-                        "propertyFee": 300,
-                        "waterFee": 45.5,
-                        "electricityFee": 120,
-                        "gasFee": 35,
-                        "parkingFee": 200,
-                        "otherFee": 0,
-                        "totalAmount": 700.5,
-                        "paidAmount": 0,
-                        "status": 0,
-                        "dueDate": "2026-02-10 00:00:00",
-                        "paidTime": null,
-                        "createTime": "2026-01-05 15:15:26",
-                        "updateTime": "2026-01-05 15:15:26"
-                    }
-                ]
             }
             return pendingBills.value
         } catch (e) {
             console.error('获取账单失败:', e)
-            // Fallback to mock on error
-            pendingBills.value = [
-                {
-                    "billId": 1,
-                    "billNo": "BILL20260105151526095526d3",
-                    "userId": 12,
-                    "billingPeriod": "2026-01",
-                    "propertyFee": 300,
-                    "waterFee": 45.5,
-                    "electricityFee": 120,
-                    "gasFee": 35,
-                    "parkingFee": 200,
-                    "otherFee": 0,
-                    "totalAmount": 700.5,
-                    "paidAmount": 0,
-                    "status": 0,
-                    "dueDate": "2026-02-10 00:00:00",
-                    "paidTime": null,
-                    "createTime": "2026-01-05 15:15:26",
-                    "updateTime": "2026-01-05 15:15:26"
-                },
-                {
-                    "billId": 2,
-                    "billNo": "BILL20260105151526095526d3",
-                    "userId": 12,
-                    "billingPeriod": "2026-01",
-                    "propertyFee": 300,
-                    "waterFee": 45.5,
-                    "electricityFee": 120,
-                    "gasFee": 35,
-                    "parkingFee": 200,
-                    "otherFee": 0,
-                    "totalAmount": 700.5,
-                    "paidAmount": 0,
-                    "status": 0,
-                    "dueDate": "2026-02-10 00:00:00",
-                    "paidTime": null,
-                    "createTime": "2026-01-05 15:15:26",
-                    "updateTime": "2026-01-05 15:15:26"
-                }
-            ]
             return pendingBills.value
         } finally {
             loading.value = false
@@ -113,50 +30,10 @@ export const usePayment = () => {
             const res = await getPaymentHistoryApi({ pageSize: 50 }) as any
             if (res.code === 200 && res.data && res.data.length > 0) {
                 historyRecords.value = res.data
-            } else {
-                // Mock data since API might be empty
-                historyRecords.value = [
-                    {
-                        "paymentId": 1,
-                        "paymentNo": "PAY20260105152801B7EE5135",
-                        "billId": 1,
-                        "userId": 12,
-                        "amount": 700.5,
-                        "paymentMethod": "WALLET",
-                        "transactionId": 5,
-                        "status": 1,
-                        "createTime": "2026-01-05 15:28:01"
-                    },
-                    {
-                        "paymentId": 2,
-                        "paymentNo": "PAY20251210101526X9AA3211",
-                        "billId": 0,
-                        "userId": 12,
-                        "amount": 320.0,
-                        "paymentMethod": "WALLET",
-                        "transactionId": 3,
-                        "status": 1,
-                        "createTime": "2025-12-10 10:15:26"
-                    }
-                ]
             }
             return historyRecords.value
         } catch (e) {
             console.error('获取缴费记录失败:', e)
-            // Fallback to mock on error too
-            historyRecords.value = [
-                {
-                    "paymentId": 1,
-                    "paymentNo": "PAY20260105152801B7EE5135",
-                    "billId": 1,
-                    "userId": 12,
-                    "amount": 700.5,
-                    "paymentMethod": "WALLET",
-                    "transactionId": 5,
-                    "status": 1,
-                    "createTime": "2026-01-05 15:28:01"
-                }
-            ]
             return historyRecords.value
         } finally {
             loading.value = false

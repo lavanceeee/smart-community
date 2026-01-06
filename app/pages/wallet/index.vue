@@ -30,10 +30,10 @@
                         </p>
                     </div>
                     <div class="relative z-10 flex gap-4">
-                        <button
+                        <button @click="showRecharge = true"
                             class="flex-1 py-3 px-6 bg-white text-[#ff5000] rounded-2xl font-bold hover:bg-slate-50 transition-colors shadow-lg">充值</button>
                         <button
-                            class="flex-1 py-3 px-6 bg-white/20 backdrop-blur-md text-white rounded-2xl font-bold hover:bg-white/30 transition-colors border border-white/30">提现</button>
+                            class="flex-1 py-3 px-6 bg-white/20 backdrop-blur-md text-white rounded-2xl font-bold hover:bg-white/30 transition-colors border border-white/30">转账</button>
                     </div>
                 </div>
 
@@ -45,7 +45,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总消耗</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalExpense || 0
-                        }}</p>
+                            }}</p>
                     </div>
                     <div
                         class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
@@ -53,7 +53,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总充值</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalRecharge || 0
-                        }}</p>
+                            }}</p>
                     </div>
                 </div>
             </div>
@@ -110,11 +110,18 @@
                 </div>
             </div>
         </div>
+        <!-- Recharge Modal -->
+        <WalletRecharge :show="showRecharge" @close="showRecharge = false" @success="handleRechargeSuccess" />
     </div>
 </template>
 
 <script setup lang="ts">
 const { walletInfo, transactions, loading, fetchWalletInfo, fetchTransactions } = useWallet();
+const showRecharge = ref(false);
+
+const handleRechargeSuccess = () => {
+    // Shared state is updated automatically by doRecharge
+};
 
 onMounted(async () => {
     await Promise.all([

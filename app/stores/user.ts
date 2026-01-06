@@ -10,9 +10,27 @@ interface UserInfo {
   userName: string;
 }
 
+interface UserRole {
+  roleId: number;
+  roleName: string;
+  roleCode: string;
+  description: string;
+  status: number;
+}
+
+interface UserPermission {
+  permissionId: number;
+  permissionName: string;
+  permissionCode: string;
+  description: string;
+  status: number;
+}
+
 export const useUserStore = defineStore('user', () => {
   const token = ref<string | null>(null);
   const userInfo = ref<UserInfo | null>(null);
+  const userRole = ref<UserRole | null>(null);
+  const userPermissions = ref<UserPermission[] | null>(null);
 
   const isLoggedIn = computed(() => !!token.value)
   const displayName = computed(() => userInfo.value?.userName)
@@ -20,6 +38,14 @@ export const useUserStore = defineStore('user', () => {
   function setLoginState(newToken: string, newUser: UserInfo) {
     token.value = newToken
     userInfo.value = newUser
+  }
+
+  function setRole(newRole: UserRole) {
+    userRole.value = newRole;
+  }
+
+  function setPermissions(newPermissions: UserPermission[]) {
+    userPermissions.value = newPermissions;
   }
 
   function logout() {
@@ -34,7 +60,11 @@ export const useUserStore = defineStore('user', () => {
     isLoggedIn,
     displayName,
     setLoginState,
+    setRole,
+    setPermissions,
     logout,
+    userRole,
+    userPermissions
   }
 }, {
   persist: true,

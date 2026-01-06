@@ -25,10 +25,10 @@ export interface TransactionRecord {
 }
 
 export const useWallet = () => {
-    const loading = ref(false);
-    const error = ref<string | null>(null);
-    const walletInfo = ref<WalletInfo | null>(null);
-    const transactions = ref<TransactionRecord[]>([]);
+    const loading = useState('wallet-loading', () => false);
+    const error = useState<string | null>('wallet-error', () => null);
+    const walletInfo = useState<WalletInfo | null>('wallet-info', () => null);
+    const transactions = useState<TransactionRecord[]>('wallet-transactions', () => []);
 
     const fetchWalletInfo = async () => {
         loading.value = true;
@@ -66,12 +66,36 @@ export const useWallet = () => {
         }
     };
 
+    const doRecharge = async (data: { amount: number, paymentMethod: string }) => {
+        loading.value = true;
+        error.value = null;
+        try {
+            const res = await rechargeApi(data) as any;
+            if (res.code === 200) {
+                // Refresh both balance and history
+                await Promise.all([
+                    fetchWalletInfo(),
+                    fetchTransactions()
+                ]);
+                return res;
+            } else {
+                throw new Error(res.message || '充值失败');
+            }
+        } catch (e: any) {
+            error.value = e.message;
+            throw e;
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         loading,
         error,
         walletInfo,
         transactions,
         fetchWalletInfo,
-        fetchTransactions
+        fetchTransactions,
+        doRecharge
     };
 };

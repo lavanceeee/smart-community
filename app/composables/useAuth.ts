@@ -43,8 +43,20 @@ export const useAuth = () => {
         userName: res?.data?.userName,
       }
 
-      const userStore = useUserStore();
-      userStore.setLoginState(token, userInfo);
+      //进行用户权限保存
+      if (token && userInfo.userId) {
+        const usersPermission = await getCurrentUser() as any;
+
+        if (usersPermission.code == 200) {
+          const role = usersPermission.data.roles;
+          const permission = usersPermission.data.permissions;
+
+          const userStore = useUserStore();
+          userStore.setLoginState(token, userInfo);
+          userStore.setRole(role);
+          userStore.setPermissions(permission);
+        }
+      }
       return res;
     } catch (e: any) {
       error.value = e.message;

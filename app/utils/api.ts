@@ -39,6 +39,14 @@ const $api = $fetch.create({
     }
 })
 
+//获取当前用户角色
+//api/permission/user/current
+export const getCurrentUser = () => {
+    return $api('api/permission/user/current', {
+        method: 'GET'
+    })
+}
+
 export const registerUser = (data: any) => {
     return $api('api/user/register', {
         method: 'POST',
@@ -270,13 +278,20 @@ export const getBillDetailApi = (billId: string | number) => {
 
 //钱包组件
 
-//1. //api/wallet/info 获取钱包信息
+//1. 获取钱包信息
+//api/wallet/info 
 export const getWalletInfoApi = () => {
     return $api('/api/wallet/info', { method: 'GET' })
 }
 
-//查询交易记录
+//2. 查询交易记录
 // /api/wallet/transactions
 export const getTransactionsApi = () => {
     return $api('/api/wallet/transactions', { method: 'GET' })
+}
+
+//3. 充值接口
+// /api/wallet/recharge
+export const rechargeApi = (data: any) => {
+    return $api('/api/wallet/recharge', { method: 'POST', body: data })
 }
