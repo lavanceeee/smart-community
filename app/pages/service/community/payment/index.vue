@@ -52,6 +52,10 @@
                     <PaymentRecords :records="historyRecords" />
                 </div>
             </div>
+
+            <!-- Pay Dialog -->
+            <ComponentPayDialogDetials :show="showPayDetails" :orderData="currentOrder" @close="showPayDetails = false"
+                @success="handlePaymentSuccess" />
         </div>
     </div>
 </template>
@@ -65,10 +69,12 @@ const {
     historyRecords,
     fetchMyBills,
     fetchPaymentHistory,
-    payBill
+    createPaymentOrder
 } = usePayment()
 
 const activeTab = ref('待缴账单')
+const showPayDetails = ref(false)
+const currentOrder = ref<any>(null)
 
 const tabs = [
     { name: '待缴账单', icon: 'lucide:wallet' },
@@ -86,24 +92,20 @@ const loadData = async () => {
     }
 }
 
-const handlePay = async (bill: any) => {
-    await ElMessageBox.confirm(
-        `确定要缴纳 ${bill.billingPeriod} 月份的物业缴费单吗？金额: ¥${bill.totalAmount.toFixed(2)}`,
-        '缴费确认',
-        {
-            confirmButtonText: '立即支付',
-            cancelButtonText: '取消',
-            type: 'info',
-            roundButton: true,
-            customClass: 'payment-confirm-box'
-        }
-    )
+const handlePay = async (bill: any, method: string) => {
+    // 创建订单
+    const order = await createPaymentOrder(bill.billId, bill.totalAmount, method);
 
-    const success = await payBill(bill.billId, bill.totalAmount);
-
-    if (success) {
-        await loadData();
+    if (order) {
+        currentOrder.value = order;
+        showPayDetails.value = true;
     }
+}
+
+const handlePaymentSuccess = async () => {
+    showPayDetails.value = false;
+    ElMessage.success('支付成功');
+    await loadData();
 }
 
 onMounted(() => {

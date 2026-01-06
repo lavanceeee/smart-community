@@ -240,14 +240,81 @@ export const getProductImagesApi = (ProductId: string | number) => {
     return $api(`/api/product/${ProductId}/images`, { method: 'GET' })
 }
 
+//添加商品到购物车
+// /api/mall/cart/items
+export const addToCartApi = (data: any) => {
+    return $api('/api/mall/cart/items', {
+        method: 'POST',
+        body: data
+    })
+}
+
+//获取购物车列表
+///api/mall/cart/items
+export const getCartListApi = () => {
+    return $api('/api/mall/cart/items', { method: 'GET' })
+}
+
+//移除购物车商品
+//api/mall/cart/items/{cartItemId}
+export const removeCartApi = (cartItemId: string | number) => {
+    return $api(`/api/mall/cart/items/${cartItemId}`, { method: 'DELETE' })
+}
+
+//更新购物车商品数量
+///api/mall/cart/items/{cartItemId}/quantity
+export const updateCartQuantityApi = (cartItemId: string | number, quantity: number) => {
+    return $api(`/api/mall/cart/items/${cartItemId}/quantity`, {
+        method: 'PUT',
+        body: { quantity }
+    })
+}
+
+
+
+
+
+
+
+
+
 
 // --- 物业缴费相关 ---
 
-// 缴纳物业费
-export const payPropertyFeeApi = (data: any) => {
-    return $api('/api/property-fee/pay', {
+// 创建订单
+//api/payment/create-order
+// 创建订单
+//api/payment/create-order
+export const createOrderApi = (data: any) => {
+    return $api(`/api/payment/create-order`, {
         method: 'POST',
         body: data
+    })
+}
+
+//发起支付
+//api/payment/initiate/{orderNo}
+export const initiatePaymentApi = (orderNo: string | number) => {
+    return $api(`/api/payment/initiate/${orderNo}`, {
+        method: 'POST'
+    })
+}
+
+//查询订单状态
+///api/payment/query/{orderNo}
+export const queryOrderStatusApi = (orderNo: string | number) => {
+    return $api(`/api/payment/query/${orderNo}`, {
+        method: 'GET'
+    })
+}
+
+
+//模拟回调接口
+///api/payment/mock/callback/{orderNo}
+export const mockCallbackApi = (orderNo: string | number, success: boolean = true) => {
+    return $api(`/api/payment/mock/callback/${orderNo}`, {
+        method: 'POST',
+        query: { success }
     })
 }
 

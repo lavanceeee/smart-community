@@ -47,10 +47,9 @@ const route = useRoute()
 // 定义菜单结构
 const menuItems = [
   { title: '关于我', path: '/profile' },
-  { title: '我的购物车', path: '/cart' },
-  { title: '我的订单', path: '/user/orders' },
+  { title: '我的购物车', path: '/service/mall/chart' },
 
-  // 可展开项
+  //可展开项
   {
     title: '账户设置',
     // 默认不需要 path，只作为折叠容器

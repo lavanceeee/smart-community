@@ -98,19 +98,52 @@
                                 <!-- Available Stores -->
                                 <div v-if="product?.availableStores?.length" class="space-y-2">
                                     <div v-for="store in product.availableStores" :key="store.storeId"
-                                        class="bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        @click="selectedStoreId = store.storeId"
+                                        class="p-3 rounded-lg border cursor-pointer transition-all"
+                                        :class="selectedStoreId === store.storeId ? 'border-[#ff5000] bg-orange-50 dark:bg-orange-900/20' : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-orange-200'">
                                         <div class="flex items-center justify-between mb-1">
-                                            <span class="font-bold text-[#ff5000]">{{ store.storeName }}</span>
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-3 h-3 rounded-full border border-slate-300 flex items-center justify-center"
+                                                    :class="selectedStoreId === store.storeId ? 'border-[#ff5000] bg-[#ff5000]' : ''">
+                                                    <Icon v-if="selectedStoreId === store.storeId" name="lucide:check"
+                                                        size="8" class="text-white" />
+                                                </div>
+                                                <span class="font-bold"
+                                                    :class="selectedStoreId === store.storeId ? 'text-[#ff5000]' : 'text-slate-700 dark:text-slate-300'">{{
+                                                        store.storeName }}</span>
+                                            </div>
                                             <span
                                                 class="text-[10px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded font-bold">库存:
                                                 {{ store.stock }}</span>
                                         </div>
-                                        <div class="flex items-center gap-1 text-xs text-slate-500">
+                                        <div class="flex items-center gap-1 text-xs text-slate-500 pl-5">
                                             <Icon name="lucide:map-pin" size="12" /> {{ store.address }}
                                         </div>
-                                        <div class="text-[10px] text-slate-400 mt-1 italic">营业时间: {{ store.businessHours
+                                        <div class="text-[10px] text-slate-400 mt-1 italic pl-5">营业时间: {{
+                                            store.businessHours
                                         }}</div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="flex items-center gap-3">
+                            <Icon name="lucide:shopping-bag" size="18" class="text-slate-400" />
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-500 shrink-0">购买数量</span>
+                                <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                                    <button @click="quantity > 1 && quantity--"
+                                        class="w-7 h-7 flex items-center justify-center bg-white dark:bg-slate-700 rounded shadow-sm text-slate-800 dark:text-slate-200 font-bold text-lg disabled:opacity-50 hover:bg-slate-50 transition-colors"
+                                        :disabled="quantity <= 1">
+                                        -
+                                    </button>
+                                    <input type="number" v-model="quantity"
+                                        class="w-12 text-center bg-transparent border-none text-base font-bold text-slate-800 dark:text-slate-100 focus:outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none" />
+                                    <button @click="quantity++"
+                                        class="w-7 h-7 flex items-center justify-center bg-white dark:bg-slate-700 rounded shadow-sm text-slate-800 dark:text-slate-200 font-bold text-lg hover:bg-slate-50 transition-colors">
+                                        +
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +187,7 @@
             </div>
 
             <div class="flex-1 max-w-[280px] flex h-11 rounded-xl overflow-hidden shadow-sm">
-                <button
+                <button @click="handleAddToCart"
                     class="flex-1 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all">
                     加入购物车
                 </button>
@@ -177,10 +210,12 @@ const product = ref<any>(null)
 const loading = ref(false)
 
 import { useMallGoods } from '@/composables/mall/useMallGoods'
-const { fetchDetail, fetchCollect, fetchCancelCollect, fetchProductImages } = useMallGoods();
+const { fetchDetail, fetchCollect, fetchCancelCollect, fetchProductImages, fetchAddToCart } = useMallGoods();
 
 const productImages = ref<any[]>([])
 const activeImage = ref('')
+const quantity = ref(1)
+const selectedStoreId = ref<number | null>(null)
 
 const loadData = async () => {
     loading.value = true
@@ -195,6 +230,11 @@ const loadData = async () => {
             title: `${product.value.productName} - 智慧社区商城`,
             description: product.value.description
         })
+
+        // Default select first store
+        if (detailData.availableStores && detailData.availableStores.length > 0) {
+            selectedStoreId.value = detailData.availableStores[0].storeId
+        }
     }
 
     if (imagesData && imagesData.length > 0) {
@@ -224,6 +264,25 @@ const handleCollect = async (productId: string) => {
         product.value.isCollected = !product.value.isCollected;
         ElMessage.success(product.value.isCollected ? '添加收藏成功' : '已取消收藏');
     }
+}
+
+const handleAddToCart = async () => {
+    if (!selectedStoreId.value) {
+        ElMessage.warning('请选择门店');
+        return;
+    }
+    if (quantity.value < 1) {
+        ElMessage.warning('请选择购买数量');
+        return;
+    }
+
+    const data = {
+        productId: productId,
+        storeId: selectedStoreId.value,
+        quantity: quantity.value
+    };
+
+    await fetchAddToCart(data);
 }
 
 </script>

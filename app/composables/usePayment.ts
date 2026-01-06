@@ -1,4 +1,4 @@
-import { payPropertyFeeApi, getPaymentHistoryApi, getMyBillsApi, getBillDetailApi } from '@/utils/api'
+import { createOrderApi, getPaymentHistoryApi, getMyBillsApi, getBillDetailApi } from '@/utils/api'
 
 export const usePayment = () => {
     const loading = ref(false)
@@ -57,27 +57,30 @@ export const usePayment = () => {
         }
     }
 
-    // 缴纳物业费
-    const payBill = async (billId: string | number, amount: number) => {
+    // 创建物业费支付订单
+    const createPaymentOrder = async (billId: string | number, amount: number, paymentMethod: string, description: string = '物业费缴纳') => {
         loading.value = true
         try {
-            const res = await payPropertyFeeApi({
-                billId,
-                amount,
-                paymentMethod: 'wallet'
-            }) as any
+            const data = {
+                orderType: "PROPERTY_FEE",
+                amount: amount,
+                paymentMethod: paymentMethod,
+                relatedId: billId,
+                description: description
+            };
+
+            const res = await createOrderApi(data) as any
 
             if (res.code == 200) {
-                ElMessage.success('缴费成功！')
-                return true;
+                return res.data;
             }
             else {
-                ElMessage.error(res.message || '缴费失败，请重试')
-                return false;
+                ElMessage.error(res.message || '创建订单失败，请重试')
+                return null;
             }
-        } catch (e) {
-            console.error('支付失败:', e)
-            ElMessage.error('支付失败，请重试');
+        } catch (e: any) {
+            console.error('创建订单失败:', e)
+            ElMessage.error(e.message || '创建订单失败，请重试');
             throw e
         } finally {
             loading.value = false
@@ -92,6 +95,6 @@ export const usePayment = () => {
         fetchMyBills,
         fetchPaymentHistory,
         fetchBillDetail,
-        payBill
+        createPaymentOrder
     }
 }

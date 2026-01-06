@@ -79,7 +79,8 @@ export const useUserStore = defineStore('user', () => {
     userPermissions
   }
 }, {
-  persist: true,
-
+  persist: {
+    storage: import.meta.client ? localStorage : undefined,
+  },
 }
 )

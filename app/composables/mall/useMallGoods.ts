@@ -1,7 +1,9 @@
+import { getMallGoodsListApi, getMallProductDetailApi, collectProductApi, cancelCollectProductApi, getProductImagesApi, addToCartApi, getCartListApi, removeCartApi } from '@/utils/api'
 
 export const useMallGoods = () => {
     const goodsList = ref<any[]>([])
     const subsidyList = ref<any[]>([])
+    const cartList = ref<any[]>([])
     const loading = ref(false)
     const currentPage = ref(1)
     const total = ref(0)
@@ -126,9 +128,71 @@ export const useMallGoods = () => {
         }
     }
 
+    //加入购物车
+    const fetchAddToCart = async (data: any) => {
+        loading.value = true;
+        try {
+            const res = await addToCartApi(data) as any
+            if (res.code == 200) {
+                ElMessage.success('已加入购物车');
+                return true;
+            }
+            else {
+                ElMessage.error(res.message);
+                return false;
+            }
+        } catch (e) {
+            console.error(e);
+            ElMessage.error('加入购物车失败');
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    //获取购物车列表
+    const fetchCartList = async () => {
+        loading.value = true
+        try {
+            const res = await getCartListApi() as any
+            if (res.code == 200) {
+                cartList.value = res.data || []
+            }
+        } catch (e) {
+            console.error(e);
+            ElMessage.error('获取购物车失败');
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    //移除购物车商品
+    const fetchRemoveCart = async (cartItemId: string | number) => {
+        loading.value = true
+        try {
+            const res = await removeCartApi(cartItemId) as any
+            if (res.code == 200) {
+                ElMessage.success('移除成功');
+                // Refresh list
+                await fetchCartList();
+                return true;
+            } else {
+                ElMessage.error(res.message);
+                return false;
+            }
+        } catch (e) {
+            console.error(e);
+            ElMessage.error('移除失败');
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         goodsList,
         subsidyList,
+        cartList,
         loading,
         fetchGoodsList,
         loadMore,
@@ -136,6 +200,9 @@ export const useMallGoods = () => {
         fetchDetail,
         fetchCollect,
         fetchCancelCollect,
-        fetchProductImages
+        fetchProductImages,
+        fetchAddToCart,
+        fetchCartList,
+        fetchRemoveCart
     }
 }

@@ -72,7 +72,7 @@
                             class="group relative w-full bg-gradient-to-r from-[#ff5000] to-[#ff8c00] text-white py-5 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:pointer-events-none">
                             <div class="flex items-center justify-center gap-2">
                                 <Icon v-if="loading" name="lucide:loader-2" class="animate-spin" size="20" />
-                                <span>立即支付 ¥{{ selectedAmount.toFixed(2) }}</span>
+                                <span>创建订单 ¥{{ selectedAmount.toFixed(2) }}</span>
                             </div>
                         </button>
                     </div>
@@ -80,6 +80,10 @@
             </Transition>
         </div>
     </Transition>
+
+    <!-- Order Details Dialog -->
+    <ComponentPayDialogDetials :show="showDetails" :orderData="orderDetails" @close="showDetails = false"
+        @success="handlePaymentSuccess" />
 </template>
 
 <script setup lang="ts">
@@ -89,32 +93,41 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'success']);
 
-const { doRecharge, loading } = useWallet();
+const { createRechargeOrder, loading } = useWallet();
 
 const amounts = [50, 100, 200, 500, 1000, 2000];
 const selectedAmount = ref(100);
 
 const paymentMethods = [
-    { id: 'alipay', name: '支付宝支付', icon: 'simple-icons:alipay', color: 'bg-blue-500' },
-    { id: 'wechat', name: '微信支付', icon: 'simple-icons:wechat', color: 'bg-green-500' }
+    { id: 'ALIPAY', name: '支付宝支付', icon: 'simple-icons:alipay', color: 'bg-blue-500' },
+    { id: 'WECHAT', name: '微信支付', icon: 'simple-icons:wechat', color: 'bg-green-500' }
 ];
-const selectedMethod = ref('alipay');
+const selectedMethod = ref('ALIPAY');
+
+const showDetails = ref(false);
+const orderDetails = ref({});
 
 const handleRecharge = async () => {
     try {
-        const res = await doRecharge({
-            amount: selectedAmount.value,
-            paymentMethod: selectedMethod.value
-        });
+        const res = await createRechargeOrder(
+            selectedAmount.value,
+            selectedMethod.value
+        );
 
-        if (res.code === 200) {
-            ElMessage.success('支付成功，已更新余额');
-            emit('success');
-            emit('close');
+        if (res) {
+            orderDetails.value = res;
+            showDetails.value = true;
+            // The logic finishes here for this step, user continues in the details dialog
         }
     } catch (error: any) {
-        ElMessage.error(error.message || '支付失败，请稍后重试');
+        ElMessage.error(error.message || '创建订单失败，请稍后重试');
     }
+};
+
+const handlePaymentSuccess = () => {
+    emit('success');
+    emit('close');
+    showDetails.value = false;
 };
 </script>
 

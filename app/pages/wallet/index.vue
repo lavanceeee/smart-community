@@ -45,7 +45,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总消耗</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalExpense || 0
-                            }}</p>
+                        }}</p>
                     </div>
                     <div
                         class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
@@ -53,7 +53,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总充值</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalRecharge || 0
-                            }}</p>
+                        }}</p>
                     </div>
                 </div>
             </div>

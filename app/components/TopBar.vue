@@ -21,7 +21,7 @@
 
       <NuxtLink to="/superCommunity" v-show="canVisitSc"
         class="text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
-        {{ roleType }} 管理
+        {{ roleType }}
       </NuxtLink>
 
       <div class="h-3 w-px bg-slate-200 dark:bg-slate-700"></div>
