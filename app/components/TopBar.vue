@@ -59,7 +59,7 @@ const userStore = useUserStore();
 const canVisitSc = computed(() => {
   const roleTypeId = userStore.userRole?.roleId;
 
-  if (roleTypeId == 4) return false;
+  if (roleTypeId == 4 || roleTypeId == null) return false;
   return true;
 })
 

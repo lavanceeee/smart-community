@@ -6,8 +6,37 @@
       </div>
     </header>
 
-    <main class="flex-1 flex justify-center items-center">
-      <div class="bg-white w-[950px] h-[500px] rounded-[20px] shadow-2xl shadow-slate-200/50 flex p-10 relative">
+    <main class="flex-1 flex justify-center items-center relative">
+      <div
+        class="bg-white w-[950px] h-[500px] rounded-[20px] shadow-2xl shadow-slate-200/50 flex p-10 relative overflow-hidden">
+
+        <!-- Loading Overlay -->
+        <Transition name="fade">
+          <div v-if="loading"
+            class="absolute inset-0 z-50 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center">
+            <div class="relative">
+              <!-- Outer glowing ring -->
+              <div class="absolute inset-0 rounded-full bg-[#ff5000]/20 animate-ping scale-150"></div>
+              <!-- Inner spinning ring -->
+              <div class="w-16 h-16 rounded-full border-4 border-slate-100 border-t-[#ff5000] animate-spin"></div>
+              <!-- Center icon -->
+              <div class="absolute inset-0 flex items-center justify-center text-[#ff5000]">
+                <Icon name="lucide:shield-check" size="24" class="animate-pulse" />
+              </div>
+            </div>
+            <div class="mt-6 flex flex-col items-center gap-2">
+              <span class="text-lg font-bold text-slate-800 tracking-tight">安全登录中</span>
+              <div class="flex gap-1">
+                <div class="w-1 h-1 rounded-full bg-[#ff5000] animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-1 h-1 rounded-full bg-[#ff5000] animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-1 h-1 rounded-full bg-[#ff5000] animate-bounce"></div>
+              </div>
+              <p class="text-xs text-slate-400 mt-2 font-medium uppercase tracking-[0.2em]">Authenticating with Neuedu
+                Service</p>
+            </div>
+          </div>
+        </Transition>
+
         <div class="flex-1 flex flex-col items-center justify-center border-r border-slate-100 pr-10">
           <h2 class="text-lg font-bold text-slate-700 mb-8">手机扫码登录</h2>
 
@@ -143,7 +172,10 @@ const form = reactive({
   agreed: false,
 });
 
-const { loginAction, loading } = useAuth();
+const { loginAction, loading: authLoading } = useAuth();
+const localLoading = ref(false);
+// 合并 loading 状态，确保加载特效能持续显示
+const loading = computed(() => authLoading.value || localLoading.value);
 
 const handleSendCode = async () => {
   if (!form.email) {
@@ -190,14 +222,22 @@ const handleLogin = async () => {
       ElMessage.error("请填写邮箱和验证码");
       return;
     }
-    // Assuming backend supports { email, verifyCode } or similar
-    // If backend only has one login endpoint, we send what it expects.
-    // Usually smart backends detect fields.
     payload = { email: form.email, verifyCode: form.verifyCode }
   }
 
+  localLoading.value = true;
+  const startTime = Date.now();
+
   try {
     await loginAction(payload, loginMethod.value);
+
+    // 计算耗时，确保 loading 效果至少显示 3 秒
+    const elapsedTime = Date.now() - startTime;
+    const minTime = 3000;
+    if (elapsedTime < minTime) {
+      await new Promise(resolve => setTimeout(resolve, minTime - elapsedTime));
+    }
+
     await navigateTo("/");
   } catch (err: any) {
     ElNotification({
@@ -205,6 +245,20 @@ const handleLogin = async () => {
       message: err.message || err,
       type: "error",
     });
+  } finally {
+    localLoading.value = false;
   }
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

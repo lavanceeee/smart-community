@@ -51,6 +51,9 @@ export const useUserStore = defineStore('user', () => {
   function logout() {
     token.value = null
     userInfo.value = null
+
+    userRole.value = null;
+    userPermissions.value = null;
     // Clean up local storage persistence if needed, though setting to null usually suffices with persist plugin
   }
 

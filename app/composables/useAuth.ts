@@ -45,14 +45,16 @@ export const useAuth = () => {
 
       //进行用户权限保存
       if (token && userInfo.userId) {
+        const userStore = useUserStore();
+        // 先保存登录状态，这样后续的 getCurrentUser 请求才能带上 Token
+        userStore.setLoginState(token, userInfo);
+
         const usersPermission = await getCurrentUser() as any;
 
         if (usersPermission.code == 200) {
           const role = usersPermission.data.roles;
           const permission = usersPermission.data.permissions;
 
-          const userStore = useUserStore();
-          userStore.setLoginState(token, userInfo);
           userStore.setRole(role);
           userStore.setPermissions(permission);
         }
