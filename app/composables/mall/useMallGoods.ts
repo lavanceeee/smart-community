@@ -154,74 +154,12 @@ export const useMallGoods = () => {
     const fetchCartList = async () => {
         loading.value = true
         try {
-            // Mock Data for testing
-            await new Promise(resolve => setTimeout(resolve, 600)); // Simulate network delay
-
-            cartList.value = [
-                {
-                    cartId: 101,
-                    productId: 1001,
-                    productName: "有机红富士苹果 (5斤装)",
-                    price: 29.9,
-                    coverImg: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&q=80",
-                    storeId: 1,
-                    storeName: "鲜果园旗舰店",
-                    quantity: 1,
-                    stock: 100
-                },
-                {
-                    cartId: 102,
-                    productId: 1002,
-                    productName: "新鲜土鸡蛋 (30枚)",
-                    price: 35.5,
-                    coverImg: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400&q=80",
-                    storeId: 1,
-                    storeName: "鲜果园旗舰店",
-                    quantity: 2,
-                    stock: 50
-                },
-                {
-                    cartId: 103,
-                    productId: 2005,
-                    productName: "家用多功能清洁剂",
-                    price: 15.9,
-                    coverImg: "https://images.unsplash.com/photo-1585421514738-0179870f806d?w=400&q=80",
-                    storeId: 2,
-                    storeName: "社区生活超市",
-                    quantity: 1,
-                    stock: 200
-                },
-                {
-                    cartId: 104,
-                    productId: 2008,
-                    productName: "维达抽纸 (12包/提)",
-                    price: 26.8,
-                    coverImg: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&q=80",
-                    storeId: 2,
-                    storeName: "社区生活超市",
-                    quantity: 5,
-                    stock: 200
-                },
-                {
-                    cartId: 105,
-                    productId: 3001,
-                    productName: "可口可乐 330ml*6",
-                    price: 12.5,
-                    coverImg: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80",
-                    storeId: 3,
-                    storeName: "便利小栈",
-                    quantity: 3,
-                    stock: 999
-                }
-            ];
-
-            // Real API Call (Commented out)
-            /*
             const res = await getCartListApi() as any
             if (res.code == 200) {
                 cartList.value = res.data || []
+            } else {
+                ElMessage.error(res.message || '获取购物车失败');
             }
-            */
         } catch (e) {
             console.error(e);
             ElMessage.error('获取购物车失败');
@@ -254,14 +192,19 @@ export const useMallGoods = () => {
     }
 
     //更新购物车商品数量
-    const fetchUpdateCartQuantity = async (cartItemId: string | number, quantity: number) => {
+    const fetchUpdateCartQuantity = async (cartItem: any, quantity: number) => {
         try {
-            const res = await updateCartQuantityApi(cartItemId, quantity) as any
+            const res = await updateCartQuantityApi({
+                cartId: cartItem.cartId,
+                productId: cartItem.productId,
+                quantity: quantity,
+                operation: 'update'
+            }) as any
+
             if (res.code == 200) {
-                // Success
                 return true;
             } else {
-                ElMessage.error(res.message);
+                ElMessage.error(res.message || '更新数量失败');
                 return false;
             }
         } catch (e) {

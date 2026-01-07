@@ -1,0 +1,133 @@
+import type { ForumPost } from './useForum';
+
+export const usePost = () => {
+    const creating = useState('forum-post-creating', () => false);
+
+    // Create Post
+    const createPost = async (params: { sectionId: number | string; title: string; content: string; images?: string }) => {
+        creating.value = true;
+        try {
+            const res = await createForumPostApi(params) as any;
+            if (res.code === 200) {
+                return res.data; // usually returns postId
+            } else {
+                throw new Error(res.message || '发布帖子失败');
+            }
+        } catch (e: any) {
+            throw e;
+        } finally {
+            creating.value = false;
+        }
+    };
+
+    // Toggle Like
+    const toggleLike = async (post: ForumPost) => {
+        // Optimistic update
+        const originalLiked = post.isLiked;
+        const originalCount = post.likeCount;
+
+        // Optimistically toggle
+        post.isLiked = !originalLiked;
+        post.likeCount = post.isLiked ? post.likeCount + 1 : Math.max(0, post.likeCount - 1);
+
+        console.log('Toggling Like:', { postId: post.postId, newLiked: post.isLiked });
+
+        try {
+            let res;
+            if (originalLiked) {
+                console.log('Sending Cancel Like Request...');
+                res = await cancelLikeForumPostApi(post.postId) as any;
+            } else {
+                console.log('Sending Like Request...');
+                res = await likeForumPostApi(post.postId) as any;
+            }
+
+            console.log('Like Response:', res);
+
+            if (res.code !== 200) {
+                throw new Error(res.message || `Code ${res.code}`);
+            }
+        } catch (e: any) {
+            console.error('Toggle Like Error:', e);
+            ElMessage.error(e.message || '操作失败');
+            // Revert
+            post.isLiked = originalLiked;
+            post.likeCount = originalCount;
+        }
+    };
+
+    // Toggle Collect
+    const toggleCollect = async (post: ForumPost) => {
+        // Optimistic update
+        const originalCollected = post.isCollected;
+
+        post.isCollected = !originalCollected;
+        // Note: ForumPost might need collectionCount if we track it, but usually collect is personal. 
+        // Assuming API doesn't return count update for collect usually, but let's check interface.
+        // Interface doesn't have collectCount.
+
+        try {
+            let res;
+            if (originalCollected) {
+                res = await cancelCollectForumPostApi(post.postId) as any;
+            } else {
+                res = await collectForumPostApi(post.postId) as any;
+            }
+
+            if (res.code !== 200) {
+                // Revert
+                post.isCollected = originalCollected;
+                ElMessage.error(res.message || '操作失败');
+            } else {
+                ElMessage.success(post.isCollected ? '收藏成功' : '已取消收藏');
+            }
+        } catch (e) {
+            // Revert
+            post.isCollected = originalCollected;
+            console.error('Toggle Collect Error:', e);
+        }
+    };
+
+    // My Collected Posts State
+    const collectedPosts = useState<ForumPost[]>('forum-my-collected', () => []);
+    const collectedPage = useState<number>('forum-my-collected-page', () => 1);
+    const collectedHasMore = useState<boolean>('forum-my-collected-has-more', () => true);
+    const collectedLoading = useState<boolean>('forum-my-collected-loading', () => false);
+
+    const fetchMyCollectedPosts = async (page = 1, size = 5, append = false) => {
+        collectedLoading.value = true;
+        try {
+            const params = {
+                pageNo: page,
+                pageSize: size
+            };
+            const res = await getMyCollectedForumPostApi(params) as any;
+            if (res.code === 200) {
+                const newPosts = res.data.records || [];
+                if (append) {
+                    collectedPosts.value = [...collectedPosts.value, ...newPosts];
+                } else {
+                    collectedPosts.value = newPosts;
+                }
+                collectedPage.value = res.data.current;
+                collectedHasMore.value = collectedPosts.value.length < res.data.total;
+            }
+        } catch (e) {
+            console.error('Fetch Collected Posts Error:', e);
+        } finally {
+            collectedLoading.value = false;
+        }
+    };
+
+    return {
+        creating,
+        createPost,
+        toggleLike,
+        toggleCollect,
+        collectedPosts,
+        collectedPage,
+        collectedHasMore,
+        collectedLoading,
+        fetchMyCollectedPosts
+    };
+};

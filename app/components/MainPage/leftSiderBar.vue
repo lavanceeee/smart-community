@@ -31,6 +31,7 @@ const menuGroups = computed(() => [
   {
     title: '社区服务',
     items: [
+      { name: '社区论坛', path: '/service/community/forum', icon: 'lucide:layout-grid' },
       { name: '通知公告', path: '/service/community/news', icon: 'lucide:megaphone' },
       { name: '物业缴费', path: '/service/community/payment', icon: 'lucide:credit-card' },
       { name: '报修投诉', path: '/service/community/issues', icon: 'lucide:wrench' },

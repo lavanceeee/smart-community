@@ -49,13 +49,44 @@ export const useWallet = () => {
         }
     };
 
-    const fetchTransactions = async () => {
+    const transactionPage = useState('wallet-transaction-page', () => 1);
+    const hasMore = useState('wallet-has-more', () => true);
+
+    const fetchTransactions = async (page = 1, size = 10, type = 'ALL', append = false) => {
         loading.value = true;
         error.value = null;
         try {
-            const res = await getTransactionsApi() as any;
+            const params = { page, size, type };
+            const res = await getTransactionsApi(params) as any;
+
             if (res.code === 200) {
-                transactions.value = res.data;
+                // Determine the list from response
+                let newItems: TransactionRecord[] = [];
+                if (Array.isArray(res.data)) {
+                    newItems = res.data;
+                } else if (res.data && Array.isArray(res.data.records)) {
+                    newItems = res.data.records;
+                }
+
+                // Filter out duplicates based on transactionId
+                const existingIds = new Set(transactions.value.map(t => t.transactionId));
+                const uniqueNewItems = newItems.filter(item => !existingIds.has(item.transactionId));
+
+                if (append) {
+                    transactions.value = [...transactions.value, ...uniqueNewItems];
+                    // If we are appending, but got no NEW unique items, it means we reached the end or backend is looping
+                    if (uniqueNewItems.length === 0 && newItems.length > 0) {
+                        hasMore.value = false;
+                    } else {
+                        hasMore.value = newItems.length >= size;
+                    }
+                } else {
+                    transactions.value = newItems; // Reset list
+                    hasMore.value = newItems.length >= size;
+                }
+
+                transactionPage.value = page;
+
             } else {
                 throw new Error(res.message || '获取交易记录失败');
             }
@@ -65,6 +96,12 @@ export const useWallet = () => {
         } finally {
             loading.value = false;
         }
+    };
+
+    const resetTransactions = () => {
+        transactions.value = [];
+        transactionPage.value = 1;
+        hasMore.value = true;
     };
 
     // 使用 createOrderApi 创建充值订单
@@ -148,16 +185,41 @@ export const useWallet = () => {
         });
     };
 
+    // 切换支付方式
+    const changePayMethod = async (orderNo: string | number, method: string) => {
+        loading.value = true;
+        try {
+            const res = await changePayMethodApi(orderNo, method) as any;
+            if (res.code === 200) {
+                ElMessage.success('支付方式已更新');
+                return true;
+            } else {
+                ElMessage.error(res.message || '切换支付方式失败,请稍后重试');
+                return false;
+            }
+        } catch (e: any) {
+            console.error('Change Pay Method Error:', e);
+            ElMessage.error('切换支付方式失败,请稍后重试');
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         loading,
         error,
         walletInfo,
         transactions,
         lastOrderData,
+        transactionPage,
+        hasMore,
         fetchWalletInfo,
         fetchTransactions,
+        resetTransactions,
         createRechargeOrder,
         initiatePayment,
+        changePayMethod,
         pollOrderStatus
     };
 };

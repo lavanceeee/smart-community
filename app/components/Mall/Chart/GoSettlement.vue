@@ -42,7 +42,7 @@
         <button @click="$emit('checkout')"
             class="w-full mt-6 bg-[#ff5000] hover:bg-[#e64a00] text-white py-3 rounded-xl font-bold shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             :disabled="selectedList.length === 0">
-            结算
+            加入订单
         </button>
     </div>
 </template>

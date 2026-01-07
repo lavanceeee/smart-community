@@ -56,6 +56,7 @@
 
 <script setup lang="ts">
 import { useMallGoods } from '@/composables/mall/useMallGoods'
+import { useGoodsOrder } from '@/composables/mall/useGoodsOrder'
 
 const { cartList, loading, fetchCartList, fetchRemoveCart, fetchUpdateCartQuantity } = useMallGoods()
 
@@ -117,7 +118,7 @@ const handleQuantityChange = async (item: any, delta: number) => {
 const handleQuantityUpdate = async (item: any, quantity: number) => {
     if (quantity < 1) quantity = 1;
     item.loading = true; // Local loading state
-    const success = await fetchUpdateCartQuantity(item.cartId, quantity);
+    const success = await fetchUpdateCartQuantity(item, quantity);
     item.loading = false;
 
     if (success) {
@@ -147,10 +148,56 @@ const handleRemove = async (id: number) => {
     }
 }
 
-const handleCheckout = () => {
+const { createOrder, loading: orderCreating } = useGoodsOrder()
+
+const handleCheckout = async () => {
     if (selectedList.value.length === 0) return;
-    ElMessage.success('跳转结算页 -> ' + selectedList.value.map(i => i.productName).join(', '));
-    // navigateTo('/service/mall/checkout') // TODO: Implement checkout page
+
+    try {
+        await ElMessageBox.confirm(
+            `确定要将这 ${selectedList.value.length} 件商品加入订单吗？`,
+            '操作确认',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }
+        )
+
+        // Group selected items by storeId
+        const groups: Record<number, number[]> = {}
+        selectedList.value.forEach(item => {
+            const sId = item.storeId
+            if (sId === undefined || sId === null) return
+            if (!groups[sId]) {
+                groups[sId] = []
+            }
+            groups[sId].push(item.cartId)
+        })
+
+        // Process each store group (usually one in typical flow, but handled both)
+        let successCount = 0
+        const storeCount = Object.keys(groups).length
+
+        for (const [storeId, cartItemIds] of Object.entries(groups)) {
+            const res = await createOrder(Number(storeId), cartItemIds, '购物车结算')
+            if (res) successCount++
+        }
+
+        if (successCount > 0) {
+            // Success! Clear selections and refresh cart
+            selectedIds.value = []
+            await fetchCartList()
+
+            if (successCount === storeCount) {
+                navigateTo('/service/mall/mo')
+            }
+        }
+    } catch (error) {
+        if (error !== 'cancel') {
+            console.error('Checkout error:', error)
+        }
+    }
 }
 
 useHead({

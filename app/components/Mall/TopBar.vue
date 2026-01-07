@@ -1,10 +1,10 @@
 <template>
   <header
-    class="w-full bg-white dark:bg-[oklch(13%_0.028_261.692)] shadow-sm sticky top-0 z-[100] transition-colors duration-300">
+    class="w-full bg-white dark:bg-[oklch(13%_0.028_261.692)] shadow-sm sticky top-10 z-[40] transition-colors duration-300">
     <div
       class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 h-8 flex items-center text-[11px] text-slate-500">
       <div class="w-full px-4 flex justify-end gap-4">
-        <NuxtLink to="/orders" class="hover:text-[#ff5000]">我的订单</NuxtLink>
+        <NuxtLink to="/service/mall/mo" class="hover:text-[#ff5000]">我的订单</NuxtLink>
         <NuxtLink to="/service/mall/chart" class="hover:text-[#ff5000]">购物车</NuxtLink>
       </div>
     </div>

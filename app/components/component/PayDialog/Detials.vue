@@ -42,11 +42,27 @@
                             <div class="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-500">支付方式</span>
-                                <div class="flex items-center gap-2">
-                                    <Icon :name="getPaymentIcon(orderData.paymentMethod)" size="16" />
-                                    <span class="font-bold text-slate-700 dark:text-slate-300">{{
-                                        getPaymentLabel(orderData.paymentMethod) }}</span>
-                                </div>
+                                <el-select v-model="orderData.paymentMethod" @change="onPaymentMethodChange"
+                                    class="payment-select" placeholder="请选择支付方式">
+                                    <el-option label="支付宝" value="ALIPAY">
+                                        <div class="flex items-center gap-2">
+                                            <Icon name="simple-icons:alipay" class="text-[#00A1E9]" size="14" />
+                                            <span>支付宝</span>
+                                        </div>
+                                    </el-option>
+                                    <el-option label="微信支付" value="WECHAT">
+                                        <div class="flex items-center gap-2">
+                                            <Icon name="simple-icons:wechat" class="text-[#07C160]" size="14" />
+                                            <span>微信支付</span>
+                                        </div>
+                                    </el-option>
+                                    <el-option label="钱包支付" value="WALLET">
+                                        <div class="flex items-center gap-2">
+                                            <Icon name="lucide:wallet" class="text-orange-500" size="14" />
+                                            <span>钱包支付</span>
+                                        </div>
+                                    </el-option>
+                                </el-select>
                             </div>
                         </div>
 
@@ -87,7 +103,11 @@ const handleClose = () => {
     emit('close');
 };
 
-const { initiatePayment, pollOrderStatus } = useWallet();
+const { initiatePayment, pollOrderStatus, changePayMethod } = useWallet();
+
+const onPaymentMethodChange = async (val: string) => {
+    await changePayMethod(props.orderData.orderNo, val);
+};
 
 const handlePay = async () => {
     paying.value = true;
@@ -151,5 +171,26 @@ const getPaymentLabel = (method: string) => {
 .scale-leave-to {
     opacity: 0;
     transform: scale(0.9) translateY(20px);
+}
+
+:deep(.payment-select) {
+    width: 120px;
+}
+
+:deep(.payment-select .el-input__wrapper) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-right: 0;
+}
+
+:deep(.payment-select .el-input__inner) {
+    text-align: right;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 13px;
+}
+
+.dark :deep(.payment-select .el-input__inner) {
+    color: #f1f5f9;
 }
 </style>

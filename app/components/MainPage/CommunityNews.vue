@@ -122,9 +122,10 @@ const displayedNews = computed(() => {
   return newsList.value.slice(0, 8)
 })
 
-const formatDate = (timeStr: string) => {
+const formatDate = (timeStr?: string | null) => {
   if (!timeStr) return ''
-  return timeStr.split(' ')[0].slice(5) // Extract MM-DD
+  const datePart = timeStr.split(' ')[0]
+  return datePart ? datePart.slice(5) : '' // Extract MM-DD
 }
 
 onMounted(() => {
