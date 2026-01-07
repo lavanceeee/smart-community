@@ -36,7 +36,7 @@ export const useCommunityIssues = () => {
                 return false
             }
         } catch (error) {
-            ElMessage.error('网络请求失败')
+            ElMessage.error('提交报事维修时网络请求失败')
             return false
         } finally {
             repairLoading.value = false
@@ -85,7 +85,7 @@ export const useCommunityIssues = () => {
                 return false
             }
         } catch (error) {
-            ElMessage.error('网络请求失败')
+            ElMessage.error('提交投诉时网络请求失败')
             return false
         } finally {
             complaintLoading.value = false

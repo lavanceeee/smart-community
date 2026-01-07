@@ -16,7 +16,7 @@ export const useParking = () => {
             }
         } catch (error) {
             console.error('Fetch parking error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('获取车位信息时网络请求失败')
         } finally {
             isFetching.value = false
         }
@@ -80,7 +80,7 @@ export const useParking = () => {
             }
         } catch (error) {
             console.error('Create parking application error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('提交车位登记申请时网络请求失败')
             return false
         } finally {
             isFetching.value = false

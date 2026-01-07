@@ -33,12 +33,12 @@
       </button>
       <template v-if="userStore.isLoggedIn">
         <NuxtLink to="/profile"
-          class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
-          <div
-            class="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-[#ff5000] text-[10px]">
+          class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors group">
+          <el-avatar :size="24" :src="userStore.userInfo?.avatar"
+            class="shrink-0 border border-orange-100 dark:border-orange-900/30">
             {{ userStore.displayName ? userStore.displayName.charAt(0).toUpperCase() : 'U' }}
-          </div>
-          {{ userStore.displayName }}
+          </el-avatar>
+          <span class="font-medium whitespace-nowrap">{{ userStore.displayName }}</span>
         </NuxtLink>
       </template>
 
@@ -72,6 +72,10 @@ const roleType = computed(() => {
 const titleParts = computed(() => {
   const path = route.path || "";
   const communityPrefix = "Neuedu智慧社区";
+
+  if (path.startsWith("/service/mall/chart")) {
+    return { base: "Neuedu智慧商城", sub: " - 购物车" };
+  }
 
   if (path.startsWith("/service/mall")) {
     return { base: "Neuedu智慧商城", sub: "" };

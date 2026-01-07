@@ -1,41 +1,22 @@
 <template>
-  <div class="w-60 flex flex-col gap-3 shrink-0">
+  <div class="w-60 flex flex-col gap-4 shrink-0">
 
-    <div class="bg-white dark:bg-white/5 rounded p-4 border border-slate-100 dark:border-white/5">
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2 text-[#ff5000]">
-          <Icon name="lucide:megaphone" size="16" />
-          <span class="font-bold text-sm">平台公告</span>
-        </div>
-        <NuxtLink to="/service/community/news" class="text-xs text-slate-400 hover:text-[#ff5000]">更多</NuxtLink>
+    <!-- Navigation Groups -->
+    <div v-for="group in menuGroups" :key="group.title"
+      class="bg-white dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 overflow-hidden shadow-sm">
+      <div class="px-4 py-3 border-b border-slate-50 dark:border-white/5 bg-slate-50/50 dark:bg-white/5">
+        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ group.title }}</h3>
       </div>
-
-      <div class="flex flex-col gap-3">
-        <NuxtLink v-for="item in announcements" :key="item.id" :to="`/service/community/news/${item.id}`"
-          class="group block">
-          <div class="flex items-start gap-2">
-            <span
-              class="w-1 h-1 rounded-full bg-slate-300 group-hover:bg-[#ff5000] mt-2 shrink-0 transition-colors"></span>
-            <span
-              class="text-xs text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000] leading-relaxed line-clamp-2 transition-colors">
-              <span v-if="item.isTop" class="text-[#ff5000] scale-90 inline-block mr-0.5">[置顶]</span>
-              {{ item.title }}
-            </span>
+      <div class="p-2 flex flex-col gap-1">
+        <NuxtLink v-for="item in group.items" :key="item.path" :to="item.path" v-show="item.show !== false"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-[#ff5000]/10 hover:text-[#ff5000] transition-all group relative"
+          active-class="active-nav bg-orange-50 dark:bg-[#ff5000]/10 text-[#ff5000] font-bold">
+          <Icon :name="item.icon" size="18" class="shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
+          <span>{{ item.name }}</span>
+          <!-- Active Indicator Dot -->
+          <div class="absolute right-2 w-1.5 h-1.5 rounded-full bg-[#ff5000] opacity-0 scale-0 transition-all nav-dot">
           </div>
-          <div class="pl-3 mt-1 text-[10px] text-slate-400 font-mono">{{ item.date }}</div>
         </NuxtLink>
-      </div>
-    </div>
-
-    <div class="bg-white dark:bg-white/5 rounded p-4 border border-slate-100 dark:border-white/5">
-      <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3">快捷服务</h3>
-      <div class="grid grid-cols-2 gap-2">
-        <div v-for="tool in quickTools" :key="tool.name"
-          class="flex flex-col items-center justify-center gap-1 bg-slate-50 dark:bg-white/5 rounded-lg py-3 cursor-pointer hover:bg-orange-50 dark:hover:bg-[#ff5000]/10 hover:text-[#ff5000] transition-colors group">
-          <Icon :name="tool.icon" size="18" class="text-slate-500 dark:text-slate-400 group-hover:text-[#ff5000]" />
-          <span class="text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-[#ff5000]">{{ tool.name
-          }}</span>
-        </div>
       </div>
     </div>
 
@@ -43,33 +24,49 @@
 </template>
 
 <script setup lang="ts">
-import { getCommunityNewsApi } from '@/utils/api'
+const userStore = useUserStore()
 
-const announcements = ref<any[]>([])
-
-onMounted(async () => {
-  try {
-    const res = await getCommunityNewsApi({ pageNum: 1, pageSize: 4 }) as any
-    if (res.code === 200 && res.data?.records) {
-      announcements.value = res.data.records.map((item: any) => ({
-        id: item.announceId,
-        title: item.title,
-        // Simplest date formatting without external libs
-        date: item.publishTime ? item.publishTime.split(' ')[0] : '',
-        isTop: false
-      }))
-    }
-  } catch (error) {
-    ElMessage.error('获取公告列表失败');
-    console.error('Fetch announcements error:', error)
+// Navigation Groups Data
+const menuGroups = computed(() => [
+  {
+    title: '社区服务',
+    items: [
+      { name: '通知公告', path: '/service/community/news', icon: 'lucide:megaphone' },
+      { name: '物业缴费', path: '/service/community/payment', icon: 'lucide:credit-card' },
+      { name: '报修投诉', path: '/service/community/issues', icon: 'lucide:wrench' },
+      { name: '停车服务', path: '/service/community/parking', icon: 'lucide:car' },
+      { name: '访客管理', path: '/service/community/visitors', icon: 'lucide:users' },
+    ]
+  },
+  {
+    title: '个人中心',
+    items: [
+      { name: '我的钱包', path: '/wallet', icon: 'lucide:wallet' },
+      { name: '基本信息', path: '/profile', icon: 'lucide:user-circle' },
+      {
+        name: '管理后台',
+        path: '/superCommunity',
+        icon: 'lucide:shield-check',
+        show: userStore.userRole?.roleId !== 4 && userStore.userRole?.roleId != null
+      },
+    ]
   }
-})
-
-// 2. 快捷工具数据
-const quickTools = [
-  { name: '交易规则', icon: 'lucide:book-open' },
-  { name: '安全中心', icon: 'lucide:shield-check' },
-  { name: '投诉反馈', icon: 'lucide:message-square-warning' },
-  { name: '帮助中心', icon: 'lucide:help-circle' },
-]
+])
 </script>
+
+<style scoped>
+.active-nav .nav-dot {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Custom scrollbar if needed */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+</style>

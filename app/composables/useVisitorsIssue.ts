@@ -28,7 +28,7 @@ export const useVisitorList = () => {
             }
         } catch (error) {
             console.error('Fetch visitor list error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('获取访客列表时网络请求失败')
         } finally {
             loading.value = false
         }
@@ -55,7 +55,7 @@ export const useVisitorList = () => {
             }
         } catch (error) {
             console.error('Create visitor error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('提交访客登记时网络请求失败')
             return false
         } finally {
             loading.value = false
@@ -76,7 +76,7 @@ export const useVisitorList = () => {
             }
         } catch (error) {
             console.error('Cancel visitor error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('撤销申请时网络请求失败')
             return false
         }
     }

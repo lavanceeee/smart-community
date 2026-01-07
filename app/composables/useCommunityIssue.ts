@@ -1,5 +1,6 @@
 import { getCommunityNewsApi, getAnnouncementDetailApi } from '@/utils/api'
 
+//社区公告
 export const useAnnouncementDetail = () => {
     const detail = ref<any>(null)
     const loading = ref(false)
@@ -15,7 +16,7 @@ export const useAnnouncementDetail = () => {
             }
         } catch (error) {
             console.error('Fetch detail error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('获取公告详情时网络请求失败')
         } finally {
             loading.value = false
         }
@@ -68,7 +69,7 @@ export const useCommunityNews = () => {
             }
         } catch (error) {
             console.error('Fetch news error:', error)
-            ElMessage.error('网络请求失败')
+            ElMessage.error('获取公告列表时网络请求失败')
         } finally {
             loading.value = false
         }

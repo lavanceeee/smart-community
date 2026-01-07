@@ -6,15 +6,24 @@
         <span class="w-1 h-4 bg-[#ff5000] rounded-full"></span>
         <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区头条</h2>
       </div>
-      <div class="flex gap-4 text-xs text-slate-400 select-none">
-        <span class="cursor-pointer hover:text-[#ff5000] transition-colors">图片新闻</span>
-        <span class="cursor-pointer hover:text-[#ff5000] transition-colors">政策解读</span>
-        <span class="cursor-pointer hover:text-[#ff5000] transition-colors">通知公告</span>
-      </div>
+      <NuxtLink to="/service/community/news"
+        class="flex items-center gap-1 text-xs text-slate-400 hover:text-[#ff5000] transition-colors cursor-pointer select-none">
+        <span>更多公告</span>
+        <Icon name="lucide:chevron-right" size="14" />
+      </NuxtLink>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-6">
+    <!-- Empty State (Full Width) -->
+    <div v-if="!loading && newsList.length === 0"
+      class="min-h-[300px] flex flex-col items-center justify-center text-slate-400">
+      <Icon name="lucide:inbox" size="48" class="mb-3 opacity-50" />
+      <span class="text-sm">暂无公告</span>
+    </div>
 
+    <!-- Content Area -->
+    <div v-else class="flex flex-col md:flex-row gap-6">
+
+      <!-- Carousel (Banner) -->
       <div class="w-full md:w-[45%] h-[340px] rounded-xl overflow-hidden relative group shrink-0">
         <el-carousel trigger="click" height="340px" :interval="5000" arrow="hover">
           <el-carousel-item v-for="item in bannerList" :key="item.id">
@@ -34,82 +43,62 @@
         </el-carousel>
       </div>
 
-      <div class="flex-1 flex flex-col justify-between gap-6 min-w-0 py-1">
+      <!-- News List (Real Data) -->
+      <div class="flex-1 min-w-0 py-1 flex flex-col justify-between">
 
-        <div class="flex flex-col gap-3">
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
-            <div class="flex items-center gap-2 text-[#d93025]">
-              <div class="p-1 bg-red-50 dark:bg-red-900/20 rounded">
-                <Icon name="lucide:mic-2" size="14" />
-              </div>
-              <span class="font-bold text-sm">政声传递</span>
-            </div>
-            <NuxtLink to="/news/politics" class="text-[11px] text-slate-400 hover:text-[#d93025] flex items-center">
-              更多
-              <Icon name="lucide:chevron-right" size="12" />
-            </NuxtLink>
+        <!-- Loading State -->
+        <div v-if="loading" class="space-y-4">
+          <div v-for="i in 6" :key="i" class="flex justify-between items-center animate-pulse">
+            <div class="h-4 bg-slate-100 dark:bg-slate-700 rounded w-2/3"></div>
+            <div class="h-4 bg-slate-100 dark:bg-slate-700 rounded w-12"></div>
           </div>
-
-          <ul class="flex flex-col gap-3">
-            <li v-for="(news, i) in politicsList" :key="i"
-              class="flex items-center justify-between group cursor-pointer">
-              <div class="flex items-center gap-2 min-w-0 pr-4">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-[#d93025] transition-colors shrink-0 mt-0.5"></span>
-                <span
-                  class="text-[13px] text-slate-700 dark:text-slate-300 truncate group-hover:text-[#d93025] transition-colors leading-normal">
-                  {{ news.title }}
-                </span>
-                <span v-if="i === 0"
-                  class="text-[9px] text-[#d93025] border border-[#d93025]/30 px-1 rounded-sm scale-90 origin-left shrink-0">最新</span>
-              </div>
-
-              <span class="text-xs text-slate-400 shrink-0 tabular-nums font-medium tracking-tight">
-                {{ news.date }}
-              </span>
-            </li>
-          </ul>
         </div>
 
-        <div class="flex flex-col gap-3">
+        <!-- List -->
+        <div v-else class="flex flex-col gap-4">
           <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
             <div class="flex items-center gap-2 text-[#1a73e8]">
               <div class="p-1 bg-blue-50 dark:bg-blue-900/20 rounded">
-                <Icon name="lucide:building-2" size="14" />
+                <Icon name="lucide:bell-ring" size="14" />
               </div>
-              <span class="font-bold text-sm">社区政务</span>
+              <span class="font-bold text-sm">最新公告</span>
             </div>
-            <NuxtLink to="/news/affairs" class="text-[11px] text-slate-400 hover:text-[#1a73e8] flex items-center">
-              更多
-              <Icon name="lucide:chevron-right" size="12" />
-            </NuxtLink>
           </div>
 
-          <ul class="flex flex-col gap-3">
-            <li v-for="(news, i) in affairsList" :key="i"
+          <ul class="flex flex-col gap-3.5">
+            <li v-for="(news, i) in displayedNews" :key="news.announceId"
               class="flex items-center justify-between group cursor-pointer">
-              <div class="flex items-center gap-2 min-w-0 pr-4">
+              <NuxtLink :to="`/service/community/news/${news.announceId}`"
+                class="flex items-center gap-2 min-w-0 pr-4 flex-1">
                 <span
                   class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-[#1a73e8] transition-colors shrink-0 mt-0.5"></span>
                 <span
-                  class="text-[13px] text-slate-700 dark:text-slate-300 truncate group-hover:text-[#1a73e8] transition-colors leading-normal">
+                  class="text-[13px] text-slate-700 dark:text-slate-300 truncate group-hover:text-[#1a73e8] transition-colors leading-normal block">
                   {{ news.title }}
                 </span>
-              </div>
+                <span v-if="i === 0"
+                  class="text-[9px] text-[#ff5000] border border-[#ff5000]/30 px-1 rounded-sm scale-90 origin-left shrink-0">NEW</span>
+              </NuxtLink>
+
               <span class="text-xs text-slate-400 shrink-0 tabular-nums font-medium tracking-tight">
-                {{ news.date }}
+                {{ formatDate(news.publishTime) }}
               </span>
             </li>
           </ul>
         </div>
-
       </div>
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// 模拟数据 (保持不变)
+import { useCommunityNews } from '@/composables/useCommunityIssue'
+
+// Use the existing composable
+const { newsList, loading, fetchNews } = useCommunityNews()
+
+// Mock Banners (Keep for visual layout as API doesn't provide banner images yet)
 const bannerList = [
   {
     id: 1,
@@ -128,21 +117,20 @@ const bannerList = [
   }
 ]
 
-const politicsList = [
-  { title: '关于印发《2024年街道民生实事项目》的通知', date: '01-15' },
-  { title: '市委书记调研我区老旧小区改造工作', date: '01-14' },
-  { title: '全区学习贯彻二十大精神宣讲报告会举行', date: '01-12' },
-  { title: '区政府召开常务会议，研究部署近期重点工作', date: '01-10' },
-  { title: '关于进一步加强社区基层治理能力的实施意见', date: '01-08' }
-]
+// Display top 8 news items
+const displayedNews = computed(() => {
+  return newsList.value.slice(0, 8)
+})
 
-const affairsList = [
-  { title: '本周社区便民服务大集时间安排通知', date: '今天' },
-  { title: '关于开展全员核酸检测应急演练的公告', date: '昨天' },
-  { title: '社区卫生服务中心流感疫苗接种指南', date: '01-13' },
-  { title: '关于暂停小区部分公共区域水电供应的检修通知', date: '01-11' },
-  { title: '2024年度社区居民医疗保险缴费截止提醒', date: '01-09' }
-]
+const formatDate = (timeStr: string) => {
+  if (!timeStr) return ''
+  return timeStr.split(' ')[0].slice(5) // Extract MM-DD
+}
+
+onMounted(() => {
+  // Ensure we fetch news
+  fetchNews()
+})
 </script>
 
 <style scoped>

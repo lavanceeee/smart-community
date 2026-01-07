@@ -17,8 +17,9 @@ const colorMode = useColorMode()
       <main class="flex-1 min-w-0 flex flex-col gap-6">
 
         <MainPageCommunityNews />
+        <ForumMainPageLayout />
 
-        <NuxtPage />
+        <!-- <NuxtPage /> -->
 
       </main>
 

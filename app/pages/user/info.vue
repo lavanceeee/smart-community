@@ -197,7 +197,7 @@ const submitInfoForm = async () => {
                 }
             } catch (error) {
                 console.error(error)
-                ElMessage.error('网络请求失败')
+                ElMessage.error('更新基本信息时网络请求失败')
             } finally {
                 infoLoading.value = false
             }
@@ -222,7 +222,7 @@ const submitPwdForm = async () => {
                     ElMessage.error(res.message || '修改失败')
                 }
             } catch (error) {
-                ElMessage.error('网络请求失败')
+                ElMessage.error('修改密码时网络请求失败')
             } finally {
                 pwdLoading.value = false
             }
