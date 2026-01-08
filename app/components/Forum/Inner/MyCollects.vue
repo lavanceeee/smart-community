@@ -5,7 +5,8 @@
         </div>
 
         <div class="space-y-4">
-            <div v-for="post in collectedPosts" :key="post.postId" class="group cursor-pointer">
+            <div v-for="post in collectedPosts" :key="post.postId" class="group cursor-pointer"
+                @click="navigateToPost(post.postId)">
                 <div class="flex gap-3">
                     <!-- Miniature Image if available -->
                     <img v-if="post.firstImage" :src="post.firstImage"
@@ -62,9 +63,14 @@
 import { usePost } from '~/composables/form/usePost';
 
 const { collectedPosts, collectedPage, collectedHasMore, collectedLoading, fetchMyCollectedPosts } = usePost();
+const router = useRouter();
 
 const loadNextPage = () => {
     fetchMyCollectedPosts(collectedPage.value + 1, 5, true);
+};
+
+const navigateToPost = (postId: number | string) => {
+    router.push(`/service/community/forum/post/${postId}`);
 };
 
 onMounted(() => {

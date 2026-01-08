@@ -90,10 +90,21 @@
         </div>
 
         <!-- Loading Sentinel -->
-        <div ref="sentinelRef" class="py-6 flex justify-center">
-            <div v-if="commentsLoading"
-                class="w-6 h-6 border-2 border-slate-200 border-t-slate-400 rounded-full animate-spin"></div>
-            <div v-else-if="!commentsHasMore && commentsList.length > 0" class="text-xs text-slate-400">
+        <!-- Loading Sentinel -->
+        <div ref="sentinelRef" class="py-6">
+            <!-- Loading Skeleton -->
+            <div v-if="commentsLoading" class="space-y-6">
+                <div v-for="i in 3" :key="i" class="flex gap-3 animate-pulse">
+                    <div class="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2 py-1">
+                        <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+                        <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                        <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else-if="!commentsHasMore && commentsList.length > 0" class="text-xs text-slate-400 text-center">
                 - 已加载全部评论 -
             </div>
             <div v-else-if="!commentsHasMore && commentsList.length === 0"
@@ -149,19 +160,28 @@ const formatDate = (str: string) => {
 };
 
 // Initial Load
-onMounted(() => {
-    // Reset list? useComments state is shared if not careful.
-    // Since useComments uses 'ref' scoped to function call, each call returns NEW refs.
-    // So this is safe.
-    fetchComments(props.postId);
-});
-
 // Lazy Loading
-const loadMore = () => {
+const loadMore = async () => {
     if (!commentsHasMore.value || commentsLoading.value) return;
-    fetchComments(props.postId, commentsPage.value + 1, 10, true);
+
+    // Artificial delay for skeleton demonstration (500ms)
+    commentsLoading.value = true;
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const nextPage = commentsList.value.length === 0 ? 1 : commentsPage.value + 1;
+    await fetchComments(props.postId, nextPage, 5, true);
 };
 const { targetRef: sentinelRef } = useIntersectionObserver(loadMore);
+
+// Initial Load handled by Observer if sentinel is visible
+// But we should reset state on mount to be sure
+onMounted(() => {
+    commentsList.value = [];
+    commentsPage.value = 1;
+    commentsHasMore.value = true;
+    commentsTotal.value = 0;
+});
+
 
 // Reply Logic
 const prepareReply = (parent: Comment, replyTo?: Comment) => {
@@ -200,7 +220,6 @@ const handleSubmit = async () => {
     if (success) {
         commentContent.value = '';
         replyTarget.value = null;
-        // Reload comments or append?
         // Simplest is to reload page 1 to see the new comment at top (if sorted by time desc)
         // Or if sorted by time asc (typical for forums), it might be at bottom.
         // Let's re-fetch.
