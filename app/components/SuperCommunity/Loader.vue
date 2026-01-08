@@ -112,6 +112,9 @@ const steps = [
 let stepTimer: NodeJS.Timeout | null = null
 
 const startLoadingSequence = () => {
+    // 只在客户端执行
+    if (!import.meta.client) return
+    
     progress.value = 0
     let stepIndex = 0
     let currentProgress = 0
@@ -133,7 +136,9 @@ const startLoadingSequence = () => {
             if (currentProgress < targetProgress && props.show) {
                 currentProgress += 2
                 progress.value = Math.min(currentProgress, targetProgress)
-                requestAnimationFrame(animateProgress)
+                if (typeof requestAnimationFrame !== 'undefined') {
+                    requestAnimationFrame(animateProgress)
+                }
             }
         }
         animateProgress()
@@ -146,6 +151,9 @@ const startLoadingSequence = () => {
 }
 
 watch(() => props.show, (newVal) => {
+    // 只在客户端执行
+    if (!import.meta.client) return
+    
     if (newVal) {
         startLoadingSequence()
     } else {
@@ -157,7 +165,10 @@ watch(() => props.show, (newVal) => {
 }, { immediate: true })
 
 onUnmounted(() => {
-    if (stepTimer) clearTimeout(stepTimer)
+    if (stepTimer) {
+        clearTimeout(stepTimer)
+        stepTimer = null
+    }
 })
 </script>
 

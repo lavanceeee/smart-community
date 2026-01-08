@@ -93,11 +93,6 @@
             @success="handleAddSuccess"
         />
 
-        <!-- Chat Window -->
-        <ChatWindow
-            v-model:visible="showChatDialog"
-            :chat-user="chatUser"
-        />
     </div>
 </template>
 
@@ -118,9 +113,7 @@ const {
 const activeTab = ref<'friends' | 'requests'>('friends')
 const showAddDialog = ref(false)
 const showConfirmDialog = ref(false)
-const showChatDialog = ref(false)
 const selectedUser = ref<UserSearchResult | null>(null)
-const chatUser = ref<{ userId: number; userName: string; avatar: string } | null>(null)
 const searchQuery = ref('')
 const currentPage = ref(1)
 const pageSize = ref(12)
@@ -178,41 +171,21 @@ const handleAddSuccess = () => {
     // 可以选择刷新列表或切换到申请列表
 }
 
-// 打开聊天窗口
+// 打开聊天页面
 const handleOpenChat = (friend: any) => {
-    chatUser.value = {
-        userId: friend.friendUserId,
-        userName: friend.friendUserName,
-        avatar: friend.friendAvatar
-    }
-    showChatDialog.value = true
+    const router = useRouter()
+    router.push({
+        path: '/service/community/chat',
+        query: {
+            openChat: friend.friendUserId
+        }
+    })
 }
 
 // 初始化加载
 onMounted(async () => {
     await loadFriends()
     await loadRequests()
-    
-    // 检查是否有通过通知跳转过来的聊天请求
-    const route = useRoute()
-    const openChatUserId = route.query.openChat
-    
-    if (openChatUserId) {
-        // 从好友列表中查找对应的好友
-        const friend = friendList.value.find(f => f.friendUserId === Number(openChatUserId))
-        
-        if (friend) {
-            // 打开聊天窗口
-            handleOpenChat(friend)
-        } else {
-            // 如果不在好友列表中，可能需要先加载好友信息
-            ElMessage.warning('未找到该好友')
-        }
-        
-        // 清除路由参数
-        const router = useRouter()
-        router.replace({ query: {} })
-    }
 })
 
 // 监听 tab 切换

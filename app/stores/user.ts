@@ -61,6 +61,14 @@ export const useUserStore = defineStore('user', () => {
     userRole.value = null;
     userRoles.value = null;
     userPermissions.value = null;
+    
+    // 断开 WebSocket 连接
+    if (import.meta.client) {
+      const { disconnect } = useWebSocket()
+      disconnect()
+      console.log('用户退出登录，已断开 WebSocket 连接')
+    }
+    
     // Clean up local storage persistence if needed, though setting to null usually suffices with persist plugin
   }
 
