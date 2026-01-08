@@ -48,6 +48,7 @@ const route = useRoute()
 const menuItems = [
   { title: '关于我', path: '/profile' },
   { title: '我的购物车', path: '/service/mall/chart' },
+  { title: '我的帖子', path: '/service/community/forum/post/my-posts' },
 
   //可展开项
   {

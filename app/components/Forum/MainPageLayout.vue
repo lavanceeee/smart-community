@@ -6,16 +6,24 @@
                 <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区论坛</h2>
             </div>
 
-            <div class="flex items-center gap-2 select-none" v-if="totalPages > 1">
-                <button @click="prevPage" :disabled="currentPage === 1"
-                    class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                    <Icon name="lucide:chevron-left" size="16" />
-                </button>
-                <span class="text-xs text-slate-400 font-mono">{{ currentPage }}/{{ totalPages }}</span>
-                <button @click="nextPage" :disabled="currentPage === totalPages"
-                    class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                    <Icon name="lucide:chevron-right" size="16" />
-                </button>
+            <div class="flex flex-col items-center gap-2 select-none" v-if="totalPages > 1">
+                <NuxtLink to="/service/community/forum"
+                    class="flex items-center gap-1 text-xs text-slate-400 hover:text-[#ff5000] transition-colors cursor-pointer select-none">
+                    <span>更多版块</span>
+                    <Icon name="lucide:chevron-right" size="14" />
+                </NuxtLink>
+
+                <div class="flex items-center gap-2">
+                    <button @click="prevPage" :disabled="currentPage === 1"
+                        class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                        <Icon name="lucide:chevron-left" size="16" />
+                    </button>
+                    <span class="text-xs text-slate-400 font-mono">{{ currentPage }}/{{ totalPages }}</span>
+                    <button @click="nextPage" :disabled="currentPage === totalPages"
+                        class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                        <Icon name="lucide:chevron-right" size="16" />
+                    </button>
+                </div>
             </div>
         </div>
 
