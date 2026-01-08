@@ -242,6 +242,9 @@ export const useChat = () => {
      */
     const handleWebSocketMessage = (wsMessage: WebSocketMessage) => {
         if (wsMessage.type === 'CHAT') {
+            const userStore = useUserStore()
+            const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
+            
             // 新消息
             const message: ChatMessage = {
                 messageId: wsMessage.messageId!,
@@ -255,6 +258,9 @@ export const useChat = () => {
                 toUserName: '',
                 toUserAvatar: ''
             }
+            
+            // 如果是收到的消息（不是自己发的）
+            const isReceivedMessage = message.toUserId === currentUserId && message.fromUserId !== currentUserId
             
             // 如果是当前聊天对象的消息
             if (currentChatUser.value && 
@@ -275,8 +281,7 @@ export const useChat = () => {
                 }
                 
                 // 如果是收到的消息，自动标记已读
-                if (message.toUserId !== message.fromUserId && 
-                    message.fromUserId === currentChatUser.value.userId) {
+                if (isReceivedMessage) {
                     markMessageRead(message.messageId, message.fromUserId)
                 }
             }
