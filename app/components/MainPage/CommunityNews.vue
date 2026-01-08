@@ -57,14 +57,6 @@
 
         <!-- List -->
         <div v-else class="flex flex-col gap-4">
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
-            <div class="flex items-center gap-2 text-[#1a73e8]">
-              <div class="p-1 bg-blue-50 dark:bg-blue-900/20 rounded">
-                <Icon name="lucide:bell-ring" size="14" />
-              </div>
-              <span class="font-bold text-sm">最新公告</span>
-            </div>
-          </div>
 
           <ul class="flex flex-col gap-3.5">
             <li v-for="(news, i) in displayedNews" :key="news.announceId"

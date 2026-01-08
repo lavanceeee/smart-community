@@ -2,51 +2,45 @@
     <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-24 transition-colors duration-300">
         <!-- Header -->
         <div
-            class="sticky top-10 z-[40] bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
-            <div class="max-w-[1100px] mx-auto px-6 h-24 flex items-center justify-between gap-10">
+            class="sticky top-0 z-[40] bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
+            <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between gap-6">
                 <!-- Left: Title Section -->
                 <div class="flex items-center gap-4 shrink-0">
                     <NuxtLink to="/service/mall"
-                        class="group flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-slate-500 hover:text-[#ff5000] transition-all duration-300">
+                        class="group flex items-center justify-center w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 hover:text-[#ff5000] transition-all duration-300">
                         <Icon name="lucide:arrow-left" size="18"
                             class="group-hover:-translate-x-0.5 transition-transform" />
                     </NuxtLink>
-                    <div>
-                        <h1 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            全部订单
-                        </h1>
-                    </div>
+                    <h1 class="text-xl font-bold text-slate-900 dark:text-white">全部订单</h1>
                 </div>
 
-                <!-- Right: Refined Filter Controls -->
-                <div class="flex-1 flex flex-col gap-3 max-w-2xl py-2">
-                    <!-- Type Segmented Control -->
-                    <div class="flex items-center">
-                        <div class="flex items-center gap-1.5 p-1 bg-slate-100/80 dark:bg-slate-800/50 rounded-xl">
-                            <button v-for="t in typeOptions" :key="t.value" @click="setFilter('orderType', t.value)"
-                                :class="[
-                                    filters.orderType === t.value
-                                        ? 'bg-white dark:bg-slate-700 text-[#ff5000] shadow-sm font-bold scale-[1.02]'
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-700/30'
-                                ]"
-                                class="px-4 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-200 whitespace-nowrap active:scale-95">
-                                {{ t.label }}
-                            </button>
-                        </div>
+                <!-- Right: Clean Filters -->
+                <div class="flex items-center gap-6">
+                    <!-- Type Filter -->
+                    <div class="flex items-center gap-1">
+                        <button v-for="t in typeOptions" :key="t.value" @click="setFilter('orderType', t.value)" :class="[
+                            filters.orderType === t.value
+                                ? 'text-[#ff5000] font-bold bg-orange-50 dark:bg-orange-900/20'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        ]"
+                            class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
+                            {{ t.label }}
+                        </button>
                     </div>
-                    <!-- Status Segmented Control -->
-                    <div class="flex items-center">
-                        <div class="flex items-center gap-1.5 p-1 bg-slate-100/80 dark:bg-slate-800/50 rounded-xl">
-                            <button v-for="s in statusOptions" :key="s.value" @click="setFilter('status', s.value)"
-                                :class="[
-                                    filters.status === s.value
-                                        ? 'bg-[#ff5000] text-white shadow-md shadow-orange-500/20 font-bold scale-[1.02]'
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-700/30'
-                                ]"
-                                class="px-4 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-200 whitespace-nowrap active:scale-95">
-                                {{ s.label }}
-                            </button>
-                        </div>
+
+                    <!-- Divider -->
+                    <div class="w-px h-4 bg-slate-200 dark:bg-slate-700"></div>
+
+                    <!-- Status Filter -->
+                    <div class="flex items-center gap-1">
+                        <button v-for="s in statusOptions" :key="s.value" @click="setFilter('status', s.value)" :class="[
+                            filters.status === s.value
+                                ? 'text-[#ff5000] font-bold bg-orange-50 dark:bg-orange-900/20'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        ]"
+                            class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
+                            {{ s.label }}
+                        </button>
                     </div>
                 </div>
             </div>

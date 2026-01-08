@@ -16,6 +16,8 @@
           @search="handleSearch" />
       </div>
 
+      <MallBannerTopCatgoryList />
+
       <div class="flex items-center gap-6 mt-1">
         <div v-for="item in mallIcons" :key="item.name" class="flex items-center gap-1 cursor-pointer group">
           <img :src="`/mallIcon/${item.icon}`" class="w-4 h-4 object-contain" :alt="item.name" />

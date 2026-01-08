@@ -1,5 +1,5 @@
 import type { ForumPost } from './useForum';
-import { getPostComments } from '~/utils/postAPI';
+import { getPostComments, getMyPostsApi, deletePostApi } from '~/utils/postAPI';
 
 export const usePost = () => {
     const creating = useState('forum-post-creating', () => false);
@@ -167,6 +167,61 @@ export const usePost = () => {
         }
     };
 
+    // My Posts State
+    const myPosts = useState<ForumPost[]>('forum-my-posts', () => []);
+    const myPostsPage = useState<number>('forum-my-posts-page', () => 1);
+    const myPostsTotal = useState<number>('forum-my-posts-total', () => 0);
+    const myPostsHasMore = useState<boolean>('forum-my-posts-has-more', () => true);
+    const myPostsLoading = useState<boolean>('forum-my-posts-loading', () => false);
+
+    // Fetch My Posts
+    const fetchMyPosts = async (page = 1, size = 10, append = false) => {
+        myPostsLoading.value = true;
+        try {
+            const params = {
+                pageNum: page,
+                pageSize: size
+            };
+            const res = await getMyPostsApi(params) as any;
+            if (res.code === 200) {
+                const newPosts = res.data.records || [];
+                if (append) {
+                    myPosts.value = [...myPosts.value, ...newPosts];
+                } else {
+                    myPosts.value = newPosts;
+                }
+                myPostsTotal.value = res.data.total;
+                myPostsPage.value = res.data.current;
+                myPostsHasMore.value = myPosts.value.length < res.data.total;
+            }
+        } catch (e) {
+            console.error('Fetch My Posts Error:', e);
+            ElMessage.error('获取我的帖子失败');
+        } finally {
+            myPostsLoading.value = false;
+        }
+    };
+
+    // Delete Post
+    const deletePost = async (postId: number | string) => {
+        try {
+            const res = await deletePostApi(postId) as any;
+            if (res.code === 200) {
+                ElMessage.success('删除成功');
+                // Remove from list
+                myPosts.value = myPosts.value.filter(p => p.postId !== postId);
+                myPostsTotal.value--;
+                return true;
+            } else {
+                ElMessage.error(res.message || '删除失败');
+                return false;
+            }
+        } catch (e: any) {
+            ElMessage.error('删除失败');
+            return false;
+        }
+    };
+
     return {
         creating,
         createPost,
@@ -183,6 +238,13 @@ export const usePost = () => {
         commentsHasMore,
         commentsLoading,
         commentsTotal,
-        fetchComments
+        fetchComments,
+        myPosts,
+        myPostsPage,
+        myPostsTotal,
+        myPostsHasMore,
+        myPostsLoading,
+        fetchMyPosts,
+        deletePost
     };
 };

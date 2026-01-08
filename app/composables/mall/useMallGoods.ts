@@ -1,21 +1,62 @@
 import { getMallGoodsListApi, getMallProductDetailApi, collectProductApi, cancelCollectProductApi, getProductImagesApi, addToCartApi, getCartListApi, removeCartApi, updateCartQuantityApi } from '@/utils/api'
+import { getCategoryListApi } from '@/utils/API/goods'
 
 export const useMallGoods = () => {
+    // State
     const goodsList = ref<any[]>([])
     const subsidyList = ref<any[]>([])
     const cartList = ref<any[]>([])
+    const categoryList = ref<any[]>([])
+
     const loading = ref(false)
     const currentPage = ref(1)
     const total = ref(0)
     const pageSize = 25
 
-    const fetchGoodsList = async (page = 1, isLoadMore = false) => {
+    // --- Actions ---
+
+    // Fetch Categories
+    const fetchCategories = async () => {
+        try {
+            const res = await getCategoryListApi() as any
+            console.log('Category API Response:', res) // Debug log
+
+            // Handle different response structures
+            // Structure A: { code: 200, data: { list: [...] } }
+            // Structure B: { list: [...], total: ... } (Direct return)
+            let rawList = []
+            if (res.data && res.data.list) {
+                rawList = res.data.list
+            } else if (res.list) {
+                rawList = res.list
+            } else if (Array.isArray(res)) {
+                rawList = res
+            }
+
+            if (rawList.length > 0) {
+                // User requirement: Display ALL categories flat, no grouping, no parent/child logic.
+                // Sort by sortOrder just to keep it orderly if provided
+                categoryList.value = rawList.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+            } else {
+                console.warn('No category list found in response')
+            }
+        } catch (error) {
+            console.error('Fetch categories error:', error)
+        }
+    }
+
+    // Fetch Goods List
+    const fetchGoodsList = async (page?: number, isLoadMore = false, size?: number) => {
         if (loading.value) return
         loading.value = true
+
+        const targetPage = page || (isLoadMore ? currentPage.value + 1 : 1)
+        const targetSize = size || pageSize
+
         try {
             const res = await getMallGoodsListApi({
-                pageNum: page,
-                pageSize: pageSize
+                pageNum: targetPage,
+                pageSize: targetSize
             }) as any
 
             const data = res.data || res
@@ -24,7 +65,7 @@ export const useMallGoods = () => {
                 const newItems = data.list || []
 
                 total.value = data.total || 0
-                currentPage.value = page
+                currentPage.value = targetPage
 
                 if (isLoadMore) {
                     goodsList.value.push(...newItems)
@@ -53,7 +94,7 @@ export const useMallGoods = () => {
 
     const hasMore = computed(() => goodsList.value.length < total.value)
 
-    //查询具体商品
+    // Fetch Detail
     const fetchDetail = async (productId: string | number) => {
         loading.value = true
         try {
@@ -69,13 +110,12 @@ export const useMallGoods = () => {
         }
     }
 
-    //商品收藏
+    // Collect Product
     const fetchCollect = async (ProductId: string | number) => {
         loading.value = true;
         try {
             const res = await collectProductApi(ProductId) as any
             if (res.code == 200) {
-                // ElMessage.success('操作成功'); // Don't show generic message here, handle in component for specific text
                 return true;
             }
             else {
@@ -89,13 +129,12 @@ export const useMallGoods = () => {
         }
     }
 
-    //取消收藏
+    // Cancel Collect
     const fetchCancelCollect = async (ProductId: string | number) => {
         loading.value = true;
         try {
             const res = await cancelCollectProductApi(ProductId) as any
             if (res.code == 200) {
-                // ElMessage.success('操作成功'); // Don't show generic message here, handle in component for specific text
                 return true;
             }
             else {
@@ -109,7 +148,7 @@ export const useMallGoods = () => {
         }
     }
 
-    //获取商品图片
+    // Fetch Images
     const fetchProductImages = async (ProductId: string | number) => {
         loading.value = true;
         try {
@@ -128,7 +167,7 @@ export const useMallGoods = () => {
         }
     }
 
-    //加入购物车
+    // Add To Cart
     const fetchAddToCart = async (data: any) => {
         loading.value = true;
         try {
@@ -150,7 +189,7 @@ export const useMallGoods = () => {
         }
     }
 
-    //获取购物车列表
+    // Fetch Cart List
     const fetchCartList = async () => {
         loading.value = true
         try {
@@ -168,14 +207,13 @@ export const useMallGoods = () => {
         }
     }
 
-    //移除购物车商品
+    // Remove Cart Item
     const fetchRemoveCart = async (cartItemId: string | number) => {
         loading.value = true
         try {
             const res = await removeCartApi(cartItemId) as any
             if (res.code == 200) {
                 ElMessage.success('移除成功');
-                // Refresh list
                 await fetchCartList();
                 return true;
             } else {
@@ -191,7 +229,7 @@ export const useMallGoods = () => {
         }
     }
 
-    //更新购物车商品数量
+    // Update Cart Quantity
     const fetchUpdateCartQuantity = async (cartItem: any, quantity: number) => {
         try {
             const res = await updateCartQuantityApi({
@@ -218,6 +256,7 @@ export const useMallGoods = () => {
         goodsList,
         subsidyList,
         cartList,
+        categoryList,
         loading,
         fetchGoodsList,
         loadMore,
@@ -229,6 +268,7 @@ export const useMallGoods = () => {
         fetchAddToCart,
         fetchCartList,
         fetchRemoveCart,
-        fetchUpdateCartQuantity
+        fetchUpdateCartQuantity,
+        fetchCategories
     }
 }

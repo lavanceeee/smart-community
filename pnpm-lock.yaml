@@ -23,6 +23,9 @@ importers:
       '@tresjs/nuxt':
         specifier: ^5.1.3
         version: 5.1.3(d98be84c4e02ba7bb64dcf1b6d6f374c)
+      dayjs:
+        specifier: ^1.11.19
+        version: 1.11.19
       echarts:
         specifier: ^6.0.0
         version: 6.0.0

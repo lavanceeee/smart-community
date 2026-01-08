@@ -3,7 +3,7 @@
         <!-- Header -->
         <div
             class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50">
-            <div class="max-w-[1000px] mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="max-w-[1300px] mx-auto px-4 h-14 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <button @click="$router.back()"
                         class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500">
@@ -15,7 +15,7 @@
         </div>
 
         <!-- Content -->
-        <div class="max-w-[1000px] mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
+        <div class="max-w-[1300px] mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
 
             <!-- Main Post Area -->
             <div class="min-w-0 bg-white dark:bg-slate-900 rounded-xl shadow-sm overflow-hidden min-h-[400px]">
@@ -43,7 +43,7 @@
                             class="w-10 h-10 rounded-full object-cover border border-slate-100 dark:border-slate-800" />
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ post.userName
-                                }}</span>
+                            }}</span>
                             <div class="flex items-center gap-2 text-xs text-slate-400">
                                 <span>{{ post.createTime }}</span>
                                 <span v-if="post.viewCount">· {{ post.viewCount }} 阅读</span>

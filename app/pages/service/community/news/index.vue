@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-12">
         <!-- New Search Header -->
-        <div class="bg-white dark:bg-slate-800 shadow-sm mb-6">
+        <div class="bg-white dark:bg-slate-800 shadow-sm mb-6 sticky top-10 z-40">
             <TopSearchBar :total="total" :query-params="queryParams" @update:query-params="handleUpdateParams"
                 @search="handleSearch" />
         </div>
