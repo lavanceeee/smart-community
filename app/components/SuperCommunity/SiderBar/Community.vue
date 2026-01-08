@@ -1,4 +1,20 @@
 <template>
+    <!-- Community Management -->
+    <SuperCommunitySiderBarGroup 
+        title="社区管理" 
+        icon="lucide:users"
+        :collapsed="collapsed"
+        v-if="hasCommunityPermission"
+    >
+        <NuxtLink v-if="hasPermission('forum:view')" to="/superCommunity/community/forum"
+            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
+            :class="isActive('/superCommunity/community/forum') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
+            <Icon name="lucide:messages-square" size="18" class="mr-3 flex-shrink-0"
+                :class="isActive('/superCommunity/community/forum') ? 'text-white' : 'text-slate-400 group-hover:text-white'" />
+            论坛管理
+        </NuxtLink>
+    </SuperCommunitySiderBarGroup>
+
     <!-- Message Management -->
     <SuperCommunitySiderBarGroup 
         title="消息管理" 
@@ -81,6 +97,10 @@ const hasPermission = (permissionCode: string) => {
     if (userStore.userRole?.roleCode === 'ROLE_SUPER_ADMIN') return true;
     return userStore.userPermissions?.some(p => p.permissionCode === permissionCode);
 };
+
+const hasCommunityPermission = computed(() => {
+    return hasPermission('forum:view');
+});
 
 const hasMessagePermission = computed(() => {
     return hasPermission('announcement:view') || hasPermission('complaint:view');
