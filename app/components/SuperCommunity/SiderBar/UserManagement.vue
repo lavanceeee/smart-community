@@ -1,5 +1,10 @@
 <template>
-    <SuperCommunitySiderBarGroup title="系统管理" v-if="hasAnyPermission">
+    <SuperCommunitySiderBarGroup 
+        title="系统管理" 
+        icon="lucide:settings"
+        :collapsed="collapsed"
+        v-if="hasAnyPermission"
+    >
         <NuxtLink v-if="hasPermission('user:view')" to="/superCommunity/system/user"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
             :class="isActive('/superCommunity/system/user') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
@@ -27,10 +32,17 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const userStore = useUserStore();
+defineProps({
+    collapsed: {
+        type: Boolean,
+        default: false
+    }
+})
 
-const isActive = (path: string) => route.path.startsWith(path);
+const route = useRoute()
+const userStore = useUserStore()
+
+const isActive = (path: string) => route.path.startsWith(path)
 
 const hasPermission = (permissionCode: string) => {
     // Super admin check

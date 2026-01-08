@@ -23,7 +23,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-    layout: 'super-community'
+    layout: 'super-community',
+    middleware: ['super-community']
 })
 
 const stats = [

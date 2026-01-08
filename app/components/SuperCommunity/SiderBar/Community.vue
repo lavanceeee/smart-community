@@ -1,6 +1,11 @@
 <template>
     <!-- Message Management -->
-    <SuperCommunitySiderBarGroup title="消息管理" v-if="hasMessagePermission">
+    <SuperCommunitySiderBarGroup 
+        title="消息管理" 
+        icon="lucide:megaphone"
+        :collapsed="collapsed"
+        v-if="hasMessagePermission"
+    >
         <NuxtLink v-if="hasPermission('announcement:view')" to="/superCommunity/message/announcement"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
             :class="isActive('/superCommunity/message/announcement') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
@@ -19,7 +24,12 @@
     </SuperCommunitySiderBarGroup>
 
     <!-- Security Management -->
-    <SuperCommunitySiderBarGroup title="安保管理" v-if="hasSecurityPermission">
+    <SuperCommunitySiderBarGroup 
+        title="安保管理" 
+        icon="lucide:shield"
+        :collapsed="collapsed"
+        v-if="hasSecurityPermission"
+    >
         <NuxtLink v-if="hasPermission('visitor:view')" to="/superCommunity/security/visitor"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
             :class="isActive('/superCommunity/security/visitor') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
@@ -38,7 +48,12 @@
     </SuperCommunitySiderBarGroup>
 
     <!-- Property Management -->
-    <SuperCommunitySiderBarGroup title="物业管理" v-if="hasPropertyPermission">
+    <SuperCommunitySiderBarGroup 
+        title="物业管理" 
+        icon="lucide:wrench"
+        :collapsed="collapsed"
+        v-if="hasPropertyPermission"
+    >
         <NuxtLink v-if="hasPermission('repair:view')" to="/superCommunity/property/repair"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
             :class="isActive('/superCommunity/property/repair') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
@@ -50,10 +65,17 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const userStore = useUserStore();
+defineProps({
+    collapsed: {
+        type: Boolean,
+        default: false
+    }
+})
 
-const isActive = (path: string) => route.path.startsWith(path);
+const route = useRoute()
+const userStore = useUserStore()
+
+const isActive = (path: string) => route.path.startsWith(path)
 
 const hasPermission = (permissionCode: string) => {
     if (userStore.userRole?.roleCode === 'ROLE_SUPER_ADMIN') return true;
