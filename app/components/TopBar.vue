@@ -73,6 +73,9 @@
 
       <div class="h-3 w-px bg-slate-200 dark:bg-slate-700"></div>
 
+      <!-- 通知铃铛 -->
+      <NotificationsDropdown v-if="userStore.isLoggedIn" />
+
       <button @click="toggleTheme"
         class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#ff5000] transition-all">
         <Icon v-if="colorMode.value === 'dark'" name="lucide:moon" size="14" />
