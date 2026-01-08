@@ -1023,7 +1023,266 @@ export const cancelCollectForumPostApi = (postId: string | number) => {
  */
 
 export const getMyCollectedForumPostApi = (params: any) => {
-  return $api('/api/forum/post/my/collected', { method: 'GET', params })
+    return $api('/api/forum/post/my/collected', { method: 'GET', params })
+}
+
+
+// ==================== 好友管理 ====================
+
+/**
+ * 获取好友列表
+ * GET /api/friend/list
+ * 
+ * 参数：
+ * - pageNum: 页码
+ * - pageSize: 每页大小
+ * 
+ * 返回：
+ * {
+ *   "code": 200,
+ *   "data": {
+ *     "records": [{
+ *       "friendId": 0,
+ *       "friendUserId": 0,
+ *       "friendUserName": "",
+ *       "friendAvatar": "",
+ *       "remark": "",
+ *       "status": 1,  // 0-待确认 1-已同意 2-已拒绝
+ *       "createTime": ""
+ *     }],
+ *     "total": 0
+ *   }
+ * }
+ */
+export const getFriendListApi = (params: any) => {
+    return $api('/api/friend/list', {
+        method: 'GET',
+        params
+    })
+}
+
+/**
+ * 获取好友申请列表
+ * GET /api/friend/requests
+ * 
+ * 参数：
+ * - pageNum: 页码
+ * - pageSize: 每页大小
+ * 
+ * 返回：同好友列表格式
+ */
+export const getFriendRequestsApi = (params: any) => {
+    return $api('/api/friend/requests', {
+        method: 'GET',
+        params
+    })
+}
+
+/**
+ * 搜索用户
+ * POST /api/friend/search
+ * 
+ * 参数：
+ * {
+ *   "keyword": "",      // 搜索关键词（手机号或姓名）
+ *   "pageNum": 1,       // 页码
+ *   "pageSize": 20      // 每页大小
+ * }
+ * 
+ * 返回：
+ * {
+ *   "code": 200,
+ *   "data": {
+ *     "records": [{
+ *       "userId": 1,
+ *       "userName": "张三",
+ *       "phone": "138****8000",
+ *       "avatar": "https://xxx.com/avatar.jpg",
+ *       "gender": 1,
+ *       "age": 28,
+ *       "friendStatus": 0  // 0-非好友，1-待审核，2-已是好友
+ *     }],
+ *     "total": 0
+ *   }
+ * }
+ */
+export const searchUsersApi = (data: any) => {
+    return $api('/api/friend/search', {
+        method: 'POST',
+        body: data
+    })
+}
+
+/**
+ * 发送好友申请
+ * POST /api/friend/request
+ * 
+ * 参数：
+ * {
+ *   "friendUserId": 0,  // 好友用户ID
+ *   "remark": ""        // 好友备注（可选）
+ * }
+ */
+export const sendFriendRequestApi = (data: any) => {
+    return $api('/api/friend/request', {
+        method: 'POST',
+        body: data
+    })
+}
+
+/**
+ * 接受好友申请
+ * POST /api/friend/{friendId}/accept
+ * 
+ * 参数：
+ * - friendId: 好友关系ID
+ */
+export const acceptFriendRequestApi = (friendId: string | number) => {
+    return $api(`/api/friend/${friendId}/accept`, {
+        method: 'POST'
+    })
+}
+
+/**
+ * 拒绝好友申请
+ * POST /api/friend/{friendId}/reject
+ * 
+ * 参数：
+ * - friendId: 好友关系ID
+ */
+export const rejectFriendRequestApi = (friendId: string | number) => {
+    return $api(`/api/friend/${friendId}/reject`, {
+        method: 'POST'
+    })
+}
+
+/**
+ * 删除好友
+ * DELETE /api/friend/{friendUserId}
+ * 
+ * 参数：
+ * - friendUserId: 好友用户ID
+ */
+export const deleteFriendApi = (friendUserId: string | number) => {
+    return $api(`/api/friend/${friendUserId}`, {
+        method: 'DELETE'
+    })
+}
+
+
+// ==================== 通知管理 ====================
+
+/**
+ * 获取通知列表
+ * GET /api/notification/list
+ * 
+ * 参数：
+ * - pageNum: 页码
+ * - pageSize: 每页大小
+ */
+export const getNotificationListApi = (params: { pageNum?: number; pageSize?: number }) => {
+    return $api('/api/notification/list', {
+        method: 'GET',
+        params
+    })
+}
+
+/**
+ * 标记通知已读
+ * POST /api/notification/{notificationId}/read
+ * 
+ * 参数：
+ * - notificationId: 通知ID
+ */
+export const markNotificationReadApi = (notificationId: number) => {
+    return $api(`/api/notification/${notificationId}/read`, {
+        method: 'POST'
+    })
+}
+
+// ==================== 私信管理 ====================
+
+/**
+ * 发送私信
+ * POST /api/message/send
+ * 
+ * 参数：
+ * {
+ *   "toUserId": 0,
+ *   "content": ""
+ * }
+ */
+export const sendMessageApi = (data: any) => {
+    return $api('/api/message/send', {
+        method: 'POST',
+        body: data
+    })
+}
+
+/**
+ * 获取聊天记录
+ * GET /api/message/chat/{otherUserId}
+ * 
+ * 参数：
+ * - otherUserId: 对方用户ID
+ * - pageNum: 页码
+ * - pageSize: 每页大小
+ */
+export const getChatHistoryApi = (otherUserId: string | number, params: any) => {
+    return $api(`/api/message/chat/${otherUserId}`, {
+        method: 'GET',
+        params
+    })
+}
+
+/**
+ * 标记消息已读
+ * POST /api/message/{messageId}/read
+ */
+export const markMessageReadApi = (messageId: string | number) => {
+    return $api(`/api/message/${messageId}/read`, {
+        method: 'POST'
+    })
+}
+
+/**
+ * 标记与某人的所有消息为已读
+ * POST /api/message/read-all/{otherUserId}
+ */
+export const markAllMessagesReadApi = (otherUserId: string | number) => {
+    return $api(`/api/message/read-all/${otherUserId}`, {
+        method: 'POST'
+    })
+}
+
+/**
+ * 获取未读消息数量
+ * GET /api/message/unread-count
+ */
+export const getUnreadCountApi = () => {
+    return $api('/api/message/unread-count', {
+        method: 'GET'
+    })
+}
+
+/**
+ * 检查用户在线状态
+ * GET /api/message/online/{userId}
+ */
+export const checkUserOnlineApi = (userId: string | number) => {
+    return $api(`/api/message/online/${userId}`, {
+        method: 'GET'
+    })
+}
+
+/**
+ * 删除消息
+ * DELETE /api/message/{messageId}
+ */
+export const deleteMessageApi = (messageId: string | number) => {
+    return $api(`/api/message/${messageId}`, {
+        method: 'DELETE'
+    })
 }
 
 

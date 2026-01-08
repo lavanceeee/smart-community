@@ -7,6 +7,7 @@
 
             <!-- Add Friend -->
             <button
+                @click="emit('addFriend')"
                 class="flex items-center gap-2 px-4 py-2 bg-[#ff5000] hover:bg-[#ff6a00] text-white rounded-lg transition-all shadow-lg shadow-orange-500/20 active:scale-95 duration-200 group">
                 <Icon name="lucide:user-plus" size="18"
                     class="group-hover:rotate-90 transition-transform duration-300" />
@@ -17,8 +18,13 @@
             <div class="relative group hidden sm:block">
                 <Icon name="lucide:search" size="16"
                     class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#ff5000] transition-colors" />
-                <input type="text" placeholder="搜索好友 / 群组..." v-model="searchQuery"
-                    class="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-[#ff5000] focus:ring-1 focus:ring-[#ff5000] w-64 transition-all" />
+                <input 
+                    type="text" 
+                    placeholder="搜索好友..." 
+                    :value="searchQuery"
+                    @input="emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
+                    class="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-[#ff5000] focus:ring-1 focus:ring-[#ff5000] w-64 transition-all" 
+                />
             </div>
         </div>
 
@@ -53,8 +59,16 @@
 </template>
 
 <script setup lang="ts">
+defineProps<{
+    searchQuery: string
+}>()
+
+const emit = defineEmits<{
+    'update:searchQuery': [value: string]
+    addFriend: []
+}>()
+
 const userStore = useUserStore()
-const searchQuery = ref('')
 </script>
 
 <style scoped>
