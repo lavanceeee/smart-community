@@ -43,7 +43,7 @@
                             class="w-10 h-10 rounded-full object-cover border border-slate-100 dark:border-slate-800" />
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ post.userName
-                                }}</span>
+                            }}</span>
                             <div class="flex items-center gap-2 text-xs text-slate-400">
                                 <span>{{ post.createTime }}</span>
                                 <span v-if="post.viewCount">· {{ post.viewCount }} 阅读</span>
