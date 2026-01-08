@@ -90,7 +90,25 @@ export const useChat = () => {
             }) as any
             
             if (res.code === 200) {
-                // 消息会通过 WebSocket 推送回来，不需要手动添加
+                const userStore = useUserStore()
+                
+                // 立即添加到消息列表（乐观更新）
+                const newMessage: ChatMessage = {
+                    messageId: res.data?.messageId || Date.now(), // 使用返回的ID或临时ID
+                    fromUserId: userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0,
+                    fromUserName: userStore.userInfo?.userName || '',
+                    fromUserAvatar: userStore.userInfo?.avatar || '',
+                    toUserId: toUserId,
+                    toUserName: currentChatUser.value?.userName || '',
+                    toUserAvatar: currentChatUser.value?.avatar || '',
+                    content: content.trim(),
+                    isRead: 0,
+                    createTime: new Date().toISOString()
+                }
+                
+                // 添加到消息列表
+                messages.value.push(newMessage)
+                
                 return res.data
             } else {
                 throw new Error(res.message || '发送消息失败')
@@ -108,11 +126,19 @@ export const useChat = () => {
      */
     const markMessageRead = async (messageId: number, toUserId: number) => {
         try {
+            const userStore = useUserStore()
+            const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
+            const message = messages.value.find(m => m.messageId === messageId)
+            
+            // 只标记"我收到的"消息为已读（不标记我发送的消息）
+            if (!message || message.fromUserId === currentUserId) {
+                return
+            }
+            
             const res = await markMessageReadApi(messageId) as any
             
             if (res.code === 200) {
                 // 更新本地消息状态
-                const message = messages.value.find(m => m.messageId === messageId)
                 if (message) {
                     message.isRead = 1
                 }
@@ -133,11 +159,13 @@ export const useChat = () => {
     const markAllMessagesRead = async (otherUserId: number) => {
         try {
             const res = await markAllMessagesReadApi(otherUserId) as any
+            const userStore = useUserStore()
+            const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
             
             if (res.code === 200) {
-                // 更新本地消息状态
+                // 只更新"我收到的"消息状态（fromUserId是对方，toUserId是我）
                 messages.value.forEach(message => {
-                    if (message.toUserId === otherUserId || message.fromUserId === otherUserId) {
+                    if (message.fromUserId === otherUserId && message.toUserId === currentUserId) {
                         message.isRead = 1
                     }
                 })
@@ -228,11 +256,23 @@ export const useChat = () => {
                 toUserAvatar: ''
             }
             
-            // 如果是当前聊天对象的消息，添加到列表
+            // 如果是当前聊天对象的消息
             if (currentChatUser.value && 
                 (message.fromUserId === currentChatUser.value.userId || 
                  message.toUserId === currentChatUser.value.userId)) {
-                messages.value.push(message)
+                
+                // 检查是否已存在（避免重复）
+                const exists = messages.value.some(m => m.messageId === message.messageId)
+                
+                if (!exists) {
+                    messages.value.push(message)
+                } else {
+                    // 如果已存在，更新消息信息（可能是临时ID被真实ID替换）
+                    const index = messages.value.findIndex(m => m.messageId === message.messageId)
+                    if (index !== -1) {
+                        messages.value[index] = message
+                    }
+                }
                 
                 // 如果是收到的消息，自动标记已读
                 if (message.toUserId !== message.fromUserId && 
