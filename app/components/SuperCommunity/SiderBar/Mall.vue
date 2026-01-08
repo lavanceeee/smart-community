@@ -13,11 +13,11 @@
             商品管理
         </NuxtLink>
 
-        <NuxtLink v-if="hasPermission('order:view')" to="/superCommunity/mall/orders"
+        <NuxtLink v-if="hasPermission('order:view')" to="/superCommunity/mall/order"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
-            :class="isActive('/superCommunity/mall/orders') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
+            :class="isActive('/superCommunity/mall/order') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
             <Icon name="lucide:clipboard-list" size="18" class="mr-3 flex-shrink-0"
-                :class="isActive('/superCommunity/mall/orders') ? 'text-white' : 'text-slate-400 group-hover:text-white'" />
+                :class="isActive('/superCommunity/mall/order') ? 'text-white' : 'text-slate-400 group-hover:text-white'" />
             订单管理
         </NuxtLink>
     </SuperCommunitySiderBarGroup>

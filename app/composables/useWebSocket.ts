@@ -223,6 +223,16 @@ export const useWebSocket = () => {
         }
     }
     
+    // 页面关闭或刷新时断开连接
+    if (import.meta.client) {
+        window.addEventListener('beforeunload', () => {
+            if (isConnected.value) {
+                console.log('页面关闭，断开 WebSocket 连接')
+                disconnect()
+            }
+        })
+    }
+    
     // 组件卸载时断开连接
     onUnmounted(() => {
         disconnect()

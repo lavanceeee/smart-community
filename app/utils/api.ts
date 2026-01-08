@@ -1324,3 +1324,62 @@ export const deleteMessageApi = (messageId: string | number) => {
 export const getForumPostDetailApi = (postId: string | number) => {
   return $api(`/api/forum/post/get/${postId}`, { method: 'GET' })
 }
+
+// ==================== 订单管理 API ====================
+
+/**
+ * 管理员查询所有订单（分页+筛选）
+ * @param data 查询条件
+ */
+export const getAdminOrderListApi = (data: {
+  orderType?: string
+  status?: number
+  orderNo?: string
+  userId?: number
+  startTime?: string
+  endTime?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/orders/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 管理员查询订单详情
+ * @param orderId 订单ID
+ */
+export const getAdminOrderDetailApi = (orderId: number) => {
+  return $api(`/api/admin/orders/${orderId}`, { method: 'GET' })
+}
+
+/**
+ * 管理员处理订单
+ * @param orderId 订单ID
+ * @param data 处理数据
+ */
+export const handleAdminOrderApi = (orderId: number, data: {
+  action: string // deliver-发货, complete-完成, refund-退款, cancel-取消
+  remark?: string
+}) => {
+  return $api(`/api/admin/orders/${orderId}/handle`, {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 管理员获取订单统计
+ * @param startTime 开始时间
+ * @param endTime 结束时间
+ */
+export const getAdminOrderStatisticsApi = (startTime?: string, endTime?: string) => {
+  const params = new URLSearchParams()
+  if (startTime) params.append('startTime', startTime)
+  if (endTime) params.append('endTime', endTime)
+  return $api(`/api/admin/orders/statistics${params.toString() ? '?' + params.toString() : ''}`, {
+    method: 'GET'
+  })
+}

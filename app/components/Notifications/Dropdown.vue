@@ -14,13 +14,13 @@
         </template>
 
         <!-- 通知内容 -->
-        <div class="notification-content">
+        <div class="notification-content bg-white dark:bg-slate-900">
             <!-- 头部 -->
             <div
                 class="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <div class="flex items-center gap-2.5">
                     <div>
-                        <h3 class="text-base font-bold text-slate-800 dark:text-white">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-slate-100">
                             通知中心
                         </h3>
                         <p v-if="unreadCount > 0" class="text-xs text-slate-500 dark:text-slate-400">
@@ -56,8 +56,8 @@
                             class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                             <Icon name="lucide:bell-off" size="40" class="opacity-40" />
                         </div>
-                        <p class="text-sm font-medium">暂无通知</p>
-                        <p class="text-xs mt-1 opacity-60">当有新消息时会显示在这里</p>
+                        <p class="text-sm font-medium dark:text-slate-400">暂无通知</p>
+                        <p class="text-xs mt-1 opacity-60 dark:opacity-50">当有新消息时会显示在这里</p>
                     </div>
                 </template>
 
@@ -104,11 +104,11 @@
                                             class="w-2 h-2 bg-[#ff5000] rounded-full animate-pulse"></span>
                                     </div>
                                 </div>
-                                <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-2 leading-relaxed">
+                                <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 mb-2 leading-relaxed">
                                     {{ notification.content }}
                                 </p>
                                 <div class="flex items-center gap-2">
-                                    <Icon name="lucide:clock" size="12" class="text-slate-400" />
+                                    <Icon name="lucide:clock" size="12" class="text-slate-400 dark:text-slate-500" />
                                     <span class="text-xs text-slate-400 dark:text-slate-500">
                                         {{ formatTime(notification.createTime) }}
                                     </span>
@@ -196,10 +196,9 @@ const handleNotificationClick = async (notification: Notification) => {
             break
         case 5: // 私信通知
             // relatedId 是发送者的用户ID
-            // 需要先跳转到好友页面，然后触发打开聊天窗口
-            // 通过路由参数传递用户ID
+            // 跳转到聊天页面并打开对应的聊天
             router.push({
-                path: '/service/community/friends',
+                path: '/service/community/chat',
                 query: {
                     openChat: notification.relatedId
                 }
@@ -239,11 +238,11 @@ const getTypeIcon = (type: number) => {
 const getTypeColorClass = (type: number) => {
     const color = NotificationTypeColor[type] || 'blue'
     const colorMap: Record<string, string> = {
-        blue: 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-        red: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400',
-        green: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-        orange: 'bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
-        purple: 'bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
+        blue: 'bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-500/20 dark:to-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-500/30',
+        red: 'bg-gradient-to-br from-red-100 to-red-50 dark:from-red-500/20 dark:to-red-600/10 text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-500/30',
+        green: 'bg-gradient-to-br from-green-100 to-green-50 dark:from-green-500/20 dark:to-green-600/10 text-green-600 dark:text-green-400 border border-green-200/50 dark:border-green-500/30',
+        orange: 'bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-500/20 dark:to-orange-600/10 text-orange-600 dark:text-orange-400 border border-orange-200/50 dark:border-orange-500/30',
+        purple: 'bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-500/20 dark:to-purple-600/10 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-500/30'
     }
     return colorMap[color] || colorMap.blue
 }
@@ -252,11 +251,11 @@ const getTypeColorClass = (type: number) => {
 const getTypeBadgeClass = (type: number) => {
     const color = NotificationTypeColor[type] || 'blue'
     const colorMap: Record<string, string> = {
-        blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-        red: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
-        green: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-        orange: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
-        purple: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
+        blue: 'bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-500/20',
+        red: 'bg-red-50 dark:bg-red-500/15 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-500/20',
+        green: 'bg-green-50 dark:bg-green-500/15 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-500/20',
+        orange: 'bg-orange-50 dark:bg-orange-500/15 text-orange-700 dark:text-orange-300 border border-orange-200/50 dark:border-orange-500/20',
+        purple: 'bg-purple-50 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-500/20'
     }
     return colorMap[color] || colorMap.blue
 }
@@ -300,15 +299,15 @@ const formatTime = (time: string) => {
 }
 
 .notification-list::-webkit-scrollbar-track {
-    @apply bg-slate-100 dark:bg-slate-800 rounded-full;
+    @apply bg-slate-100 dark:bg-slate-800/50 rounded-full;
 }
 
 .notification-list::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 dark:bg-slate-600 rounded-full hover:bg-slate-400 dark:hover:bg-slate-500;
+    @apply bg-slate-300 dark:bg-slate-600/70 rounded-full hover:bg-slate-400 dark:hover:bg-slate-500;
 }
 
 .notification-item.unread {
-    @apply bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-950/10 dark:to-transparent;
+    @apply bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-500/5 dark:to-transparent;
 }
 
 .notification-item {
@@ -321,7 +320,7 @@ const formatTime = (time: string) => {
 }
 
 .notification-item:hover::before {
-    @apply from-[#ff5000]/5 to-transparent;
+    @apply from-[#ff5000]/5 to-transparent dark:from-orange-500/10 dark:to-transparent;
 }
 
 .line-clamp-2 {
@@ -340,11 +339,23 @@ const formatTime = (time: string) => {
     overflow: hidden !important;
 }
 
+/* 黑夜模式下的弹窗样式 */
+html.dark .notification-popover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    background: rgb(15 23 42) !important;
+}
+
 /* 消息通知样式 */
 :deep(.message-notification) {
     border-radius: 12px !important;
     box-shadow: 0 10px 30px rgba(255, 80, 0, 0.15) !important;
     border-left: 4px solid #ff5000 !important;
+}
+
+html.dark :deep(.message-notification) {
+    box-shadow: 0 10px 30px rgba(255, 80, 0, 0.3) !important;
+    border-left: 4px solid #fb923c !important;
+    background: rgb(15 23 42) !important;
 }
 
 :deep(.message-notification .el-notification__content) {
