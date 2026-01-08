@@ -189,9 +189,30 @@ const handleOpenChat = (friend: any) => {
 }
 
 // 初始化加载
-onMounted(() => {
-    loadFriends()
-    loadRequests()
+onMounted(async () => {
+    await loadFriends()
+    await loadRequests()
+    
+    // 检查是否有通过通知跳转过来的聊天请求
+    const route = useRoute()
+    const openChatUserId = route.query.openChat
+    
+    if (openChatUserId) {
+        // 从好友列表中查找对应的好友
+        const friend = friendList.value.find(f => f.friendUserId === Number(openChatUserId))
+        
+        if (friend) {
+            // 打开聊天窗口
+            handleOpenChat(friend)
+        } else {
+            // 如果不在好友列表中，可能需要先加载好友信息
+            ElMessage.warning('未找到该好友')
+        }
+        
+        // 清除路由参数
+        const router = useRouter()
+        router.replace({ query: {} })
+    }
 })
 
 // 监听 tab 切换

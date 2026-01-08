@@ -58,17 +58,22 @@ export interface NotificationListResponse {
     pages: number
 }
 
-export const useNotifications = () => {
-    const notifications = ref<Notification[]>([])
-    const loading = ref(false)
-    const total = ref(0)
-    const currentPage = ref(1)
-    const pageSize = ref(10)
+// 全局状态（单例模式）
+const notifications = ref<Notification[]>([])
+const loading = ref(false)
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = ref(10)
+let isWebSocketListenerRegistered = false
 
+export const useNotifications = () => {
     // 未读通知数量
     const unreadCount = computed(() => {
         return notifications.value.filter(n => n.isRead === 0).length
     })
+    
+    // WebSocket 实例
+    const { onMessage } = useWebSocket()
 
     // 获取通知列表
     const fetchNotifications = async (page: number = 1, size: number = 10) => {
@@ -154,6 +159,55 @@ export const useNotifications = () => {
     // 获取已读通知
     const getReadNotifications = () => {
         return notifications.value.filter(n => n.isRead === 1)
+    }
+    
+    /**
+     * 处理 WebSocket 消息 - 监听新通知
+     */
+    const handleWebSocketMessage = (wsMessage: any) => {
+        // 当收到聊天消息时，刷新通知列表（后端会自动创建通知）
+        if (wsMessage.type === 'CHAT') {
+            const userStore = useUserStore()
+            const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
+            
+            // 如果是收到的消息（不是自己发的）
+            if (wsMessage.toUserId === currentUserId && wsMessage.fromUserId !== currentUserId) {
+                console.log('收到新消息，刷新通知列表')
+                
+                // 显示美观的通知提示
+                ElNotification({
+                    title: '新消息',
+                    message: h('div', { class: 'flex items-center gap-3' }, [
+                        h('img', {
+                            src: wsMessage.fromUserAvatar || '/default-avatar.png',
+                            class: 'w-10 h-10 rounded-full object-cover',
+                            style: 'flex-shrink: 0;'
+                        }),
+                        h('div', { class: 'flex-1 min-w-0' }, [
+                            h('div', { class: 'font-semibold text-slate-800 dark:text-white mb-1' }, wsMessage.fromUserName),
+                            h('div', { class: 'text-sm text-slate-600 dark:text-slate-400 truncate' }, wsMessage.content)
+                        ])
+                    ]),
+                    type: 'info',
+                    duration: 4000,
+                    position: 'top-right',
+                    customClass: 'message-notification',
+                    offset: 60
+                })
+                
+                // 延迟一下再刷新，确保后端已经创建了通知
+                setTimeout(() => {
+                    fetchNotifications(currentPage.value, pageSize.value)
+                }, 500)
+            }
+        }
+    }
+    
+    // 注册 WebSocket 消息监听（只注册一次）
+    if (!isWebSocketListenerRegistered) {
+        onMessage(handleWebSocketMessage)
+        isWebSocketListenerRegistered = true
+        console.log('已注册通知 WebSocket 监听器')
     }
 
     return {
