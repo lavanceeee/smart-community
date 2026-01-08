@@ -1,22 +1,13 @@
 <template>
-    <el-popover
-        :visible="visible"
-        placement="bottom-end"
-        :width="420"
-        trigger="click"
-        popper-class="notification-popover"
-        @update:visible="handleVisibleChange"
-    >
+    <el-popover :visible="visible" placement="bottom-end" :width="350" trigger="click"
+        popper-class="notification-popover" @update:visible="handleVisibleChange">
         <template #reference>
             <button
-                class="relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#ff5000] transition-colors"
-            >
-                <Icon name="lucide:bell" size="20" />
+                class="relative w-5 h-5 flex items-center justify-center rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#ff5000] transition-colors">
+                <Icon name="lucide:bell" size="14" />
                 <!-- 未读通知徽章 -->
-                <span
-                    v-if="unreadCount > 0"
-                    class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-slate-900"
-                >
+                <span v-if="unreadCount > 0"
+                    class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-slate-900">
                     {{ unreadCount > 99 ? '99+' : unreadCount }}
                 </span>
             </button>
@@ -25,11 +16,9 @@
         <!-- 通知内容 -->
         <div class="notification-content">
             <!-- 头部 -->
-            <div class="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
+            <div
+                class="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#ff5000] to-orange-600 shadow-lg shadow-orange-500/20">
-                        <Icon name="lucide:bell" size="16" class="text-white" />
-                    </div>
                     <div>
                         <h3 class="text-base font-bold text-slate-800 dark:text-white">
                             通知中心
@@ -39,23 +28,23 @@
                         </p>
                     </div>
                 </div>
-                <button
-                    v-if="unreadCount > 0"
-                    @click="handleMarkAllRead"
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-[#ff5000] hover:bg-orange-50 dark:hover:bg-orange-950/20 font-medium transition-all"
-                >
+                <button v-if="unreadCount > 0" @click="handleMarkAllRead"
+                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-[#ff5000] hover:bg-orange-50 dark:hover:bg-orange-950/20 font-medium transition-all">
                     <Icon name="lucide:check-check" size="14" />
                     全部已读
                 </button>
             </div>
 
             <!-- 通知列表 -->
-            <div class="notification-list max-h-[480px] overflow-y-auto">
+            <div class="notification-list max-h-[350px] overflow-y-auto">
                 <template v-if="loading">
                     <div class="flex flex-col items-center justify-center py-16">
                         <div class="relative">
-                            <div class="w-12 h-12 rounded-full border-4 border-orange-100 dark:border-orange-900/20"></div>
-                            <div class="absolute inset-0 w-12 h-12 rounded-full border-4 border-[#ff5000] border-t-transparent animate-spin"></div>
+                            <div class="w-12 h-12 rounded-full border-4 border-orange-100 dark:border-orange-900/20">
+                            </div>
+                            <div
+                                class="absolute inset-0 w-12 h-12 rounded-full border-4 border-[#ff5000] border-t-transparent animate-spin">
+                            </div>
                         </div>
                         <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">加载中...</p>
                     </div>
@@ -63,7 +52,8 @@
 
                 <template v-else-if="notifications.length === 0">
                     <div class="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-slate-500">
-                        <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                        <div
+                            class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                             <Icon name="lucide:bell-off" size="40" class="opacity-40" />
                         </div>
                         <p class="text-sm font-medium">暂无通知</p>
@@ -72,37 +62,28 @@
                 </template>
 
                 <template v-else>
-                    <div
-                        v-for="notification in notifications"
-                        :key="notification.notificationId"
+                    <div v-for="notification in notifications" :key="notification.notificationId"
                         @click="handleNotificationClick(notification)"
                         class="notification-item px-4 py-3 border-b border-slate-50 dark:border-slate-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:to-transparent cursor-pointer transition-all duration-200 relative group"
-                        :class="{ 'unread': notification.isRead === 0 }"
-                    >
+                        :class="{ 'unread': notification.isRead === 0 }">
                         <!-- 未读指示条 -->
-                        <div 
-                            v-if="notification.isRead === 0"
-                            class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ff5000] to-orange-400"
-                        ></div>
-                        
+                        <div v-if="notification.isRead === 0"
+                            class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ff5000] to-orange-400">
+                        </div>
+
                         <div class="flex items-start gap-3">
                             <!-- 图标或头像 -->
                             <template v-if="notification.type === 5 && getUserAvatar(notification)">
                                 <!-- 私信通知显示发送者头像 -->
-                                <el-avatar
-                                    :size="44"
-                                    :src="getUserAvatar(notification)"
-                                    class="shrink-0 shadow-sm group-hover:shadow-md transition-all duration-200 ring-2 ring-purple-100 dark:ring-purple-900/30"
-                                >
+                                <el-avatar :size="44" :src="getUserAvatar(notification)"
+                                    class="shrink-0 shadow-sm group-hover:shadow-md transition-all duration-200 ring-2 ring-purple-100 dark:ring-purple-900/30">
                                     <Icon name="lucide:user" size="20" />
                                 </el-avatar>
                             </template>
                             <template v-else>
                                 <!-- 其他类型显示图标 -->
-                                <div 
-                                    class="w-11 h-11 shrink-0 flex items-center justify-center rounded-xl shadow-sm group-hover:shadow-md transition-all duration-200"
-                                    :class="getTypeColorClass(notification.type)"
-                                >
+                                <div class="w-11 h-11 shrink-0 flex items-center justify-center rounded-xl shadow-sm group-hover:shadow-md transition-all duration-200"
+                                    :class="getTypeColorClass(notification.type)">
                                     <Icon :name="getTypeIcon(notification.type)" size="20" />
                                 </div>
                             </template>
@@ -110,20 +91,17 @@
                             <!-- 内容 -->
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-1.5">
-                                    <h4 class="text-sm font-bold text-slate-800 dark:text-white truncate group-hover:text-[#ff5000] transition-colors">
+                                    <h4
+                                        class="text-sm font-bold text-slate-800 dark:text-white truncate group-hover:text-[#ff5000] transition-colors">
                                         {{ notification.title }}
                                     </h4>
                                     <div class="flex items-center gap-2 shrink-0">
-                                        <span 
-                                            class="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                                            :class="getTypeBadgeClass(notification.type)"
-                                        >
+                                        <span class="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                                            :class="getTypeBadgeClass(notification.type)">
                                             {{ getTypeText(notification.type) }}
                                         </span>
-                                        <span
-                                            v-if="notification.isRead === 0"
-                                            class="w-2 h-2 bg-[#ff5000] rounded-full animate-pulse"
-                                        ></span>
+                                        <span v-if="notification.isRead === 0"
+                                            class="w-2 h-2 bg-[#ff5000] rounded-full animate-pulse"></span>
                                     </div>
                                 </div>
                                 <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-2 leading-relaxed">
@@ -142,14 +120,10 @@
             </div>
 
             <!-- 底部 -->
-            <div 
-                v-if="notifications.length > 0"
-                class="px-4 py-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50/50 dark:bg-slate-800/30"
-            >
-                <button
-                    @click="handleViewAll"
-                    class="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg text-sm text-[#ff5000] hover:bg-orange-50 dark:hover:bg-orange-950/20 font-medium transition-all group"
-                >
+            <div v-if="notifications.length > 0"
+                class="px-4 py-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50/50 dark:bg-slate-800/30">
+                <button @click="handleViewAll"
+                    class="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg text-sm text-[#ff5000] hover:bg-orange-50 dark:hover:bg-orange-950/20 font-medium transition-all group">
                     <span>查看全部通知</span>
                     <Icon name="lucide:arrow-right" size="14" class="group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -292,14 +266,14 @@ const formatTime = (time: string) => {
     const now = new Date()
     const date = new Date(time)
     const diff = now.getTime() - date.getTime()
-    
+
     const seconds = Math.floor(diff / 1000)
     const minutes = Math.floor(seconds / 60)
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
     const months = Math.floor(days / 30)
     const years = Math.floor(days / 365)
-    
+
     if (seconds < 60) {
         return '刚刚'
     } else if (minutes < 60) {
@@ -377,4 +351,3 @@ const formatTime = (time: string) => {
     margin: 0 !important;
 }
 </style>
-

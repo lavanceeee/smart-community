@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1240px] mx-auto px-4 py-6">
+  <div class="max-w-[1240px] mx-auto px-4 py-6" ref="rootObserverRef">
     <!-- Section Title -->
     <div class="flex items-center gap-2 mb-6">
       <div class="w-1 h-6 bg-[#ff5000] rounded-full"></div>
@@ -7,19 +7,28 @@
     </div>
 
     <!-- Goods Grid -->
-    <div v-if="loading && goodsList.length === 0"
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
-      <div v-for="i in 10" :key="i" class="bg-gray-100 dark:bg-slate-800 rounded-xl h-64 animate-pulse"></div>
-    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+      <!-- Skeleton Loading -->
+      <div v-if="loading && goodsList.length === 0" v-for="i in 5" :key="`skeleton-${i}`"
+        class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
+        <div class="aspect-square bg-slate-200 dark:bg-slate-700"></div>
+        <div class="p-3 space-y-2">
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+          <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+          <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-2/3 mt-3"></div>
+        </div>
+      </div>
 
-    <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+      <!-- Product Cards -->
       <div v-for="item in goodsList" :key="item.productId" @click="goToDetail(item.productId)"
         class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-transparent cursor-pointer shadow-sm hover:shadow-md flex flex-col">
+
         <!-- Product Image -->
         <div class="aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
           <img :src="productMainImages[item.productId] || item.coverImg" :alt="item.productName"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-          <!-- Optional Hover Action Overlay -->
+
+          <!-- Hover Overlay -->
           <div
             class="absolute inset-x-0 bottom-0 bg-black/5 py-1 text-center opacity-0 group-hover:opacity-100 transition-opacity">
             <span class="text-[10px] text-white">查看详情</span>
@@ -34,10 +43,10 @@
             {{ item.productName }}
           </h3>
 
-          <!-- Description (Replacing tags since real data has description) -->
+          <!-- Description -->
           <p class="text-xs text-slate-400 line-clamp-1 mb-2">{{ item.description }}</p>
 
-          <!-- Price and Sales -->
+          <!-- Price -->
           <div class="mt-auto flex items-baseline justify-between gap-1 flex-wrap">
             <div class="flex items-baseline text-[#ff5000]">
               <span class="text-xs font-bold font-sans">¥</span>
@@ -51,21 +60,36 @@
       </div>
     </div>
 
-    <!-- Load More Placeholder -->
-    <div class="mt-12 text-center" v-if="goodsList.length > 0">
-      <button v-if="hasMore" @click="loadMore" :disabled="loading"
-        class="px-8 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm hover:border-[#ff5000] hover:text-[#ff5000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-        {{ loading ? '加载中...' : '加载更多' }}
-      </button>
-      <span v-else class="text-slate-400 text-sm">没有更多商品了</span>
+    <!-- Loading More Skeleton (outside grid) -->
+    <div v-if="loading && goodsList.length > 0" class="mt-6">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+        <div v-for="i in 6" :key="`loading-${i}`"
+          class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
+          <div class="aspect-square bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-3 space-y-2">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-2/3 mt-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lazy Load Sentinel (Always visible) -->
+    <div ref="sentinelRef" class="mt-12 py-6 flex justify-center">
+      <span v-if="!hasMore && goodsList.length > 0" class="text-slate-400 text-sm">
+        没有更多商品了
+      </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMallGoods } from '@/composables/mall/useMallGoods'
+import { useIntersectionObserver } from '~/utils/lazyLoading'
 
-const { goodsList, loading, fetchGoodsList, loadMore, hasMore, fetchProductImages } = useMallGoods()
+const { goodsList, loading, fetchGoodsList, hasMore, fetchProductImages } = useMallGoods()
+const containerRef = ref<HTMLElement | null>(null) // Root container ref
 
 const productMainImages = ref<Record<string, string>>({})
 
@@ -89,10 +113,41 @@ watch(goodsList, (newList) => {
   })
 }, { immediate: true, deep: true })
 
-onMounted(() => {
-  if (goodsList.value.length === 0) {
-    fetchGoodsList()
+// 初始加载：当组件进入可视区域时，加载前5个
+const initialLoad = async () => {
+  if (goodsList.value.length === 0 && !loading.value) {
+    // loading.value = true // Handled in fetchGoodsList
+    await fetchGoodsList(1, false, 6)
   }
+}
+
+// 懒加载更多：当滚动到底部时，加载下一页5个
+const loadMore = async () => {
+  if (!hasMore.value || loading.value) return
+
+  // Add artificial delay for skeleton display (1000ms)
+  loading.value = true
+  await new Promise(resolve => setTimeout(resolve, 1000))
+
+  // Fix: fetchGoodsList checks if(loading) return, so we must reset it briefly
+  // to allow the function to execute. The function will set it back to true immediately.
+  loading.value = false
+  await fetchGoodsList(undefined, true, 5) // Load 5 items
+}
+
+// 监听组件根元素是否进入视口（用于初始加载）
+const { targetRef: rootObserverRef } = useIntersectionObserver(initialLoad)
+// 监听底部哨兵（用于加载更多）
+const { targetRef: sentinelRef } = useIntersectionObserver(loadMore)
+
+onMounted(() => {
+  // Manually assign root ref if needed, or template ref works automatically if name matches
+  // But useIntersectionObserver returns a ref. We need to bind it to the DOM.
+  // Since we have two observers now, we need to bind them correctly.
+  // The previous implementation used useIntersectionObserver which returns targetRef.
+  // We can't bind two refs to the same element easily or we need separate elements.
+  // rootObserverRef will be bound to the main container div.
+  // sentinelRef is bound to the bottom div.
 })
 </script>
 

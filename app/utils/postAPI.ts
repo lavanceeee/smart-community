@@ -77,3 +77,27 @@ export const getPostComments = (postId: number, pageNum: number, pageSize: numbe
         }
     })
 }
+
+/**
+ * 获取我的帖子列表
+ * GET /api/forum/post/my
+ * 参数：
+ * - pageNum: 页码
+ * - pageSize: 每页大小
+ */
+export const getMyPostsApi = (params: { pageNum?: number; pageSize?: number }) => {
+    return $api('/api/forum/post/my', {
+        method: 'GET',
+        params
+    });
+};
+
+/**
+ * 删除帖子
+ * DELETE /api/forum/post/delete/{postId}
+ */
+export const deletePostApi = (postId: number | string) => {
+    return $api(`/api/forum/post/delete/${postId}`, {
+        method: 'DELETE'
+    });
+};

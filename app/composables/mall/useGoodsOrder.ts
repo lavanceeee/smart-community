@@ -60,6 +60,7 @@ export const useGoodsOrder = () => {
             }
 
             // Priority: Status > Type > PaymentMethod > All
+            // Note: Backend APIs are separate and do not support combined filtering yet.
             if (filters.status !== 'ALL') {
                 params.status = Number(filters.status)
                 res = await getOrdersListByStatusApi(params)

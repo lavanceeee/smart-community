@@ -7,7 +7,7 @@
             <!-- Dialog Content -->
             <Transition name="scale">
                 <div v-if="show"
-                    class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+                    class="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
 
                     <!-- Header -->
                     <div class="px-8 pt-8 pb-4 flex justify-between items-center">
@@ -18,14 +18,14 @@
                         </button>
                     </div>
 
-                    <div class="px-8 pb-8 space-y-8">
+                    <div class="px-8 pb-8 grid md:grid-cols-2 gap-8">
                         <!-- Amount Selection -->
                         <div>
                             <label
                                 class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-wider text-[10px]">选择充值金额</label>
-                            <div class="grid grid-cols-3 gap-3">
+                            <div class="grid grid-cols-2 gap-3">
                                 <button v-for="amt in amounts" :key="amt" @click="selectedAmount = amt" :class="[
-                                    'py-4 rounded-2xl border-2 font-black transition-all duration-200',
+                                    'py-6 rounded-2xl border-2 font-black transition-all duration-200 text-lg',
                                     selectedAmount === amt
                                         ? 'border-[#ff5000] bg-orange-50 text-[#ff5000] dark:bg-orange-500/10'
                                         : 'border-slate-50 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-200 dark:hover:border-slate-700'
@@ -37,44 +37,46 @@
                         </div>
 
                         <!-- Payment Method -->
-                        <div>
-                            <label
-                                class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-wider text-[10px]">支付方式</label>
-                            <div class="space-y-3">
-                                <button v-for="method in paymentMethods" :key="method.id"
-                                    @click="selectedMethod = method.id" :class="[
-                                        'w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all',
-                                        selectedMethod === method.id
-                                            ? 'border-[#ff5000] bg-orange-50 dark:bg-orange-500/10'
-                                            : 'border-slate-50 dark:border-slate-800'
-                                    ]">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            :class="['w-10 h-10 rounded-xl flex items-center justify-center text-white', method.color]">
-                                            <Icon :name="method.icon" size="20" />
+                        <div class="flex flex-col h-full justify-between gap-6">
+                            <div>
+                                <label
+                                    class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-wider text-[10px]">支付方式</label>
+                                <div class="space-y-3">
+                                    <button v-for="method in paymentMethods" :key="method.id"
+                                        @click="selectedMethod = method.id" :class="[
+                                            'w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all',
+                                            selectedMethod === method.id
+                                                ? 'border-[#ff5000] bg-orange-50 dark:bg-orange-500/10'
+                                                : 'border-slate-50 dark:border-slate-800'
+                                        ]">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                :class="['w-10 h-10 rounded-xl flex items-center justify-center text-white', method.color]">
+                                                <Icon :name="method.icon" size="20" />
+                                            </div>
+                                            <span class="font-bold text-slate-700 dark:text-slate-200">{{ method.name
+                                                }}</span>
                                         </div>
-                                        <span class="font-bold text-slate-700 dark:text-slate-200">{{ method.name
-                                        }}</span>
-                                    </div>
-                                    <div v-if="selectedMethod === method.id"
-                                        class="w-6 h-6 rounded-full bg-[#ff5000] flex items-center justify-center text-white">
-                                        <Icon name="lucide:check" size="14" />
-                                    </div>
-                                    <div v-else
-                                        class="w-6 h-6 rounded-full border-2 border-slate-100 dark:border-slate-800">
-                                    </div>
-                                </button>
+                                        <div v-if="selectedMethod === method.id"
+                                            class="w-6 h-6 rounded-full bg-[#ff5000] flex items-center justify-center text-white">
+                                            <Icon name="lucide:check" size="14" />
+                                        </div>
+                                        <div v-else
+                                            class="w-6 h-6 rounded-full border-2 border-slate-100 dark:border-slate-800">
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Action Button -->
-                        <button @click="handleRecharge" :disabled="loading"
-                            class="group relative w-full bg-gradient-to-r from-[#ff5000] to-[#ff8c00] text-white py-5 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:pointer-events-none">
-                            <div class="flex items-center justify-center gap-2">
-                                <Icon v-if="loading" name="lucide:loader-2" class="animate-spin" size="20" />
-                                <span>创建订单 ¥{{ selectedAmount.toFixed(2) }}</span>
-                            </div>
-                        </button>
+                            <!-- Action Button -->
+                            <button @click="handleRecharge" :disabled="loading"
+                                class="group relative w-full bg-gradient-to-r from-[#ff5000] to-[#ff8c00] text-white py-5 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:pointer-events-none">
+                                <div class="flex items-center justify-center gap-2">
+                                    <Icon v-if="loading" name="lucide:loader-2" class="animate-spin" size="20" />
+                                    <span>创建订单 ¥{{ selectedAmount.toFixed(2) }}</span>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </Transition>

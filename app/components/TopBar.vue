@@ -5,7 +5,7 @@
       <nuxt-link to="/">
         <div class="text-sm font-bold text-[#ff5000] flex items-center gap-2">
           <Icon name="lucide:layout-grid" size="14" class="shrink-0" />
-          <div class="flex items-center">
+          <div class="flex items-center w-[150px]">
             <span>{{ titleParts.base }}</span>
             <Transition name="title-slide" mode="out-in">
               <span :key="titleParts.sub" class="whitespace-nowrap block">{{ titleParts.sub }}</span>
@@ -14,7 +14,7 @@
         </div>
       </nuxt-link>
       <!-- New Navigation Links -->
-      <div class="flex items-center gap-1 ml-6">
+      <div class="flex items-center gap-1 ml-5">
         <NuxtLink to="/service/mall"
           class="h-7 px-3 flex items-center gap-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-[#ff5000] transition-all text-xs font-semibold"
           active-class="bg-orange-50 dark:bg-orange-950/30 !text-[#ff5000]">
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-4 text-xs font-medium">
+    <div class="flex items-center gap-3 text-xs font-medium">
       <!-- Remaining Right Part -->
 
       <NuxtLink to="/wallet" class="text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
@@ -83,13 +83,17 @@
       </button>
       <template v-if="userStore.isLoggedIn">
         <NuxtLink to="/profile"
-          class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors group">
-          <el-avatar :size="24" :src="userStore.userInfo?.avatar"
-            class="shrink-0 border border-orange-100 dark:border-orange-900/30">
-            {{ userStore.displayName ? userStore.displayName.charAt(0).toUpperCase() : 'U' }}
-          </el-avatar>
-          <span class="font-medium whitespace-nowrap">{{ userStore.displayName }}</span>
+          class="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors group">
+          <div>
+            <span class="font-medium whitespace-nowrap">{{ userStore.displayName }}</span>
+          </div>
         </NuxtLink>
+
+        <el-avatar :size="28" :src="userStore.userInfo?.avatar"
+          class="shrink-0 border border-orange-100 dark:border-orange-900/30">
+          {{ userStore.displayName ? userStore.displayName.charAt(0).toUpperCase() : 'U' }}
+        </el-avatar>
+
       </template>
 
       <NuxtLink v-else to="/login" class="text-slate-600 dark:text-slate-300 hover:text-[#ff5000] transition-colors">
@@ -142,10 +146,10 @@ const communityServices = [
 const canVisitSc = computed(() => {
   console.log('用户角色信息:', userStore.userRole);
   console.log('所有角色:', userStore.userRoles);
-  
+
   const roleTypeId = userStore.userRole?.roleId;
   console.log('角色ID:', roleTypeId);
-  
+
   // 未登录或角色ID为4（普通用户）时不显示后台管理入口
   if (!roleTypeId || roleTypeId === 4) return false;
   return true;
@@ -173,13 +177,13 @@ const titleParts = computed(() => {
   if (path.startsWith("/service/community/payment"))
     return { base: communityPrefix, sub: " - 缴费" };
   if (path.startsWith("/service/community/issues"))
-    return { base: communityPrefix, sub: " - 报修与投诉" };
+    return { base: communityPrefix, sub: " - 报修投诉" };
   if (path.startsWith("/service/community/parking"))
     return { base: communityPrefix, sub: " - 停车服务" };
   if (path.startsWith("/service/community/visitors"))
-    return { base: communityPrefix, sub: " - 访客管理" };
+    return { base: communityPrefix, sub: " - 访客" };
   if (path.startsWith("/wallet"))
-    return { base: communityPrefix, sub: " - 我的钱包" };
+    return { base: communityPrefix, sub: " - 钱包" };
   if (path.startsWith("/profile"))
     return { base: communityPrefix, sub: " - 我的" };
 
