@@ -20,6 +20,20 @@ export const usePost = () => {
         }
     };
 
+    // Get Post Detail
+    const getPostDetail = async (postId: string | number) => {
+        try {
+            const res = await getForumPostDetailApi(postId) as any;
+            if (res.code === 200) {
+                return res.data;
+            } else {
+                throw new Error(res.message || '获取帖子详情失败');
+            }
+        } catch (e: any) {
+            throw e;
+        }
+    };
+
     // Toggle Like
     const toggleLike = async (post: ForumPost) => {
         // Optimistic update
@@ -128,6 +142,7 @@ export const usePost = () => {
         collectedPage,
         collectedHasMore,
         collectedLoading,
-        fetchMyCollectedPosts
+        fetchMyCollectedPosts,
+        getPostDetail
     };
 };

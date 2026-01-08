@@ -1,174 +1,135 @@
-const $api = $fetch.create({
-    onRequest({ request, options }) {
-        const config = useRuntimeConfig()
-        // 优先使用运行时配置，如果没有则回退
-        const baseUrl = config.public.apiBase
-        console.log('Current API Base:', baseUrl) // Debug log
-
-        if (baseUrl) {
-            options.baseURL = baseUrl
-        }
-
-        const userStore = useUserStore()
-
-        // 不需要 Token 的接口白名单
-        const publicEndpoints = [
-            'api/user/login',
-            'api/user/register',
-            'api/user/send-verify-code',
-            'api/user/password/reset'
-        ];
-
-        // 如果请求地址包含白名单中的路径，直接跳过 Token 注入
-        const isPublic = publicEndpoints.some(endpoint => request.toString().includes(endpoint));
-
-        if (isPublic) {
-            return;
-        }
-
-        if (userStore.isLoggedIn && userStore.token) {
-            options.headers = new Headers(options.headers);
-            options.headers.set('Authorization', `Bearer ${userStore.token}`)
-        } else {
-            // 只有访问非白名单接口且没有 token 时才提示或处理
-            if (import.meta.client) {
-                // 可以选择在这里提示，或者干脆不提示让后端返回 401
-                ElMessage.error("请先登录")
-            }
-        }
-    }
-})
+import { $api } from '../composables/useApi'
 
 //获取当前用户角色
 //api/permission/user/current
 export const getCurrentUser = () => {
-    return $api('api/permission/user/current', {
-        method: 'GET'
-    })
+  return $api('api/permission/user/current', {
+    method: 'GET'
+  })
 }
 
 export const registerUser = (data: any) => {
-    return $api('api/user/register', {
-        method: 'POST',
-        body: data
-    })
+  return $api('api/user/register', {
+    method: 'POST',
+    body: data
+  })
 }
 
 export const loginUser = (body: any, loginMethod: string) => {
 
-    if (loginMethod === 'phone') {
-        return $api('api/user/login', {
-            method: "POST",
-            body
-        })
-    }
-    else {
-        return $api('api/user/login-by-email', {
-            method: "POST",
-            body
-        })
-    }
+  if (loginMethod === 'phone') {
+    return $api('api/user/login', {
+      method: "POST",
+      body
+    })
+  }
+  else {
+    return $api('api/user/login-by-email', {
+      method: "POST",
+      body
+    })
+  }
 
 }
 
 //api/user/avatar/upload
 export const uploadAvatarApi = (body: any) => {
-    return $api('api/user/avatar/upload', {
-        method: "POST",
-        body
-    })
+  return $api('api/user/avatar/upload', {
+    method: "POST",
+    body
+  })
 }
 
 export const updateUserInfoApi = (body: any) => {
-    return $api('api/user/profile', {
-        method: "PUT",
-        body
-    })
+  return $api('api/user/profile', {
+    method: "PUT",
+    body
+  })
 }
 
 //忘记密码重置邮箱Api
 export const sendResetPasswordEmailApi = (email: string) => {
-    return $api('/api/user/send-verify-code', {
-        method: "POST",
-        body: { email } //JSON
-    })
+  return $api('/api/user/send-verify-code', {
+    method: "POST",
+    body: { email } //JSON
+  })
 }
 
 //重置密码
 export const resetPasswordApi = (body: any) => {
-    return $api('api/user/forgot-password', {
-        method: "POST",
-        body
-    })
+  return $api('api/user/forgot-password', {
+    method: "POST",
+    body
+  })
 }
 
 // 修改密码
 export const changePasswordApi = (body: any) => {
-    return $api('api/user/change-password', {
-        method: "POST",
-        body
-    })
+  return $api('api/user/change-password', {
+    method: "POST",
+    body
+  })
 }
 
 //退出登录 /api/user/logout
 export const logoutUser = () => {
-    return $api('api/user/logout', {
-        method: 'POST'
-    })
+  return $api('api/user/logout', {
+    method: 'POST'
+  })
 }
 
 // 获取社区公告列表
 export const getCommunityNewsApi = (params: any) => {
-    return $api('/api/announcement/list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/announcement/list', {
+    method: 'GET',
+    params
+  })
 }
 
 // 获取公告详情
 export const getAnnouncementDetailApi = (announceId: string | number) => {
-    return $api(`/api/announcement/${announceId}`, {
-        method: 'GET'
-    })
+  return $api(`/api/announcement/${announceId}`, {
+    method: 'GET'
+  })
 }
 
 // 获取访客登记列表
 export const getVisitorListApi = (params: any) => {
-    return $api('/api/visitor/list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/visitor/list', {
+    method: 'GET',
+    params
+  })
 }
 
 // 创建访客登记
 export const createVisitorApi = (data: any) => {
-    return $api('/api/visitor/register', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/visitor/register', {
+    method: 'POST',
+    body: data
+  })
 }
 
 // 取消访客登记
 export const cancelVisitorApi = (registerId: number | string) => {
-    return $api(`/api/visitor/${registerId}`, {
-        method: 'DELETE'
-    })
+  return $api(`/api/visitor/${registerId}`, {
+    method: 'DELETE'
+  })
 }
 
 // 获取所有车位信息 (用于车位图展示)
 export const getAllParkingApi = (params: any) => {
-    return $api('/api/parking/all', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/parking/all', {
+    method: 'GET',
+    params
+  })
 }
 
 // 提交车位登记申请
 export const registerParkingApi = (data: any) => {
-    return $api('/api/parking/register', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/parking/register', {
+    method: 'POST',
+    body: data
+  })
 }
 
 
@@ -176,36 +137,36 @@ export const registerParkingApi = (data: any) => {
 
 // 获取报事维修列表
 export const getRepairListApi = (params: any) => {
-    return $api('/api/repair/my-list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/repair/my-list', {
+    method: 'GET',
+    params
+  })
 }
 
 // 提交报事维修
 export const createRepairApi = (data: any) => {
-    return $api('/api/repair/submit', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/repair/submit', {
+    method: 'POST',
+    body: data
+  })
 }
 
 // --- 物业事项投诉 ---
 
 // 获取投诉列表
 export const getComplaintListApi = (params: any) => {
-    return $api('/api/complaint/my-list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/complaint/my-list', {
+    method: 'GET',
+    params
+  })
 }
 
 // 提交投诉
 export const createComplaintApi = (data: any) => {
-    return $api('/api/complaint/submit', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/complaint/submit', {
+    method: 'POST',
+    body: data
+  })
 }
 
 
@@ -214,60 +175,60 @@ export const createComplaintApi = (data: any) => {
 //商城
 //获取商品列表
 export const getMallGoodsListApi = (data: any) => {
-    return $api('/api/mall/list', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/mall/list', {
+    method: 'POST',
+    body: data
+  })
 }
 
 //获取商品详情
 export const getMallProductDetailApi = (productId: string | number) => {
-    return $api(`/api/mall/products/${productId}`, { method: 'GET' })
+  return $api(`/api/mall/products/${productId}`, { method: 'GET' })
 }
 
 //商品收藏
 export const collectProductApi = (productId: string | number) => {
-    return $api(`/api/mall/products/${productId}/collect`, { method: 'POST' })
+  return $api(`/api/mall/products/${productId}/collect`, { method: 'POST' })
 }
 
 //取消收藏DELET请求
 export const cancelCollectProductApi = (productId: string | number) => {
-    return $api(`/api/mall/products/${productId}/collect`, { method: 'DELETE' })
+  return $api(`/api/mall/products/${productId}/collect`, { method: 'DELETE' })
 }
 
 //获取商品图片
 export const getProductImagesApi = (ProductId: string | number) => {
-    return $api(`/api/product/${ProductId}/images`, { method: 'GET' })
+  return $api(`/api/product/${ProductId}/images`, { method: 'GET' })
 }
 
 //添加商品到购物车
 // /api/mall/cart/items
 export const addToCartApi = (data: any) => {
-    return $api('/api/mall/cart/items', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/mall/cart/items', {
+    method: 'POST',
+    body: data
+  })
 }
 
 //获取购物车列表
 ///api/mall/cart/items
 export const getCartListApi = () => {
-    return $api('/api/mall/cart/items', { method: 'GET' })
+  return $api('/api/mall/cart/items', { method: 'GET' })
 }
 
 //移除购物车商品
 //api/mall/cart/items/{cartItemId}
 export const removeCartApi = (cartItemId: string | number) => {
-    return $api(`/api/mall/cart/items/${cartItemId}`, { method: 'DELETE' })
+  return $api(`/api/mall/cart/items/${cartItemId}`, { method: 'DELETE' })
 }
 
 //更新购物车商品数量
 ///api/mall/cart/items/{cartItemId}/quantity
 export const updateCartQuantityApi = (data: any) => {
-    return $api(`/api/mall/cart/items/${data.cartId}/quantity`, {
-        method: 'PUT',
-        body: data
-    })
+  return $api(`/api/mall/cart/items/${data.cartId}/quantity`, {
+    method: 'PUT',
+    body: data
+  })
 }
 
 
@@ -286,59 +247,59 @@ export const updateCartQuantityApi = (data: any) => {
 // 创建订单
 //api/payment/create-order
 export const createOrderApi = (data: any) => {
-    return $api(`/api/payment/create-order`, {
-        method: 'POST',
-        body: data
-    })
+  return $api(`/api/payment/create-order`, {
+    method: 'POST',
+    body: data
+  })
 }
 
 //发起支付
 //api/payment/initiate/{orderNo}
 export const initiatePaymentApi = (orderNo: string | number) => {
-    return $api(`/api/payment/initiate/${orderNo}`, {
-        method: 'POST'
-    })
+  return $api(`/api/payment/initiate/${orderNo}`, {
+    method: 'POST'
+  })
 }
 
 //查询订单状态
 ///api/payment/query/{orderNo}
 export const queryOrderStatusApi = (orderNo: string | number) => {
-    return $api(`/api/payment/query/${orderNo}`, {
-        method: 'GET'
-    })
+  return $api(`/api/payment/query/${orderNo}`, {
+    method: 'GET'
+  })
 }
 
 
 //模拟回调接口
 ///api/payment/mock/callback/{orderNo}
 export const mockCallbackApi = (orderNo: string | number, success: boolean = true) => {
-    return $api(`/api/payment/mock/callback/${orderNo}`, {
-        method: 'POST',
-        query: { success }
-    })
+  return $api(`/api/payment/mock/callback/${orderNo}`, {
+    method: 'POST',
+    query: { success }
+  })
 }
 
 // 查询缴费记录
 export const getPaymentHistoryApi = (params: any) => {
-    return $api('/api/property-fee/payments', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/property-fee/payments', {
+    method: 'GET',
+    params
+  })
 }
 
 // 查询我的物业费账单
 export const getMyBillsApi = (params: any) => {
-    return $api('/api/property-fee/bills', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/property-fee/bills', {
+    method: 'GET',
+    params
+  })
 }
 
 // 获取账单详情
 export const getBillDetailApi = (billId: string | number) => {
-    return $api(`/api/property-fee/bills/${billId}`, {
-        method: 'GET'
-    })
+  return $api(`/api/property-fee/bills/${billId}`, {
+    method: 'GET'
+  })
 }
 
 
@@ -348,20 +309,20 @@ export const getBillDetailApi = (billId: string | number) => {
 //1. 获取钱包信息
 //api/wallet/info 
 export const getWalletInfoApi = () => {
-    return $api('/api/wallet/info', { method: 'GET' })
+  return $api('/api/wallet/info', { method: 'GET' })
 }
 
 //2. 查询交易记录
 // /api/wallet/transactions
 //参数 1.type: ALL  2.page:1 3.size:10 
 export const getTransactionsApi = (params: any) => {
-    return $api('/api/wallet/transactions', { method: 'GET', params })
+  return $api('/api/wallet/transactions', { method: 'GET', params })
 }
 
 //3. 充值接口
 // /api/wallet/recharge
 export const rechargeApi = (data: any) => {
-    return $api('/api/wallet/recharge', { method: 'POST', body: data })
+  return $api('/api/wallet/recharge', { method: 'POST', body: data })
 }
 
 //选择支付方式
@@ -369,10 +330,10 @@ export const rechargeApi = (data: any) => {
 // 参数 orderNo paymentMethod
 //返回：200成功 其他的话显示res.message
 export const changePayMethodApi = (orderNo: string | number, paymentMethod: string) => {
-    return $api(`/api/payment/changePayMethod/${orderNo}`, {
-        method: 'POST',
-        params: { paymentMethod }
-    })
+  return $api(`/api/payment/changePayMethod/${orderNo}`, {
+    method: 'POST',
+    params: { paymentMethod }
+  })
 }
 
 
@@ -430,10 +391,10 @@ api/orders/product/create
 
 */
 export const createProductOrderApi = (data: any) => {
-    return $api('/api/orders/product/create', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/orders/product/create', {
+    method: 'POST',
+    body: data
+  })
 }
 
 
@@ -492,10 +453,10 @@ export const createProductOrderApi = (data: any) => {
 }
  */
 export const getOrdersListApi = (params: any) => {
-    return $api('/api/orders/list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/orders/list', {
+    method: 'GET',
+    params
+  })
 }
 
 /*
@@ -688,10 +649,10 @@ pageSize
 */
 
 export const getOrdersListByTypeApi = (params: any) => {
-    return $api('/api/orders/list/by-type', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/orders/list/by-type', {
+    method: 'GET',
+    params
+  })
 }
 
 /*
@@ -752,10 +713,10 @@ pageSize
 
 
 export const getOrdersListByStatusApi = (params: any) => {
-    return $api('/api/orders/list/by-status', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/orders/list/by-status', {
+    method: 'GET',
+    params
+  })
 }
 
 
@@ -803,7 +764,7 @@ export const getOrdersListByStatusApi = (params: any) => {
 */
 
 export const getOrderDetailApi = (orderId: string | number) => {
-    return $api(`/api/orders/${orderId}`, { method: 'GET' })
+  return $api(`/api/orders/${orderId}`, { method: 'GET' })
 }
 
 /*
@@ -813,7 +774,7 @@ export const getOrderDetailApi = (orderId: string | number) => {
 */
 
 export const cancelOrderApi = (orderId: string | number) => {
-    return $api(`/api/orders/${orderId}/cancel`, { method: 'POST' })
+  return $api(`/api/orders/${orderId}/cancel`, { method: 'POST' })
 }
 
 
@@ -868,7 +829,7 @@ export const cancelOrderApi = (orderId: string | number) => {
 */
 
 export const getForumSectionListApi = () => {
-    return $api('/api/forum/section/list', { method: 'GET' })
+  return $api('/api/forum/section/list', { method: 'GET' })
 }
 
 
@@ -931,7 +892,7 @@ export const getForumSectionListApi = () => {
  */
 
 export const getForumPostListApi = (params: any) => {
-    return $api('/api/forum/post/list', { method: 'POST', body: params })
+  return $api('/api/forum/post/list', { method: 'POST', body: params })
 }
 
 /**
@@ -956,7 +917,7 @@ export const getForumPostListApi = (params: any) => {
  */
 
 export const createForumPostApi = (data: any) => {
-    return $api('/api/forum/post/create', { method: 'POST', body: data })
+  return $api('/api/forum/post/create', { method: 'POST', body: data })
 }
 
 /*
@@ -974,7 +935,7 @@ export const createForumPostApi = (data: any) => {
 
 */
 export const likeForumPostApi = (postId: string | number) => {
-    return $api(`/api/forum/post/new/${postId}/like`, { method: 'POST' })
+  return $api(`/api/forum/post/new/${postId}/like`, { method: 'POST' })
 }
 
 
@@ -985,7 +946,7 @@ export const likeForumPostApi = (postId: string | number) => {
 和点赞相同
  */
 export const cancelLikeForumPostApi = (postId: string | number) => {
-    return $api(`/api/forum/post/cancel/${postId}/like`, { method: 'DELETE' })
+  return $api(`/api/forum/post/cancel/${postId}/like`, { method: 'DELETE' })
 }
 
 /**
@@ -1007,7 +968,7 @@ export const cancelLikeForumPostApi = (postId: string | number) => {
  */
 
 export const collectForumPostApi = (postId: string | number) => {
-    return $api(`/api/forum/post/new/${postId}/collect`, { method: 'POST' })
+  return $api(`/api/forum/post/new/${postId}/collect`, { method: 'POST' })
 }
 
 /**
@@ -1017,7 +978,7 @@ export const collectForumPostApi = (postId: string | number) => {
  * 参数：postId
  */
 export const cancelCollectForumPostApi = (postId: string | number) => {
-    return $api(`/api/forum/post/cancel/${postId}/collect`, { method: 'DELETE' })
+  return $api(`/api/forum/post/cancel/${postId}/collect`, { method: 'DELETE' })
 }
 
 
@@ -1062,5 +1023,45 @@ export const cancelCollectForumPostApi = (postId: string | number) => {
  */
 
 export const getMyCollectedForumPostApi = (params: any) => {
-    return $api('/api/forum/post/my/collected', { method: 'GET', params })
+  return $api('/api/forum/post/my/collected', { method: 'GET', params })
+}
+
+
+/**
+ * 获取帖子详情
+ * GET
+/api/forum/post/get/{postId}
+参数：postId
+返回：
+
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "postId": 1,
+    "sectionId": 2,
+    "sectionName": "邻里互助",
+    "userId": 12,
+    "userName": "余文俊",
+    "userAvatar": "http://localhost:8080/api/uploads/avatar/20260106/542dd118364d4bde82daed941fb14cf6.webp",
+    "title": "寻找丢失的钥匙",
+    "content": "今天下午在小区花园丢失了一串钥匙，上面有小熊挂件，如有拾到请联系我，谢谢！",
+    "images": null,
+    "viewCount": 51,
+    "likeCount": 5,
+    "commentCount": 3,
+    "collectCount": 1,
+    "isTop": 0,
+    "isEssence": 0,
+    "isLiked": false,
+    "isCollected": false,
+    "createTime": "2026-01-06 10:20:22",
+    "updateTime": "2026-01-07 15:05:26"
+  },
+  "timestamp": 1767836338864
+}
+*/
+
+export const getForumPostDetailApi = (postId: string | number) => {
+  return $api(`/api/forum/post/get/${postId}`, { method: 'GET' })
 }

@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between mb-5 px-1">
       <div class="flex items-center gap-2">
         <span class="w-1 h-4 bg-[#ff5000] rounded-full"></span>
-        <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区头条</h2>
+        <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区公告</h2>
       </div>
       <NuxtLink to="/service/community/news"
         class="flex items-center gap-1 text-xs text-slate-400 hover:text-[#ff5000] transition-colors cursor-pointer select-none">
@@ -24,7 +24,8 @@
     <div v-else class="flex flex-col md:flex-row gap-6">
 
       <!-- Carousel (Banner) -->
-      <div class="w-full md:w-[45%] h-[340px] rounded-xl overflow-hidden relative group shrink-0">
+      <div v-if="bannerList && bannerList.length > 0"
+        class="w-full md:w-[45%] h-[340px] rounded-xl overflow-hidden relative group shrink-0">
         <el-carousel trigger="click" height="340px" :interval="5000" arrow="hover">
           <el-carousel-item v-for="item in bannerList" :key="item.id">
             <div class="relative w-full h-full cursor-pointer">
@@ -98,24 +99,13 @@ import { useCommunityNews } from '@/composables/useCommunityIssue'
 // Use the existing composable
 const { newsList, loading, fetchNews } = useCommunityNews()
 
-// Mock Banners (Keep for visual layout as API doesn't provide banner images yet)
-const bannerList = [
-  {
-    id: 1,
-    title: '智慧社区“邻里节”圆满举办，共建美好家园',
-    image: 'https://img.alicdn.com/imgextra/i2/O1CN01Z7xZ7x1Z7xZ7xZ7xZ_!!6000000000000-0-tps-800-450.jpg'
-  },
-  {
-    id: 2,
-    title: '社区开展冬季消防安全大检查，消除隐患保平安',
-    image: 'https://img.alicdn.com/imgextra/i4/O1CN014W4W4W14W4W4W4W4W_!!6000000000000-0-tps-800-450.jpg'
-  },
-  {
-    id: 3,
-    title: '数字化养老服务中心正式启用，老人生活更便捷',
-    image: 'https://img.alicdn.com/imgextra/i3/O1CN013X3X3X13X3X3X3X3X_!!6000000000000-0-tps-800-450.jpg'
-  }
-]
+// Define bannerList (initialize as empty or handle in template)
+interface Banner {
+  id: number;
+  title: string;
+  image: string;
+}
+const bannerList = ref<Banner[]>([])
 
 // Display top 8 news items
 const displayedNews = computed(() => {

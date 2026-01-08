@@ -47,13 +47,13 @@
           <h3 class="text-slate-900 dark:text-white font-bold text-sm mb-4">快速链接</h3>
           <ul class="space-y-2 text-xs">
             <li>
-              <NuxtLink to="/about" class="hover:text-[#ff5000] transition-colors">关于我们</NuxtLink>
+              <NuxtLink to="#" class="hover:text-[#ff5000] transition-colors">关于我们</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/service/community" class="hover:text-[#ff5000] transition-colors">社区服务</NuxtLink>
+              <NuxtLink to="#" class="hover:text-[#ff5000] transition-colors">社区服务</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/news" class="hover:text-[#ff5000] transition-colors">新闻公告</NuxtLink>
+              <NuxtLink to="#" class="hover:text-[#ff5000] transition-colors">新闻公告</NuxtLink>
             </li>
           </ul>
         </div>

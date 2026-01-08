@@ -5,11 +5,11 @@
                 <span class="w-1 h-4 bg-[#ff5000] rounded-full"></span>
                 <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区论坛</h2>
             </div>
-            <div class="flex gap-4 text-xs text-slate-400 select-none">
-                <span class="cursor-pointer hover:text-[#ff5000] transition-colors">最新帖子</span>
-                <span class="cursor-pointer hover:text-[#ff5000] transition-colors">热门话题</span>
-                <span class="cursor-pointer hover:text-[#ff5000] transition-colors">精华内容</span>
-            </div>
+            <NuxtLink to="/service/community/forum"
+                class="flex items-center gap-1 text-xs text-slate-400 hover:text-[#ff5000] transition-colors cursor-pointer select-none">
+                <span>全部版块</span>
+                <Icon name="lucide:chevron-right" size="14" />
+            </NuxtLink>
         </div>
 
         <!-- Forum Content (Mock) -->

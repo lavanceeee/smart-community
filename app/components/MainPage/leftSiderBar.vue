@@ -3,7 +3,7 @@
 
     <!-- Navigation Groups -->
     <div v-for="group in menuGroups" :key="group.title"
-      class="bg-white dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 overflow-hidden shadow-sm">
+      class="bg-white dark:bg-white/5 rounded border border-slate-100 dark:border-white/5 overflow-hidden shadow-sm">
       <div class="px-4 py-3 border-b border-slate-50 dark:border-white/5 bg-slate-50/50 dark:bg-white/5">
         <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ group.title }}</h3>
       </div>
@@ -42,8 +42,9 @@ const menuGroups = computed(() => [
   {
     title: '个人中心',
     items: [
+      { name: '我的好友', path: '/service/community/friends', icon: 'lucide:user' },
       { name: '我的钱包', path: '/wallet', icon: 'lucide:wallet' },
-      { name: '基本信息', path: '/profile', icon: 'lucide:user-circle' },
+      { name: '个人信息', path: '/profile', icon: 'lucide:user-circle' },
       {
         name: '管理后台',
         path: '/superCommunity',
@@ -61,7 +62,6 @@ const menuGroups = computed(() => [
   scale: 1;
 }
 
-/* Custom scrollbar if needed */
 ::-webkit-scrollbar {
   width: 4px;
 }
