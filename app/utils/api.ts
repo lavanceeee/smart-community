@@ -3,7 +3,7 @@ import { $api } from '../composables/useApi'
 //获取当前用户角色
 //api/permission/user/current
 export const getCurrentUser = () => {
-  return $api('api/permission/user/current', {
+  return $api('/api/permission/user/current', {
     method: 'GET'
   })
 }

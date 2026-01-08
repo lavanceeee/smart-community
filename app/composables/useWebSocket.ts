@@ -51,7 +51,7 @@ export const useWebSocket = () => {
             // 构建 WebSocket URL
             const wsProtocol = config.public.apiBase.startsWith('https') ? 'wss' : 'ws'
             const wsHost = config.public.apiBase.replace(/^https?:\/\//, '')
-            const wsUrl = `${wsProtocol}://${wsHost}/ws/chat?token=${userStore.token}`
+            const wsUrl = `${wsProtocol}://${wsHost}/api/ws/chat?token=${userStore.token}`
             
             console.log('正在连接 WebSocket...', wsUrl)
             
