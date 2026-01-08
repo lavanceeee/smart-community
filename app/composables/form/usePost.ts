@@ -1,4 +1,5 @@
 import type { ForumPost } from './useForum';
+import { getPostComments } from '~/utils/postAPI';
 
 export const usePost = () => {
     const creating = useState('forum-post-creating', () => false);
@@ -133,6 +134,39 @@ export const usePost = () => {
         }
     };
 
+    // Comments State
+    const commentsList = useState<any[]>('forum-post-comments', () => []);
+    const commentsPage = useState<number>('forum-post-comments-page', () => 1);
+    const commentsHasMore = useState<boolean>('forum-post-comments-has-more', () => true);
+    const commentsLoading = useState<boolean>('forum-post-comments-loading', () => false);
+    const commentsTotal = useState<number>('forum-post-comments-total', () => 0);
+
+    const fetchComments = async (postId: number | string, page = 1, size = 10, append = false) => {
+        if (!postId) return;
+        commentsLoading.value = true;
+        try {
+            const res = await getPostComments(Number(postId), page, size) as any;
+            if (res.code === 200) {
+                const newComments = res.data.records || [];
+                commentsTotal.value = res.data.total;
+
+                if (append) {
+                    commentsList.value = [...commentsList.value, ...newComments];
+                } else {
+                    commentsList.value = newComments;
+                }
+
+                commentsPage.value = res.data.current;
+                // If loaded count >= total, no more
+                commentsHasMore.value = commentsList.value.length < res.data.total;
+            }
+        } catch (e) {
+            console.error('Fetch Comments Error:', e);
+        } finally {
+            commentsLoading.value = false;
+        }
+    };
+
     return {
         creating,
         createPost,
@@ -143,6 +177,12 @@ export const usePost = () => {
         collectedHasMore,
         collectedLoading,
         fetchMyCollectedPosts,
-        getPostDetail
+        getPostDetail,
+        commentsList,
+        commentsPage,
+        commentsHasMore,
+        commentsLoading,
+        commentsTotal,
+        fetchComments
     };
 };

@@ -43,7 +43,7 @@
                             class="w-10 h-10 rounded-full object-cover border border-slate-100 dark:border-slate-800" />
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ post.userName
-                            }}</span>
+                                }}</span>
                             <div class="flex items-center gap-2 text-xs text-slate-400">
                                 <span>{{ post.createTime }}</span>
                                 <span v-if="post.viewCount">· {{ post.viewCount }} 阅读</span>
@@ -104,19 +104,8 @@
                     </div>
                 </div>
 
-                <!-- Comments Section (Placeholder) -->
-                <div v-if="post"
-                    class="bg-slate-50 dark:bg-black/20 p-6 border-t border-slate-100 dark:border-slate-800">
-                    <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        评论 <span class="text-slate-400 font-normal">({{ post.commentCount }})</span>
-                    </h3>
-                    <div class="text-center py-8">
-                        <button
-                            class="px-6 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-500 hover:text-[#ff5000] hover:border-[#ff5000] transition-all">
-                            写下你的评论...
-                        </button>
-                    </div>
-                </div>
+                <!-- Comments Section -->
+                <ForumInnerComments v-if="post" :post-id="postId" />
             </div>
 
             <!-- Right Sidebar -->
@@ -148,9 +137,15 @@
 <script setup lang="ts">
 import { usePost } from '~/composables/form/usePost';
 
+
+const userStore = useUserStore();
 const route = useRoute();
 const postId = route.params.postId as string;
-const { getPostDetail, toggleLike, toggleCollect } = usePost();
+const {
+    getPostDetail,
+    toggleLike,
+    toggleCollect
+} = usePost();
 
 const post = ref<any>(null);
 const loading = ref(true);
@@ -183,8 +178,8 @@ const imageList = computed(() => {
     return post.value.images.split(',');
 })
 
-onMounted(() => {
-    fetchDetail();
+onMounted(async () => {
+    await fetchDetail();
 })
 </script>
 
