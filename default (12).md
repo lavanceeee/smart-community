@@ -2464,6 +2464,1111 @@
 ```
 
 
+# 管理员论坛板块管理
+
+
+## 查询板块详情
+
+
+**接口地址**:`/api/admin/forum/section/{sectionId}`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员查询指定板块的详细信息</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|sectionId|板块ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultSectionDetailVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||SectionDetailVO|SectionDetailVO|
+|&emsp;&emsp;sectionId|板块ID|integer(int64)||
+|&emsp;&emsp;sectionName|板块名称|string||
+|&emsp;&emsp;sectionDesc|板块描述|string||
+|&emsp;&emsp;iconUrl|板块图标URL|string||
+|&emsp;&emsp;sortOrder|排序序号|integer(int32)||
+|&emsp;&emsp;postCount|帖子数量|integer(int32)||
+|&emsp;&emsp;status|状态 0-禁用 1-启用|integer(int32)||
+|&emsp;&emsp;statusDesc|状态描述|string||
+|&emsp;&emsp;createTime|创建时间|string(date-time)||
+|&emsp;&emsp;updateTime|更新时间|string(date-time)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"sectionId": 0,
+		"sectionName": "",
+		"sectionDesc": "",
+		"iconUrl": "",
+		"sortOrder": 0,
+		"postCount": 0,
+		"status": 0,
+		"statusDesc": "",
+		"createTime": "",
+		"updateTime": ""
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 更新板块
+
+
+**接口地址**:`/api/admin/forum/section/{sectionId}`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员更新板块信息</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "sectionName": "社区公告",
+  "sectionDesc": "社区官方公告和重要通知",
+  "iconUrl": "https://example.com/icon.png",
+  "sortOrder": 1,
+  "status": 1
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|sectionId|板块ID|path|true|integer(int64)||
+|updateSectionRequest|更新请求|body|true|UpdateSectionRequest|UpdateSectionRequest|
+|&emsp;&emsp;sectionName|板块名称||true|string||
+|&emsp;&emsp;sectionDesc|板块描述||false|string||
+|&emsp;&emsp;iconUrl|板块图标URL||false|string||
+|&emsp;&emsp;sortOrder|排序序号||true|integer(int32)||
+|&emsp;&emsp;status|状态 0-禁用 1-启用||true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 删除板块
+
+
+**接口地址**:`/api/admin/forum/section/{sectionId}`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员删除板块（板块下不能有帖子）</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|sectionId|板块ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 启用-禁用板块
+
+
+**接口地址**:`/api/admin/forum/section/{sectionId}/status`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员启用或禁用板块</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|sectionId|板块ID|path|true|integer(int64)||
+|status|状态（0-禁用，1-启用）|query|true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询所有板块
+
+
+**接口地址**:`/api/admin/forum/section/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员分页查询所有板块，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "sectionName": "公告",
+  "status": 1,
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|adminSectionQueryRequest|查询条件|body|true|AdminSectionQueryRequest|AdminSectionQueryRequest|
+|&emsp;&emsp;sectionName|板块名称（模糊搜索）||false|string||
+|&emsp;&emsp;status|状态（0-禁用，1-启用）||false|integer(int32)||
+|&emsp;&emsp;pageNum|页码||true|integer(int32)||
+|&emsp;&emsp;pageSize|每页大小||true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageSectionDetailVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageSectionDetailVO|PageSectionDetailVO|
+|&emsp;&emsp;records|板块详情|array|SectionDetailVO|
+|&emsp;&emsp;&emsp;&emsp;sectionId|板块ID|integer||
+|&emsp;&emsp;&emsp;&emsp;sectionName|板块名称|string||
+|&emsp;&emsp;&emsp;&emsp;sectionDesc|板块描述|string||
+|&emsp;&emsp;&emsp;&emsp;iconUrl|板块图标URL|string||
+|&emsp;&emsp;&emsp;&emsp;sortOrder|排序序号|integer||
+|&emsp;&emsp;&emsp;&emsp;postCount|帖子数量|integer||
+|&emsp;&emsp;&emsp;&emsp;status|状态 0-禁用 1-启用|integer||
+|&emsp;&emsp;&emsp;&emsp;statusDesc|状态描述|string||
+|&emsp;&emsp;&emsp;&emsp;createTime|创建时间|string||
+|&emsp;&emsp;&emsp;&emsp;updateTime|更新时间|string||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageSectionDetailVO|PageSectionDetailVO|
+|&emsp;&emsp;searchCount||PageSectionDetailVO|PageSectionDetailVO|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"sectionId": 0,
+				"sectionName": "",
+				"sectionDesc": "",
+				"iconUrl": "",
+				"sortOrder": 0,
+				"postCount": 0,
+				"status": 0,
+				"statusDesc": "",
+				"createTime": "",
+				"updateTime": ""
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 创建板块
+
+
+**接口地址**:`/api/admin/forum/section/create`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员创建新的论坛板块</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "sectionName": "社区公告",
+  "sectionDesc": "社区官方公告和重要通知",
+  "iconUrl": "https://example.com/icon.png",
+  "sortOrder": 1,
+  "status": 1
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|createSectionRequest|创建请求|body|true|CreateSectionRequest|CreateSectionRequest|
+|&emsp;&emsp;sectionName|板块名称||true|string||
+|&emsp;&emsp;sectionDesc|板块描述||false|string||
+|&emsp;&emsp;iconUrl|板块图标URL||false|string||
+|&emsp;&emsp;sortOrder|排序序号||true|integer(int32)||
+|&emsp;&emsp;status|状态 0-禁用 1-启用||true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultLong|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int64)|integer(int64)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 板块统计
+
+
+**接口地址**:`/api/admin/forum/section/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员获取板块统计数据</p>
+
+
+
+**请求参数**:
+
+
+暂无
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultMapStringObject|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
 # 订单管理接口
 
 
@@ -4203,7 +5308,7 @@
 
 | 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
 | -------- | -------- | ----- | -------- | -------- | ------ |
-|complaintQueryRequest|投诉查询条件|body|true|ComplaintQueryRequest|ComplaintQueryRequest|
+|complaintQueryRequest|查询条件|body|true|ComplaintQueryRequest|ComplaintQueryRequest|
 |&emsp;&emsp;complaintType|投诉类型（可选）||false|string||
 |&emsp;&emsp;status|处理状态（可选）：0-待处理，1-处理中，2-已完成，3-已驳回||false|integer(int32)||
 |&emsp;&emsp;userId|用户ID（可选）||false|integer(int64)||
@@ -6230,6 +7335,693 @@
 ```
 
 
+# 管理员投诉管理
+
+
+## 处理投诉
+
+
+**接口地址**:`/api/admin/complaint/{complaintId}/handle`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员处理投诉</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "status": 2,
+  "handleResult": "已安排工作人员进行处理，问题已解决"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|complaintId|投诉ID|path|true|integer(int64)||
+|complaintHandleRequest|处理请求|body|true|ComplaintHandleRequest|ComplaintHandleRequest|
+|&emsp;&emsp;status|处理状态：1-处理中，2-已完成，3-已驳回||true|integer(int32)||
+|&emsp;&emsp;handleResult|处理结果||true|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultComplaintResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||ComplaintResponse|ComplaintResponse|
+|&emsp;&emsp;complaintId|投诉ID，唯一标识|integer(int64)||
+|&emsp;&emsp;userId|提交用户ID|integer(int64)||
+|&emsp;&emsp;complaintType|投诉类型|string||
+|&emsp;&emsp;description|投诉描述|string||
+|&emsp;&emsp;location|投诉位置|string||
+|&emsp;&emsp;status|处理状态,可用值:0,1,2,3|integer(int32)||
+|&emsp;&emsp;statusText|状态描述文本|string||
+|&emsp;&emsp;createTime|提交时间|string(date-time)||
+|&emsp;&emsp;handleTime|处理时间，未处理时为null|string(date-time)||
+|&emsp;&emsp;handleUserId|处理人员ID，未处理时为null|integer(int64)||
+|&emsp;&emsp;handleResult|处理结果说明，未处理时为null|string||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"complaintId": 1,
+		"userId": 1,
+		"complaintType": "噪音扰民",
+		"description": "楼上住户深夜装修，噪音严重影响休息",
+		"location": "3号楼2单元1002",
+		"status": 2,
+		"statusText": "已完成",
+		"createTime": "",
+		"handleTime": "",
+		"handleUserId": 1,
+		"handleResult": "已加强噪音管理，并与楼上住户沟通，问题已解决"
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询所有投诉
+
+
+**接口地址**:`/api/admin/complaint/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员分页查询所有投诉，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "complaintType": "噪音扰民",
+  "status": 0,
+  "userId": 1,
+  "keyword": "噪音",
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|complaintQueryRequest|查询条件|body|true|ComplaintQueryRequest|ComplaintQueryRequest|
+|&emsp;&emsp;complaintType|投诉类型（可选）||false|string||
+|&emsp;&emsp;status|处理状态（可选）：0-待处理，1-处理中，2-已完成，3-已驳回||false|integer(int32)||
+|&emsp;&emsp;userId|用户ID（可选）||false|integer(int64)||
+|&emsp;&emsp;keyword|关键词搜索（可选，搜索投诉描述和位置）||false|string||
+|&emsp;&emsp;pageNum|页码||false|integer(int32)||
+|&emsp;&emsp;pageSize|每页数量||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageComplaintResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageComplaintResponse|PageComplaintResponse|
+|&emsp;&emsp;records|事项投诉响应数据|array|ComplaintResponse|
+|&emsp;&emsp;&emsp;&emsp;complaintId|投诉ID，唯一标识|integer||
+|&emsp;&emsp;&emsp;&emsp;userId|提交用户ID|integer||
+|&emsp;&emsp;&emsp;&emsp;complaintType|投诉类型|string||
+|&emsp;&emsp;&emsp;&emsp;description|投诉描述|string||
+|&emsp;&emsp;&emsp;&emsp;location|投诉位置|string||
+|&emsp;&emsp;&emsp;&emsp;status|处理状态,可用值:0,1,2,3|integer||
+|&emsp;&emsp;&emsp;&emsp;statusText|状态描述文本|string||
+|&emsp;&emsp;&emsp;&emsp;createTime|提交时间|string||
+|&emsp;&emsp;&emsp;&emsp;handleTime|处理时间，未处理时为null|string||
+|&emsp;&emsp;&emsp;&emsp;handleUserId|处理人员ID，未处理时为null|integer||
+|&emsp;&emsp;&emsp;&emsp;handleResult|处理结果说明，未处理时为null|string||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageComplaintResponse|PageComplaintResponse|
+|&emsp;&emsp;searchCount||PageComplaintResponse|PageComplaintResponse|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"complaintId": 1,
+				"userId": 1,
+				"complaintType": "噪音扰民",
+				"description": "楼上住户深夜装修，噪音严重影响休息",
+				"location": "3号楼2单元1002",
+				"status": 2,
+				"statusText": "已完成",
+				"createTime": "",
+				"handleTime": "",
+				"handleUserId": 1,
+				"handleResult": "已加强噪音管理，并与楼上住户沟通，问题已解决"
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量处理投诉
+
+
+**接口地址**:`/api/admin/complaint/batch-handle`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员批量处理投诉</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "status": 2,
+  "handleResult": "已安排工作人员进行处理，问题已解决"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|complaintIds|投诉ID列表|query|true|array|integer|
+|complaintHandleRequest|处理请求|body|true|ComplaintHandleRequest|ComplaintHandleRequest|
+|&emsp;&emsp;status|处理状态：1-处理中，2-已完成，3-已驳回||true|integer(int32)||
+|&emsp;&emsp;handleResult|处理结果||true|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultInteger|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int32)|integer(int32)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 投诉统计
+
+
+**接口地址**:`/api/admin/complaint/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员获取投诉统计数据</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|startTime|开始时间|query|false|string||
+|endTime|结束时间|query|false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultMapStringObject|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
 # 后台用户管理
 
 
@@ -7260,6 +9052,286 @@
 |&emsp;&emsp;title|帖子标题||true|string||
 |&emsp;&emsp;content|帖子内容||true|string||
 |&emsp;&emsp;images|图片URL列表，逗号分隔||false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 设置-取消置顶
+
+
+**接口地址**:`/api/forum/post/{postId}/top`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员设置或取消帖子置顶状态</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|postId|帖子ID|path|true|integer(int64)||
+|isTop|是否置顶（0-否，1-是）|query|true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 设置-取消精华
+
+
+**接口地址**:`/api/forum/post/{postId}/essence`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员设置或取消帖子精华状态</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|postId|帖子ID|path|true|integer(int64)||
+|isEssence|是否精华（0-否，1-是）|query|true|integer(int32)||
 
 
 **响应状态**:
@@ -8946,6 +11018,693 @@
 | 状态码 | 说明 | schema |
 | -------- | -------- | ----- | 
 |200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+# 管理员报修管理
+
+
+## 处理报修
+
+
+**接口地址**:`/api/admin/repair/{reportId}/handle`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员处理报修</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "status": 2,
+  "handleResult": "已安排维修人员上门处理，问题已解决"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|reportId|报修ID|path|true|integer(int64)||
+|repairHandleRequest|处理请求|body|true|RepairHandleRequest|RepairHandleRequest|
+|&emsp;&emsp;status|处理状态：1-处理中，2-已完成，3-已驳回||true|integer(int32)||
+|&emsp;&emsp;handleResult|处理结果||false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultRepairReportResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||RepairReportResponse|RepairReportResponse|
+|&emsp;&emsp;reportId|报事ID，唯一标识|integer(int64)||
+|&emsp;&emsp;userId|提交用户ID|integer(int64)||
+|&emsp;&emsp;reportType|事项类型|string||
+|&emsp;&emsp;description|事项描述|string||
+|&emsp;&emsp;location|报修地点|string||
+|&emsp;&emsp;status|处理状态,可用值:0,1,2,3|integer(int32)||
+|&emsp;&emsp;statusText|状态描述文本|string||
+|&emsp;&emsp;createTime|提交时间|string(date-time)||
+|&emsp;&emsp;handleTime|处理时间，未处理时为null|string(date-time)||
+|&emsp;&emsp;handleUserId|处理人员ID，未处理时为null|integer(int64)||
+|&emsp;&emsp;handleResult|处理结果说明，未处理时为null|string||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"reportId": 1,
+		"userId": 1,
+		"reportType": "水电维修",
+		"description": "厨房水龙头漏水，需要维修",
+		"location": "21号楼2单元201",
+		"status": 2,
+		"statusText": "已完成",
+		"createTime": "",
+		"handleTime": "",
+		"handleUserId": 1,
+		"handleResult": "已安排维修人员上门处理，问题已解决"
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询所有报修
+
+
+**接口地址**:`/api/admin/repair/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员分页查询所有报修，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "reportType": "水电维修",
+  "status": 0,
+  "userId": 1,
+  "keyword": "水龙头",
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|repairQueryRequest|查询条件|body|true|RepairQueryRequest|RepairQueryRequest|
+|&emsp;&emsp;reportType|事项类型（可选）||false|string||
+|&emsp;&emsp;status|处理状态（可选）：0-待处理，1-处理中，2-已完成，3-已驳回||false|integer(int32)||
+|&emsp;&emsp;userId|用户ID（可选）||false|integer(int64)||
+|&emsp;&emsp;keyword|关键词搜索（可选，搜索事项描述和地点）||false|string||
+|&emsp;&emsp;pageNum|页码||false|integer(int32)||
+|&emsp;&emsp;pageSize|每页数量||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageRepairReportResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageRepairReportResponse|PageRepairReportResponse|
+|&emsp;&emsp;records|报事维修响应数据|array|RepairReportResponse|
+|&emsp;&emsp;&emsp;&emsp;reportId|报事ID，唯一标识|integer||
+|&emsp;&emsp;&emsp;&emsp;userId|提交用户ID|integer||
+|&emsp;&emsp;&emsp;&emsp;reportType|事项类型|string||
+|&emsp;&emsp;&emsp;&emsp;description|事项描述|string||
+|&emsp;&emsp;&emsp;&emsp;location|报修地点|string||
+|&emsp;&emsp;&emsp;&emsp;status|处理状态,可用值:0,1,2,3|integer||
+|&emsp;&emsp;&emsp;&emsp;statusText|状态描述文本|string||
+|&emsp;&emsp;&emsp;&emsp;createTime|提交时间|string||
+|&emsp;&emsp;&emsp;&emsp;handleTime|处理时间，未处理时为null|string||
+|&emsp;&emsp;&emsp;&emsp;handleUserId|处理人员ID，未处理时为null|integer||
+|&emsp;&emsp;&emsp;&emsp;handleResult|处理结果说明，未处理时为null|string||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageRepairReportResponse|PageRepairReportResponse|
+|&emsp;&emsp;searchCount||PageRepairReportResponse|PageRepairReportResponse|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"reportId": 1,
+				"userId": 1,
+				"reportType": "水电维修",
+				"description": "厨房水龙头漏水，需要维修",
+				"location": "21号楼2单元201",
+				"status": 2,
+				"statusText": "已完成",
+				"createTime": "",
+				"handleTime": "",
+				"handleUserId": 1,
+				"handleResult": "已安排维修人员上门处理，问题已解决"
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量处理报修
+
+
+**接口地址**:`/api/admin/repair/batch-handle`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员批量处理报修</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "status": 2,
+  "handleResult": "已安排维修人员上门处理，问题已解决"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|reportIds|报修ID列表|query|true|array|integer|
+|repairHandleRequest|处理请求|body|true|RepairHandleRequest|RepairHandleRequest|
+|&emsp;&emsp;status|处理状态：1-处理中，2-已完成，3-已驳回||true|integer(int32)||
+|&emsp;&emsp;handleResult|处理结果||false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultInteger|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int32)|integer(int32)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 报修统计
+
+
+**接口地址**:`/api/admin/repair/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员获取报修统计数据</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|startTime|开始时间|query|false|string||
+|endTime|结束时间|query|false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultMapStringObject|
 |400|Bad Request|ResultVoid|
 |403|Forbidden|ResultVoid|
 |404|Not Found||
@@ -21422,6 +24181,1116 @@ stompClient.connect(url, new WebSocketHandler() {
 ```
 
 
+# 管理员公告管理
+
+
+## 查询公告详情
+
+
+**接口地址**:`/api/admin/announcement/{announceId}`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员查询指定公告的详细信息（不增加阅读次数）</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|announceId|公告ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultAnnouncementResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||AnnouncementResponse|AnnouncementResponse|
+|&emsp;&emsp;announceId|公告ID|integer(int64)||
+|&emsp;&emsp;title|公告标题|string||
+|&emsp;&emsp;content|公告内容|string||
+|&emsp;&emsp;publishUserId|发布人ID|integer(int64)||
+|&emsp;&emsp;publishUserName|发布人姓名|string||
+|&emsp;&emsp;publishTime|发布时间|string(date-time)||
+|&emsp;&emsp;readCount|阅读次数|integer(int32)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"announceId": 1,
+		"title": "关于小区停水的通知",
+		"content": "因水管维修，明天上午8:00-12:00停水...",
+		"publishUserId": 100,
+		"publishUserName": "张三",
+		"publishTime": "",
+		"readCount": 128
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 更新公告
+
+
+**接口地址**:`/api/admin/announcement/{announceId}`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员更新公告内容</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "title": "关于小区停水的通知",
+  "content": "尊敬的各位业主：\n因市政水管维修，本小区将于2026年1月10日（周五）上午8:00-12:00进行停水。"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|announceId|公告ID|path|true|integer(int64)||
+|updateAnnouncementRequest|更新请求|body|true|UpdateAnnouncementRequest|UpdateAnnouncementRequest|
+|&emsp;&emsp;title|公告标题||true|string||
+|&emsp;&emsp;content|公告内容||true|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 删除公告
+
+
+**接口地址**:`/api/admin/announcement/{announceId}`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员删除指定公告</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|announceId|公告ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询所有公告
+
+
+**接口地址**:`/api/admin/announcement/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员分页查询所有公告，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "keyword": "停水",
+  "publishUserId": 1,
+  "startTime": "2026-01-01 00:00:00",
+  "endTime": "2026-01-31 23:59:59",
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|adminAnnouncementQueryRequest|查询条件|body|true|AdminAnnouncementQueryRequest|AdminAnnouncementQueryRequest|
+|&emsp;&emsp;keyword|关键词搜索（标题或内容）||false|string||
+|&emsp;&emsp;publishUserId|发布人ID||false|integer(int64)||
+|&emsp;&emsp;startTime|开始时间||false|string||
+|&emsp;&emsp;endTime|结束时间||false|string||
+|&emsp;&emsp;pageNum|页码||true|integer(int32)||
+|&emsp;&emsp;pageSize|每页大小||true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageAnnouncementResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageAnnouncementResponse|PageAnnouncementResponse|
+|&emsp;&emsp;records|公告响应|array|AnnouncementResponse|
+|&emsp;&emsp;&emsp;&emsp;announceId|公告ID|integer||
+|&emsp;&emsp;&emsp;&emsp;title|公告标题|string||
+|&emsp;&emsp;&emsp;&emsp;content|公告内容|string||
+|&emsp;&emsp;&emsp;&emsp;publishUserId|发布人ID|integer||
+|&emsp;&emsp;&emsp;&emsp;publishUserName|发布人姓名|string||
+|&emsp;&emsp;&emsp;&emsp;publishTime|发布时间|string||
+|&emsp;&emsp;&emsp;&emsp;readCount|阅读次数|integer||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageAnnouncementResponse|PageAnnouncementResponse|
+|&emsp;&emsp;searchCount||PageAnnouncementResponse|PageAnnouncementResponse|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"announceId": 1,
+				"title": "关于小区停水的通知",
+				"content": "因水管维修，明天上午8:00-12:00停水...",
+				"publishUserId": 100,
+				"publishUserName": "张三",
+				"publishTime": "",
+				"readCount": 128
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 发布公告
+
+
+**接口地址**:`/api/admin/announcement/publish`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员发布新公告</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "title": "关于小区停水的通知",
+  "content": "尊敬的各位业主：\n因市政水管维修，本小区将于2026年1月10日（周五）上午8:00-12:00进行停水。\n请各位业主提前做好储水准备，给您带来的不便敬请谅解。"
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|announcementPublishRequest|发布公告请求|body|true|AnnouncementPublishRequest|AnnouncementPublishRequest|
+|&emsp;&emsp;title|公告标题||true|string||
+|&emsp;&emsp;content|公告内容||true|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultAnnouncementResponse|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||AnnouncementResponse|AnnouncementResponse|
+|&emsp;&emsp;announceId|公告ID|integer(int64)||
+|&emsp;&emsp;title|公告标题|string||
+|&emsp;&emsp;content|公告内容|string||
+|&emsp;&emsp;publishUserId|发布人ID|integer(int64)||
+|&emsp;&emsp;publishUserName|发布人姓名|string||
+|&emsp;&emsp;publishTime|发布时间|string(date-time)||
+|&emsp;&emsp;readCount|阅读次数|integer(int32)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"announceId": 1,
+		"title": "关于小区停水的通知",
+		"content": "因水管维修，明天上午8:00-12:00停水...",
+		"publishUserId": 100,
+		"publishUserName": "张三",
+		"publishTime": "",
+		"readCount": 128
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量删除公告
+
+
+**接口地址**:`/api/admin/announcement/batch-delete`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员批量删除公告</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+[]
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|integers|integer|body|true|array||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultInteger|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int32)|integer(int32)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 公告统计
+
+
+**接口地址**:`/api/admin/announcement/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员获取公告统计数据</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|startTime|开始时间|query|false|string||
+|endTime|结束时间|query|false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultMapStringObject|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
 # 访客登记管理
 
 
@@ -24502,7 +28371,7 @@ stompClient.connect(url, new WebSocketHandler() {
 
 | 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
 | -------- | -------- | ----- | -------- | -------- | ------ |
-|repairQueryRequest|报事维修查询条件|body|true|RepairQueryRequest|RepairQueryRequest|
+|repairQueryRequest|查询条件|body|true|RepairQueryRequest|RepairQueryRequest|
 |&emsp;&emsp;reportType|事项类型（可选）||false|string||
 |&emsp;&emsp;status|处理状态（可选）：0-待处理，1-处理中，2-已完成，3-已驳回||false|integer(int32)||
 |&emsp;&emsp;userId|用户ID（可选）||false|integer(int64)||
@@ -27008,6 +30877,978 @@ stompClient.connect(url, new WebSocketHandler() {
 ```
 
 
+# 管理员通知管理
+
+
+## 发送通知
+
+
+**接口地址**:`/api/admin/notification/send`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员发送通知（可发送给单个用户或全体用户）</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "userId": 123,
+  "type": 1,
+  "title": "系统维护通知",
+  "content": "系统将于今晚22:00-24:00进行维护",
+  "relatedId": 456
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|sendNotificationRequest|发送通知请求|body|true|SendNotificationRequest|SendNotificationRequest|
+|&emsp;&emsp;userId|用户ID（可选，不填则发送给所有用户）||false|integer(int64)||
+|&emsp;&emsp;type|通知类型||true|integer(int32)||
+|&emsp;&emsp;title|通知标题||true|string||
+|&emsp;&emsp;content|通知内容||true|string||
+|&emsp;&emsp;relatedId|关联ID（可选）||false|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultInteger|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int32)|integer(int32)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询所有通知
+
+
+**接口地址**:`/api/admin/notification/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员分页查询所有通知，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "userId": 123,
+  "type": 1,
+  "isRead": 0,
+  "keyword": "公告",
+  "startTime": "2026-01-01 00:00:00",
+  "endTime": "2026-01-31 23:59:59",
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|adminNotificationQueryRequest|查询条件|body|true|AdminNotificationQueryRequest|AdminNotificationQueryRequest|
+|&emsp;&emsp;userId|用户ID（可选）||false|integer(int64)||
+|&emsp;&emsp;type|通知类型（可选，1-系统通知 2-点赞通知 3-评论通知 4-好友申请 5-私信通知）||false|integer(int32)||
+|&emsp;&emsp;isRead|是否已读（可选，0-未读 1-已读）||false|integer(int32)||
+|&emsp;&emsp;keyword|关键词搜索（标题或内容）||false|string||
+|&emsp;&emsp;startTime|开始时间||false|string||
+|&emsp;&emsp;endTime|结束时间||false|string||
+|&emsp;&emsp;pageNum|页码||true|integer(int32)||
+|&emsp;&emsp;pageSize|每页大小||true|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageNotificationDetailVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageNotificationDetailVO|PageNotificationDetailVO|
+|&emsp;&emsp;records|通知详情|array|NotificationDetailVO|
+|&emsp;&emsp;&emsp;&emsp;notificationId|通知ID|integer||
+|&emsp;&emsp;&emsp;&emsp;userId|用户ID|integer||
+|&emsp;&emsp;&emsp;&emsp;userName|用户名|string||
+|&emsp;&emsp;&emsp;&emsp;userPhone|用户手机号|string||
+|&emsp;&emsp;&emsp;&emsp;type|通知类型|integer||
+|&emsp;&emsp;&emsp;&emsp;typeDesc|通知类型描述|string||
+|&emsp;&emsp;&emsp;&emsp;title|通知标题|string||
+|&emsp;&emsp;&emsp;&emsp;content|通知内容|string||
+|&emsp;&emsp;&emsp;&emsp;relatedId|关联ID|integer||
+|&emsp;&emsp;&emsp;&emsp;isRead|是否已读 0-未读 1-已读|integer||
+|&emsp;&emsp;&emsp;&emsp;isReadDesc|是否已读描述|string||
+|&emsp;&emsp;&emsp;&emsp;createTime|创建时间|string||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageNotificationDetailVO|PageNotificationDetailVO|
+|&emsp;&emsp;searchCount||PageNotificationDetailVO|PageNotificationDetailVO|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"notificationId": 0,
+				"userId": 0,
+				"userName": "",
+				"userPhone": "",
+				"type": 0,
+				"typeDesc": "",
+				"title": "",
+				"content": "",
+				"relatedId": 0,
+				"isRead": 0,
+				"isReadDesc": "",
+				"createTime": ""
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量删除通知
+
+
+**接口地址**:`/api/admin/notification/batch-delete`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员批量删除通知</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+[]
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|integers|integer|body|true|array||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultInteger|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|integer(int32)|integer(int32)|
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": 0,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 查询通知详情
+
+
+**接口地址**:`/api/admin/notification/{notificationId}`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员查询指定通知的详细信息</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|notificationId|通知ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultNotificationDetailVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||NotificationDetailVO|NotificationDetailVO|
+|&emsp;&emsp;notificationId|通知ID|integer(int64)||
+|&emsp;&emsp;userId|用户ID|integer(int64)||
+|&emsp;&emsp;userName|用户名|string||
+|&emsp;&emsp;userPhone|用户手机号|string||
+|&emsp;&emsp;type|通知类型|integer(int32)||
+|&emsp;&emsp;typeDesc|通知类型描述|string||
+|&emsp;&emsp;title|通知标题|string||
+|&emsp;&emsp;content|通知内容|string||
+|&emsp;&emsp;relatedId|关联ID|integer(int64)||
+|&emsp;&emsp;isRead|是否已读 0-未读 1-已读|integer(int32)||
+|&emsp;&emsp;isReadDesc|是否已读描述|string||
+|&emsp;&emsp;createTime|创建时间|string(date-time)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"notificationId": 0,
+		"userId": 0,
+		"userName": "",
+		"userPhone": "",
+		"type": 0,
+		"typeDesc": "",
+		"title": "",
+		"content": "",
+		"relatedId": 0,
+		"isRead": 0,
+		"isReadDesc": "",
+		"createTime": ""
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 删除通知
+
+
+**接口地址**:`/api/admin/notification/{notificationId}`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员删除指定通知</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|notificationId|通知ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 通知统计
+
+
+**接口地址**:`/api/admin/notification/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员获取通知统计数据</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|startTime|开始时间|query|false|string||
+|endTime|结束时间|query|false|string||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultMapStringObject|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
 # 购物车管理接口
 
 
@@ -28263,13 +33104,323 @@ stompClient.connect(url, new WebSocketHandler() {
 ```
 
 
-# 管理端-门店商品接口
+# 管理端-门店商品管理
 
 
-## 修改门店商品库存
+## 添加门店商品
 
 
-**接口地址**:`/api/admin/storeP-products/{storeProductId}/stock`
+**接口地址**:`/api/admin/store-products`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>为指定门店添加商品</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "storeId": 1,
+  "productId": 1,
+  "stock": 100,
+  "status": 1
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|addStoreProductRequest|添加门店商品请求|body|true|AddStoreProductRequest|AddStoreProductRequest|
+|&emsp;&emsp;storeId|门店ID||true|integer(int64)||
+|&emsp;&emsp;productId|商品ID||true|integer(int64)||
+|&emsp;&emsp;stock|库存数量||true|integer(int32)||
+|&emsp;&emsp;status|状态 0-下架 1-上架||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 更新门店商品
+
+
+**接口地址**:`/api/admin/store-products`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>更新门店商品的库存和状态</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "id": 1,
+  "stock": 100,
+  "status": 1
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|updateStoreProductRequest|更新门店商品请求|body|true|UpdateStoreProductRequest|UpdateStoreProductRequest|
+|&emsp;&emsp;id|门店商品ID||true|integer(int64)||
+|&emsp;&emsp;stock|库存数量||false|integer(int32)||
+|&emsp;&emsp;status|状态 0-下架 1-上架||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 修改门店商品库存（简化版）
+
+
+**接口地址**:`/api/admin/store-products/{storeProductId}/stock`
 
 
 **请求方式**:`PUT`
@@ -28416,10 +33567,10 @@ stompClient.connect(url, new WebSocketHandler() {
 ```
 
 
-## 门店商品上下架
+## 门店商品上下架（简化版）
 
 
-**接口地址**:`/api/admin/storeP-products/{storeProductId}/status`
+**接口地址**:`/api/admin/store-products/{storeProductId}/status`
 
 
 **请求方式**:`PUT`
@@ -28486,6 +33637,993 @@ stompClient.connect(url, new WebSocketHandler() {
 	"code": 200,
 	"message": "操作成功",
 	"data": true,
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 分页查询门店商品列表
+
+
+**接口地址**:`/api/admin/store-products/query`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>管理员查询门店商品列表，支持多条件筛选</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "storeId": 1,
+  "productId": 1,
+  "productName": "苹果",
+  "storeName": "一号店",
+  "status": 1,
+  "pageNum": 1,
+  "pageSize": 10
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|adminStoreProductQueryRequest|管理端-门店商品查询请求|body|true|AdminStoreProductQueryRequest|AdminStoreProductQueryRequest|
+|&emsp;&emsp;storeId|门店ID||false|integer(int64)||
+|&emsp;&emsp;productId|商品ID||false|integer(int64)||
+|&emsp;&emsp;productName|商品名称（模糊查询）||false|string||
+|&emsp;&emsp;storeName|门店名称（模糊查询）||false|string||
+|&emsp;&emsp;status|状态 0-下架 1-上架||false|integer(int32)||
+|&emsp;&emsp;pageNum|页码||false|integer(int32)||
+|&emsp;&emsp;pageSize|每页数量||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultPageStoreProductVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||PageStoreProductVO|PageStoreProductVO|
+|&emsp;&emsp;records|门店商品VO|array|StoreProductVO|
+|&emsp;&emsp;&emsp;&emsp;id|门店商品ID|integer||
+|&emsp;&emsp;&emsp;&emsp;storeId|门店ID|integer||
+|&emsp;&emsp;&emsp;&emsp;storeName|门店名称|string||
+|&emsp;&emsp;&emsp;&emsp;storeAddress|门店地址|string||
+|&emsp;&emsp;&emsp;&emsp;storeContactPhone|门店联系电话|string||
+|&emsp;&emsp;&emsp;&emsp;storeStatus|门店状态 0-关闭 1-正常营业|integer||
+|&emsp;&emsp;&emsp;&emsp;productId|商品ID|integer||
+|&emsp;&emsp;&emsp;&emsp;productName|商品名称|string||
+|&emsp;&emsp;&emsp;&emsp;productPrice|商品价格|string||
+|&emsp;&emsp;&emsp;&emsp;productCoverImg|商品封面图片|string||
+|&emsp;&emsp;&emsp;&emsp;productStatus|商品状态 0-下架 1-上架|integer||
+|&emsp;&emsp;&emsp;&emsp;stock|库存数量|integer||
+|&emsp;&emsp;&emsp;&emsp;status|状态 0-下架 1-上架|integer||
+|&emsp;&emsp;&emsp;&emsp;createTime|创建时间|string||
+|&emsp;&emsp;&emsp;&emsp;updateTime|更新时间|string||
+|&emsp;&emsp;total||integer(int64)||
+|&emsp;&emsp;size||integer(int64)||
+|&emsp;&emsp;current||integer(int64)||
+|&emsp;&emsp;orders||array|OrderItem|
+|&emsp;&emsp;&emsp;&emsp;column||string||
+|&emsp;&emsp;&emsp;&emsp;asc||boolean||
+|&emsp;&emsp;optimizeCountSql||PageStoreProductVO|PageStoreProductVO|
+|&emsp;&emsp;searchCount||PageStoreProductVO|PageStoreProductVO|
+|&emsp;&emsp;optimizeJoinOfCountSql||boolean||
+|&emsp;&emsp;maxLimit||integer(int64)||
+|&emsp;&emsp;countId||string||
+|&emsp;&emsp;pages||integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"records": [
+			{
+				"id": 1,
+				"storeId": 1,
+				"storeName": "一号店",
+				"storeAddress": "北京市朝阳区xxx",
+				"storeContactPhone": "13800138000",
+				"storeStatus": 1,
+				"productId": 1,
+				"productName": "苹果",
+				"productPrice": "10.0",
+				"productCoverImg": "http://xxx.jpg",
+				"productStatus": 1,
+				"stock": 100,
+				"status": 1,
+				"createTime": "",
+				"updateTime": ""
+			}
+		],
+		"total": 0,
+		"size": 0,
+		"current": 0,
+		"orders": [
+			{
+				"column": "",
+				"asc": true
+			}
+		],
+		"optimizeCountSql": {},
+		"searchCount": {},
+		"optimizeJoinOfCountSql": true,
+		"maxLimit": 0,
+		"countId": "",
+		"pages": 0
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量更新门店商品状态
+
+
+**接口地址**:`/api/admin/store-products/batch-update-status`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>批量上架或下架门店商品</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "ids": [
+    1,
+    2,
+    3
+  ],
+  "status": 1
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|batchUpdateStoreProductRequest|批量更新门店商品请求|body|true|BatchUpdateStoreProductRequest|BatchUpdateStoreProductRequest|
+|&emsp;&emsp;ids|门店商品ID列表||true|array|integer(int64)|
+|&emsp;&emsp;status|状态 0-下架 1-上架||false|integer(int32)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 批量删除门店商品
+
+
+**接口地址**:`/api/admin/store-products/batch-delete`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded,application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>根据ID列表批量删除门店商品</p>
+
+
+
+**请求示例**:
+
+
+```javascript
+[]
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|integers|integer|body|true|array||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 获取门店商品详情
+
+
+**接口地址**:`/api/admin/store-products/{id}`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>根据ID获取门店商品详细信息</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|id|门店商品ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultStoreProductVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||StoreProductVO|StoreProductVO|
+|&emsp;&emsp;id|门店商品ID|integer(int64)||
+|&emsp;&emsp;storeId|门店ID|integer(int64)||
+|&emsp;&emsp;storeName|门店名称|string||
+|&emsp;&emsp;storeAddress|门店地址|string||
+|&emsp;&emsp;storeContactPhone|门店联系电话|string||
+|&emsp;&emsp;storeStatus|门店状态 0-关闭 1-正常营业|integer(int32)||
+|&emsp;&emsp;productId|商品ID|integer(int64)||
+|&emsp;&emsp;productName|商品名称|string||
+|&emsp;&emsp;productPrice|商品价格|string||
+|&emsp;&emsp;productCoverImg|商品封面图片|string||
+|&emsp;&emsp;productStatus|商品状态 0-下架 1-上架|integer(int32)||
+|&emsp;&emsp;stock|库存数量|integer(int32)||
+|&emsp;&emsp;status|状态 0-下架 1-上架|integer(int32)||
+|&emsp;&emsp;createTime|创建时间|string(date-time)||
+|&emsp;&emsp;updateTime|更新时间|string(date-time)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"id": 1,
+		"storeId": 1,
+		"storeName": "一号店",
+		"storeAddress": "北京市朝阳区xxx",
+		"storeContactPhone": "13800138000",
+		"storeStatus": 1,
+		"productId": 1,
+		"productName": "苹果",
+		"productPrice": "10.0",
+		"productCoverImg": "http://xxx.jpg",
+		"productStatus": 1,
+		"stock": 100,
+		"status": 1,
+		"createTime": "",
+		"updateTime": ""
+	},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 删除门店商品
+
+
+**接口地址**:`/api/admin/store-products/{id}`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>根据ID删除门店商品</p>
+
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|id|门店商品ID|path|true|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultVoid|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-400**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-403**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+**响应状态码-500**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data|响应数据|object||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {},
+	"timestamp": 1640995200000
+}
+```
+
+
+## 获取门店商品统计信息
+
+
+**接口地址**:`/api/admin/store-products/statistics`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:<p>获取门店商品的各项统计数据</p>
+
+
+
+**请求参数**:
+
+
+暂无
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|ResultStoreProductStatisticsVO|
+|400|Bad Request|ResultVoid|
+|403|Forbidden|ResultVoid|
+|404|Not Found||
+|500|Internal Server Error|ResultVoid|
+
+
+**响应状态码-200**:
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code|响应码|integer(int32)|integer(int32)|
+|message|响应消息|string||
+|data||StoreProductStatisticsVO|StoreProductStatisticsVO|
+|&emsp;&emsp;totalCount|门店商品总数|integer(int64)||
+|&emsp;&emsp;onlineCount|上架商品数|integer(int64)||
+|&emsp;&emsp;offlineCount|下架商品数|integer(int64)||
+|&emsp;&emsp;lowStockCount|库存不足商品数（库存<10）|integer(int64)||
+|&emsp;&emsp;zeroStockCount|零库存商品数|integer(int64)||
+|&emsp;&emsp;totalStock|总库存数量|integer(int64)||
+|timestamp|时间戳|integer(int64)|integer(int64)|
+
+
+**响应示例**:
+```javascript
+{
+	"code": 200,
+	"message": "操作成功",
+	"data": {
+		"totalCount": 100,
+		"onlineCount": 80,
+		"offlineCount": 20,
+		"lowStockCount": 5,
+		"zeroStockCount": 3,
+		"totalStock": 5000
+	},
 	"timestamp": 1640995200000
 }
 ```

@@ -22,6 +22,7 @@
             class="flex-1 overflow-y-auto py-6 px-3 space-y-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <SuperCommunitySiderBarCommunity :collapsed="isCollapsed" />
             <SuperCommunitySiderBarMall :collapsed="isCollapsed" />
+            <SuperCommunitySiderBarProperty :collapsed="isCollapsed" />
             <SuperCommunitySiderBarUserManagement :collapsed="isCollapsed" />
         </nav>
 
