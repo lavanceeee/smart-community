@@ -93,7 +93,15 @@
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
             >
                 <el-table-column prop="orderNo" label="订单号" width="220" fixed />
-                <el-table-column prop="orderTypeDesc" label="订单类型" width="100" />
+                <el-table-column label="用户信息" width="180">
+                    <template #default="{ row }">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-sm font-medium text-slate-800 dark:text-white">{{ row.userName || '-' }}</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400">{{ row.userPhone || '-' }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="orderTypeDesc" label="订单类型" width="120" />
                 <el-table-column prop="amount" label="订单金额" width="120">
                     <template #default="{ row }">
                         <span class="font-semibold text-[#ff5000]">¥{{ row.amount?.toFixed(2) }}</span>
@@ -106,9 +114,9 @@
                         </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="paymentMethodDesc" label="支付方式" width="100" />
+                <el-table-column prop="paymentMethodDesc" label="支付方式" width="120" />
                 <el-table-column prop="storeName" label="取货门店" width="150" show-overflow-tooltip />
-                <el-table-column prop="description" label="订单描述" min-width="200" show-overflow-tooltip />
+                <el-table-column prop="description" label="订单描述" min-width="180" show-overflow-tooltip />
                 <el-table-column prop="productCount" label="商品数量" width="100" />
                 <el-table-column prop="createTime" label="创建时间" width="180" sortable />
                 <el-table-column label="操作" width="180" fixed="right">
@@ -165,8 +173,12 @@
                             <p class="text-sm font-mono">{{ currentOrder.orderNo }}</p>
                         </div>
                         <div>
-                            <label class="text-sm text-slate-500">用户ID</label>
-                            <p class="text-sm">{{ currentOrder.userId }}</p>
+                            <label class="text-sm text-slate-500">用户名</label>
+                            <p class="text-sm font-medium">{{ currentOrder.userName || '-' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-500">用户手机号</label>
+                            <p class="text-sm">{{ currentOrder.userPhone || '-' }}</p>
                         </div>
                         <div>
                             <label class="text-sm text-slate-500">订单类型</label>
@@ -192,7 +204,7 @@
                             <label class="text-sm text-slate-500">取货门店</label>
                             <p class="text-sm">{{ currentOrder.storeName }}</p>
                         </div>
-                        <div v-if="currentOrder.description">
+                        <div v-if="currentOrder.description" class="col-span-2">
                             <label class="text-sm text-slate-500">订单描述</label>
                             <p class="text-sm">{{ currentOrder.description }}</p>
                         </div>
@@ -298,6 +310,84 @@
                 </el-button>
             </template>
         </el-dialog>
+
+        <!-- 订单统计弹窗 -->
+        <el-dialog
+            v-model="statisticsDialogVisible"
+            title="订单统计"
+            width="800px"
+            :close-on-click-modal="false"
+        >
+            <div v-if="statisticsData" class="space-y-6">
+                <!-- 概览统计 -->
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm opacity-90">总订单数</span>
+                            <Icon name="lucide:shopping-cart" size="24" class="opacity-80" />
+                        </div>
+                        <div class="text-3xl font-bold">{{ statisticsData.totalOrders || 0 }}</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm opacity-90">已完成</span>
+                            <Icon name="lucide:check-circle" size="24" class="opacity-80" />
+                        </div>
+                        <div class="text-3xl font-bold">{{ statisticsData.completedOrders || 0 }}</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm opacity-90">待处理</span>
+                            <Icon name="lucide:clock" size="24" class="opacity-80" />
+                        </div>
+                        <div class="text-3xl font-bold">{{ statisticsData.pendingOrders || 0 }}</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm opacity-90">总金额</span>
+                            <Icon name="lucide:currency-yen" size="24" class="opacity-80" />
+                        </div>
+                        <div class="text-3xl font-bold">¥{{ (statisticsData.totalAmount || 0).toFixed(2) }}</div>
+                    </div>
+                </div>
+
+                <!-- 按状态统计 -->
+                <div v-if="statisticsData.statusCount" class="bg-slate-50 dark:bg-slate-700 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-slate-800 dark:text-white">按状态统计</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div v-for="(count, status) in statisticsData.statusCount" :key="status" 
+                            class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">{{ getStatusName(status) }}</div>
+                            <div class="text-2xl font-bold text-slate-800 dark:text-white">{{ count }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 按类型统计 -->
+                <div v-if="statisticsData.typeCount" class="bg-slate-50 dark:bg-slate-700 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-slate-800 dark:text-white">按类型统计</h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div v-for="(count, type) in statisticsData.typeCount" :key="type"
+                            class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">{{ getTypeName(type) }}</div>
+                            <div class="text-2xl font-bold text-slate-800 dark:text-white">{{ count }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其他统计数据 -->
+                <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-slate-800 dark:text-white">其他统计</h3>
+                    <div class="space-y-2 text-sm">
+                        <div v-for="(value, key) in getOtherStats()" :key="key" 
+                            class="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-600 last:border-0">
+                            <span class="text-slate-600 dark:text-slate-300">{{ formatKey(key) }}</span>
+                            <span class="font-semibold text-slate-800 dark:text-white">{{ value }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -314,6 +404,9 @@ definePageMeta({
 interface Order {
     orderId: number
     orderNo: string
+    userId: number
+    userName: string
+    userPhone: string
     orderType: string
     orderTypeDesc: string
     amount: number
@@ -329,7 +422,6 @@ interface Order {
 }
 
 interface OrderDetail extends Order {
-    userId: number
     storeId?: number
     relatedId?: number
     callbackTime?: string
@@ -355,6 +447,8 @@ const orderList = ref<Order[]>([])
 const currentOrder = ref<OrderDetail | null>(null)
 const detailDialogVisible = ref(false)
 const handleDialogVisible = ref(false)
+const statisticsDialogVisible = ref(false)
+const statisticsData = ref<any>(null)
 const dateRange = ref<[string, string] | null>(null)
 
 const queryForm = reactive({
@@ -498,14 +592,8 @@ const fetchOrderStatistics = async () => {
     try {
         const response = await getAdminOrderStatisticsApi()
         if (response.code === 200 && response.data) {
-            ElMessageBox.alert(
-                JSON.stringify(response.data, null, 2),
-                '订单统计',
-                {
-                    confirmButtonText: '确定',
-                    dangerouslyUseHTMLString: false
-                }
-            )
+            statisticsData.value = response.data
+            statisticsDialogVisible.value = true
         } else {
             ElMessage.error(response.message || '获取统计失败')
         }
@@ -554,6 +642,59 @@ const getStatusType = (status?: number): '' | 'success' | 'warning' | 'danger' |
 const canHandle = (status: number) => {
     // 支付成功(待取货)状态可以处理
     return status === 2
+}
+
+// 获取状态名称
+const getStatusName = (status: string | number) => {
+    const statusMap: Record<string, string> = {
+        '0': '待支付',
+        '1': '支付中',
+        '2': '支付成功',
+        '3': '已完成',
+        '4': '支付失败',
+        '5': '已取消',
+        '6': '已退款'
+    }
+    return statusMap[status.toString()] || status.toString()
+}
+
+// 获取类型名称
+const getTypeName = (type: string) => {
+    const typeMap: Record<string, string> = {
+        'PRODUCT': '商品订单',
+        'RECHARGE': '充值订单',
+        'PROPERTY_FEE': '物业费',
+        'PARKING_FEE': '停车费'
+    }
+    return typeMap[type] || type
+}
+
+// 获取其他统计数据
+const getOtherStats = () => {
+    if (!statisticsData.value) return {}
+    const result: Record<string, any> = {}
+    const excludeKeys = ['totalOrders', 'completedOrders', 'pendingOrders', 'totalAmount', 'statusCount', 'typeCount']
+    
+    for (const key in statisticsData.value) {
+        if (!excludeKeys.includes(key)) {
+            result[key] = statisticsData.value[key]
+        }
+    }
+    return result
+}
+
+// 格式化键名
+const formatKey = (key: string) => {
+    const keyMap: Record<string, string> = {
+        'avgAmount': '平均订单金额',
+        'todayOrders': '今日订单数',
+        'todayAmount': '今日订单金额',
+        'weekOrders': '本周订单数',
+        'weekAmount': '本周订单金额',
+        'monthOrders': '本月订单数',
+        'monthAmount': '本月订单金额'
+    }
+    return keyMap[key] || key
 }
 
 onMounted(() => {

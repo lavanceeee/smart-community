@@ -6,6 +6,14 @@
         :collapsed="collapsed"
         v-if="hasCommunityPermission"
     >
+        <NuxtLink v-if="hasPermission('forum:section:view')" to="/superCommunity/community/section"
+            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
+            :class="isActive('/superCommunity/community/section') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
+            <Icon name="lucide:layout-grid" size="18" class="mr-3 flex-shrink-0"
+                :class="isActive('/superCommunity/community/section') ? 'text-white' : 'text-slate-400 group-hover:text-white'" />
+            板块管理
+        </NuxtLink>
+
         <NuxtLink v-if="hasPermission('forum:view')" to="/superCommunity/community/forum"
             class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200"
             :class="isActive('/superCommunity/community/forum') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white'">
@@ -99,7 +107,7 @@ const hasPermission = (permissionCode: string) => {
 };
 
 const hasCommunityPermission = computed(() => {
-    return hasPermission('forum:view');
+    return hasPermission('forum:section:view') || hasPermission('forum:view');
 });
 
 const hasMessagePermission = computed(() => {
