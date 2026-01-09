@@ -1383,3 +1383,29 @@ export const getAdminOrderStatisticsApi = (startTime?: string, endTime?: string)
     method: 'GET'
   })
 }
+
+// ==================== 论坛管理 API ====================
+
+/**
+ * 删除帖子
+ * @param postId 帖子ID
+ */
+export const deleteForumPostApi = (postId: number) => {
+  return $api(`/api/forum/post/delete/${postId}`, { method: 'DELETE' })
+}
+
+/**
+ * 更新帖子
+ * @param postId 帖子ID
+ * @param data 更新数据
+ */
+export const updateForumPostApi = (postId: number, data: {
+  title: string
+  content: string
+  images?: string
+}) => {
+  return $api(`/api/forum/post/update/${postId}`, {
+    method: 'PUT',
+    body: data
+  })
+}
