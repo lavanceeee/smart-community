@@ -40,6 +40,19 @@ export const uploadAvatarApi = (body: any) => {
   })
 }
 
+/**
+ * 上传单张图片
+ * @param file 图片文件
+ */
+export const uploadImageApi = (file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return $api('/api/upload/image', {
+    method: 'POST',
+    body: formData
+  })
+}
+
 export const updateUserInfoApi = (body: any) => {
   return $api('api/user/profile', {
     method: "PUT",
@@ -1023,7 +1036,7 @@ export const cancelCollectForumPostApi = (postId: string | number) => {
  */
 
 export const getMyCollectedForumPostApi = (params: any) => {
-    return $api('/api/forum/post/my/collected', { method: 'GET', params })
+  return $api('/api/forum/post/my/collected', { method: 'GET', params })
 }
 
 
@@ -1407,5 +1420,120 @@ export const updateForumPostApi = (postId: number, data: {
   return $api(`/api/forum/post/update/${postId}`, {
     method: 'PUT',
     body: data
+  })
+}
+
+/**
+ * 设置/取消帖子置顶
+ * @param postId 帖子ID
+ * @param isTop 是否置顶 0-否 1-是
+ */
+export const setForumPostTopApi = (postId: number, isTop: number) => {
+  return $api(`/api/forum/post/${postId}/top?isTop=${isTop}`, {
+    method: 'POST'
+  })
+}
+
+/**
+ * 设置/取消帖子精华
+ * @param postId 帖子ID
+ * @param isEssence 是否精华 0-否 1-是
+ */
+export const setForumPostEssenceApi = (postId: number, isEssence: number) => {
+  return $api(`/api/forum/post/${postId}/essence?isEssence=${isEssence}`, {
+    method: 'POST'
+  })
+}
+
+// ==================== 论坛板块管理 API ====================
+
+/**
+ * 查询所有板块（分页）
+ * @param data 查询参数
+ */
+export const queryForumSectionsApi = (data: {
+  sectionName?: string
+  status?: number
+  pageNum: number
+  pageSize: number
+}) => {
+  return $api('/api/admin/forum/section/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 查询板块详情
+ * @param sectionId 板块ID
+ */
+export const getForumSectionDetailApi = (sectionId: number) => {
+  return $api(`/api/admin/forum/section/${sectionId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 创建板块
+ * @param data 板块数据
+ */
+export const createForumSectionApi = (data: {
+  sectionName: string
+  sectionDesc?: string
+  iconUrl?: string
+  sortOrder: number
+  status: number
+}) => {
+  return $api('/api/admin/forum/section/create', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 更新板块
+ * @param sectionId 板块ID
+ * @param data 板块数据
+ */
+export const updateForumSectionApi = (sectionId: number, data: {
+  sectionName: string
+  sectionDesc?: string
+  iconUrl?: string
+  sortOrder: number
+  status: number
+}) => {
+  return $api(`/api/admin/forum/section/${sectionId}`, {
+    method: 'PUT',
+    body: data
+  })
+}
+
+/**
+ * 删除板块
+ * @param sectionId 板块ID
+ */
+export const deleteForumSectionApi = (sectionId: number) => {
+  return $api(`/api/admin/forum/section/${sectionId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 启用/禁用板块
+ * @param sectionId 板块ID
+ * @param status 状态 0-禁用 1-启用
+ */
+export const toggleForumSectionStatusApi = (sectionId: number, status: number) => {
+  return $api(`/api/admin/forum/section/${sectionId}/status?status=${status}`, {
+    method: 'POST'
+  })
+}
+
+/**
+ * 获取板块统计
+ */
+export const getForumSectionStatisticsApi = () => {
+  return $api('/api/admin/forum/section/statistics', {
+    method: 'GET'
   })
 }
