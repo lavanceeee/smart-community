@@ -23,8 +23,6 @@
                 </div>
             </div>
 
-
-
             <!-- Message Bubble -->
             <div class="max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm transition-all"
                 :class="[
@@ -50,7 +48,7 @@
                 class="w-20 h-20 rounded-3xl bg-gray-50 dark:bg-[#1E1F20] flex items-center justify-center border border-gray-100 dark:border-gray-800">
                 <Icon name="lucide:sparkles" size="40" class="text-gray-300 dark:text-gray-500" />
             </div>
-            <p class="font-medium text-lg">Ready to help, ask me anything!</p>
+            <InspiraCoTextGenerateEffect words="Ready to help, ask me anything!" class="font-medium text-2xl" />
         </div>
     </div>
 </template>

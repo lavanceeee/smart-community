@@ -21,6 +21,11 @@ export const agentApi = {
             method: 'POST',
             body: payload
         })
+    },
+    getHistory: (payload: { page?: number, page_size?: number }) => {
+        return $agentApi('/sessions', {
+            method: 'GET',
+        })
     }
 }
 
@@ -45,7 +50,7 @@ export const agentStreamApi = {
 
         // 将 http/https 转换为 ws/wss
         const wsBase = config.public.agentBase.replace(/^http/, 'ws')
-        const wsUrl = `${wsBase}/ws/chat/${userId}`
+        const wsUrl = `${wsBase}/ws/chat`
 
         console.log('Connecting to WebSocket:', wsUrl)
 

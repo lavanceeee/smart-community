@@ -1,14 +1,26 @@
 <template>
-    <div
-        class="h-[calc(100vh-2.5rem)] flex flex-col bg-white dark:bg-[#131314] transition-colors relative overflow-hidden">
+    <div class="h-[calc(100vh-3rem)] relative overflow-clip">
+        <!-- Stars Background (Dark Mode Only) -->
+        <InspiraCoSrartsbackground v-if="$colorMode.value === 'dark'" :factor="0.05" :speed="50" star-color="#fff"
+            class="h-full">
+            <div class="h-full flex flex-col relative">
+                <AgentHomepageSiderBarCo />
+                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1 z-10" />
+                <div
+                    class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-[#131314] via-[#131314]">
+                    <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
+                </div>
+            </div>
+        </InspiraCoSrartsbackground>
 
-        <!-- Content Area -->
-        <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1" />
-
-        <!-- Input Area -->
-        <div
-            class="w-full flex justify-center px-4 pb-2 pt-2 bg-gradient-to-t from-white via-white to-transparent dark:from-[#131314] dark:via-[#131314] z-10 shrink-0">
-            <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
+        <!-- Plain White Background (Light Mode) -->
+        <div v-else class="h-full flex flex-col relative bg-white">
+            <AgentHomepageSiderBarCo />
+            <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1 z-10" />
+            <div
+                class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-white via-white">
+                <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
+            </div>
         </div>
     </div>
 </template>
@@ -19,6 +31,16 @@ import type { Message } from '~/components/Agent/Homepage/ContentCo.vue'
 
 definePageMeta({
     layout: 'agent'
+})
+
+
+const colorMode = useColorMode()
+
+// 默认设置为暗色模式
+onMounted(() => {
+    if (colorMode.preference !== 'dark') {
+        colorMode.preference = 'dark'
+    }
 })
 
 const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus } = useAgent()

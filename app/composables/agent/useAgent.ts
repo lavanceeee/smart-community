@@ -135,16 +135,16 @@ export const useAgent = () => {
                             }
                             break;
 
-                        // case 'error':
-                        // // 错误消息
-                        // console.error('Stream error:', data)
-                        // error.value = data
-                        // agentStatus.value = '发生错误'
-                        // isStreaming.value = false
-                        // if (import.meta.client) {
-                        //     ElMessage.error(data || '发生错误')
-                        // }
-                        // break;
+                        case 'error':
+                            // 错误消息
+                            console.error('Stream error:', data)
+                            error.value = data
+                            agentStatus.value = '发生错误'
+                            isStreaming.value = false
+                            if (import.meta.client) {
+                                ElMessage.error(data || '发生错误')
+                            }
+                            break;
 
                         default:
                             // 未知类型，如果包含 content 则尝试显示
