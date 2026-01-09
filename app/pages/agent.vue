@@ -7,7 +7,7 @@
 
         <!-- Input Area -->
         <div
-            class="w-full flex justify-center px-4 pb-8 pt-4 bg-gradient-to-t from-white via-white to-transparent dark:from-[#131314] dark:via-[#131314] z-10 shrink-0">
+            class="w-full flex justify-center px-4 pb-2 pt-2 bg-gradient-to-t from-white via-white to-transparent dark:from-[#131314] dark:via-[#131314] z-10 shrink-0">
             <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
         </div>
     </div>

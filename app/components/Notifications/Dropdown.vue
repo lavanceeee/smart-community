@@ -7,8 +7,8 @@
                 <Icon name="lucide:bell" size="14" />
                 <!-- 未读通知徽章 -->
                 <span v-if="unreadCount > 0"
-                    class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-slate-900">
-                    {{ unreadCount > 99 ? '99+' : unreadCount }}
+                    class="absolute -top-1 -right-1 min-w-[12px] h-[12px] flex items-center justify-center bg-red-500 text-white text-[8px] font-bold rounded-full ring-2 ring-white dark:ring-slate-900">
+                    {{ unreadCount }}
                 </span>
             </button>
         </template>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 w-full max-w-3xl overflow-y-auto p-4 space-y-6 scroll-smooth" ref="containerRef">
+    <div class="flex-1 w-full max-w-3xl mx-auto overflow-y-auto p-4 space-y-6 scroll-smooth" ref="containerRef">
         <div v-for="(msg, index) in messages" :key="index" class="flex flex-col gap-2"
             :class="[msg.role === 'user' ? 'items-end' : 'items-start']">
 
@@ -14,7 +14,16 @@
                 <!-- <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     {{ msg.role === 'user' ? 'You' : 'Agent' }}
                 </span> -->
+
+                <!-- Agent Status Indicator -->
+                <div v-if="msg.role === 'assistant' && msg.isStreaming && agentStatus"
+                    class="flex items-center gap-2 ml-2 transition-all animate-pulse">
+                    <Icon name="lucide:loader-2" size="14" class="animate-spin text-emerald-500" />
+                    <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{{ agentStatus }}</span>
+                </div>
             </div>
+
+
 
             <!-- Message Bubble -->
             <div class="max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm transition-all"
@@ -31,12 +40,7 @@
                     class="inline-block w-1.5 h-4 ml-0.5 align-middle bg-emerald-500 animate-pulse rounded-full"></span>
             </div>
 
-            <!-- Agent Status Indicator -->
-            <div v-if="msg.role === 'assistant' && msg.isStreaming && agentStatus"
-                class="flex items-center gap-2 ml-2 transition-all animate-pulse">
-                <Icon name="lucide:loader-2" size="14" class="animate-spin text-emerald-500" />
-                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{{ agentStatus }}</span>
-            </div>
+
         </div>
 
         <!-- Empty State -->
