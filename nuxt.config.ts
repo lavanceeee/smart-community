@@ -28,7 +28,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8080' // 默认值，会被 NUXT_PUBLIC_API_BASE 覆盖
+      apiBase: 'http://172.20.10.14:8080', // 默认值，会被 NUXT_PUBLIC_API_BASE 覆盖
+      agentBase: 'http://localhost:8001' // 默认值，会被 NUXT_PUBLIC_AGENT_BASE 覆盖
     }
   },
 

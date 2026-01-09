@@ -15,6 +15,14 @@
       </nuxt-link>
       <!-- New Navigation Links -->
       <div class="flex items-center gap-1 ml-5">
+
+        <NuxtLink to="/agent"
+          class="h-7 px-3 flex items-center gap-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-[#ff5000] transition-all text-xs font-semibold"
+          active-class="bg-orange-50 dark:bg-orange-950/30 !text-[#ff5000]">
+          <Icon name="lucide:bot" size="14" />
+          智能体
+        </NuxtLink>
+
         <NuxtLink to="/service/mall"
           class="h-7 px-3 flex items-center gap-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-[#ff5000] transition-all text-xs font-semibold"
           active-class="bg-orange-50 dark:bg-orange-950/30 !text-[#ff5000]">
