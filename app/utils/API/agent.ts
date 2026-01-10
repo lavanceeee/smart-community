@@ -26,6 +26,12 @@ export const agentApi = {
         return $agentApi('/sessions', {
             method: 'GET',
         })
+    },
+    // 获取工具元数据
+    getToolMetadata: () => {
+        return $agentApi('/api/tools/metadata', {
+            method: 'GET',
+        })
     }
 }
 

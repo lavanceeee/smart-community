@@ -1537,3 +1537,418 @@ export const getForumSectionStatisticsApi = () => {
     method: 'GET'
   })
 }
+
+// ==================== 通知管理 API ====================
+
+/**
+ * 查询所有通知（分页）
+ * @param data 查询参数
+ */
+export const queryNotificationsApi = (data: {
+  userId?: number
+  type?: number
+  isRead?: number
+  keyword?: string
+  startTime?: string
+  endTime?: string
+  pageNum: number
+  pageSize: number
+}) => {
+  return $api('/api/admin/notification/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 查询通知详情
+ * @param notificationId 通知ID
+ */
+export const getNotificationDetailApi = (notificationId: number) => {
+  return $api(`/api/admin/notification/${notificationId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 发送通知
+ * @param data 通知数据
+ */
+export const sendNotificationApi = (data: {
+  userId?: number
+  type: number
+  title: string
+  content: string
+  relatedId?: number
+}) => {
+  return $api('/api/admin/notification/send', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 删除通知
+ * @param notificationId 通知ID
+ */
+export const deleteNotificationApi = (notificationId: number) => {
+  return $api(`/api/admin/notification/${notificationId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 批量删除通知
+ * @param notificationIds 通知ID数组
+ */
+export const batchDeleteNotificationsApi = (notificationIds: number[]) => {
+  return $api('/api/admin/notification/batch-delete', {
+    method: 'POST',
+    body: notificationIds
+  })
+}
+
+/**
+ * 获取通知统计
+ * @param startTime 开始时间
+ * @param endTime 结束时间
+ */
+export const getNotificationStatisticsApi = (startTime?: string, endTime?: string) => {
+  const params = new URLSearchParams()
+  if (startTime) params.append('startTime', startTime)
+  if (endTime) params.append('endTime', endTime)
+  return $api(`/api/admin/notification/statistics${params.toString() ? '?' + params.toString() : ''}`, {
+    method: 'GET'
+  })
+}
+
+// ==================== 公告管理 API ====================
+
+/**
+ * 查询所有公告（分页）
+ * @param data 查询参数
+ */
+export const queryAnnouncementsApi = (data: {
+  keyword?: string
+  publishUserId?: number
+  startTime?: string
+  endTime?: string
+  pageNum: number
+  pageSize: number
+}) => {
+  return $api('/api/admin/announcement/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 查询公告详情（管理端）
+ * @param announceId 公告ID
+ */
+export const getAdminAnnouncementDetailApi = (announceId: number) => {
+  return $api(`/api/admin/announcement/${announceId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 发布公告
+ * @param data 公告数据
+ */
+export const publishAnnouncementApi = (data: {
+  title: string
+  content: string
+}) => {
+  return $api('/api/announcement/publish', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 更新公告
+ * @param announceId 公告ID
+ * @param data 公告数据
+ */
+export const updateAnnouncementApi = (announceId: number, data: {
+  title: string
+  content: string
+}) => {
+  return $api(`/api/admin/announcement/${announceId}`, {
+    method: 'PUT',
+    body: data
+  })
+}
+
+/**
+ * 删除公告
+ * @param announceId 公告ID
+ */
+export const deleteAnnouncementApi = (announceId: number) => {
+  return $api(`/api/admin/announcement/${announceId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 获取公告统计
+ * @param startTime 开始时间
+ * @param endTime 结束时间
+ */
+export const getAnnouncementStatisticsApi = (startTime?: string, endTime?: string) => {
+  const params = new URLSearchParams()
+  if (startTime) params.append('startTime', startTime)
+  if (endTime) params.append('endTime', endTime)
+  return $api(`/api/admin/announcement/statistics${params.toString() ? '?' + params.toString() : ''}`, {
+    method: 'GET'
+  })
+}
+
+// ==================== 商品管理 API ====================
+
+/**
+ * 查询商品列表（管理端）
+ * @param data 查询参数
+ */
+export const queryAdminProductsApi = (data: {
+  categoryId?: number
+  keyword?: string
+  pageNum: number
+  pageSize: number
+}) => {
+  return $api('/api/admin/products/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 创建/更新商品
+ * @param data 商品数据
+ */
+export const saveProductApi = (data: {
+  productId?: number
+  productName: string
+  categoryId: number
+  price: number
+  originalPrice?: number
+  stock: number
+  coverImg: string
+  detailImgs?: string[]
+  description?: string
+  status?: string
+}) => {
+  return $api('/api/admin/products', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 获取商品分类列表
+ */
+export const getProductCategoriesApi = () => {
+  return $api('/api/admin/product-categories/list', {
+    method: 'POST',
+    body: {
+      pageNo: 1,
+      pageSize: 1000
+    }
+  })
+}
+
+// ==================== 门店管理 API ====================
+
+/**
+ * 查询门店列表（管理端）
+ * @param data 查询参数
+ */
+export const queryAdminStoresApi = (data: {
+  pageNum?: number
+  pageSize?: number
+  storeName?: string
+  areaId?: number
+  status?: number
+  orderBy?: string
+  isAsc?: boolean
+}) => {
+  return $api('/api/admin/stores/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+// ==================== 门店商品管理 API ====================
+
+/**
+ * 分页查询门店商品列表
+ * @param data 查询参数
+ */
+export const queryStoreProductsApi = (data: {
+  storeId?: number
+  productId?: number
+  productName?: string
+  storeName?: string
+  status?: number
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/store-products/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 获取门店商品统计信息
+ */
+export const getStoreProductStatisticsApi = () => {
+  return $api('/api/admin/store-products/statistics', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 添加门店商品
+ * @param data 门店商品数据
+ */
+export const addStoreProductApi = (data: {
+  storeId: number
+  productId: number
+  stock: number
+  status?: number
+}) => {
+  return $api('/api/admin/store-products', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 更新门店商品
+ * @param data 门店商品数据
+ */
+export const updateStoreProductApi = (data: {
+  id: number
+  stock?: number
+  status?: number
+}) => {
+  return $api('/api/admin/store-products', {
+    method: 'PUT',
+    body: data
+  })
+}
+
+/**
+ * 删除门店商品
+ * @param id 门店商品ID
+ */
+export const deleteStoreProductApi = (id: number) => {
+  return $api(`/api/admin/store-products/${id}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 批量删除门店商品
+ * @param ids 门店商品ID列表
+ */
+export const batchDeleteStoreProductsApi = (ids: number[]) => {
+  return $api('/api/admin/store-products/batch-delete', {
+    method: 'DELETE',
+    body: { ids }
+  })
+}
+
+/**
+ * 批量更新门店商品状态
+ * @param ids 门店商品ID列表
+ * @param status 状态
+ */
+export const batchUpdateStoreProductStatusApi = (ids: number[], status: number) => {
+  return $api('/api/admin/store-products/batch-update-status', {
+    method: 'PUT',
+    body: { ids, status }
+  })
+}
+
+/**
+ * 获取门店商品详情
+ * @param id 门店商品ID
+ */
+export const getStoreProductDetailApi = (id: number) => {
+  return $api(`/api/admin/store-products/${id}`, {
+    method: 'GET'
+  })
+}
+
+// ==================== 报事维修管理 API ====================
+
+/**
+ * 查询报事维修列表（管理端）
+ * @param data 查询参数
+ */
+export const queryRepairListApi = (data: {
+  reportType?: string
+  status?: number
+  userId?: number
+  keyword?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/repair/admin/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 处理报事维修（管理端）
+ * @param reportId 报事ID
+ * @param data 处理数据
+ */
+export const handleRepairApi = (reportId: number, data: {
+  status: number
+  handleResult?: string
+}) => {
+  return $api(`/api/repair/admin/${reportId}/handle`, {
+    method: 'PUT',
+    body: data
+  })
+}
+
+// ==================== 投诉管理 API ====================
+
+/**
+ * 查询投诉列表（管理端）
+ * @param data 查询参数
+ */
+export const queryComplaintListApi = (data: {
+  complaintType?: string
+  status?: number
+  userId?: number
+  keyword?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/complaint/admin/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 处理投诉（管理端）
+ * @param complaintId 投诉ID
+ * @param data 处理数据
+ */
+export const handleComplaintApi = (complaintId: number, data: {
+  status: number
+  handleResult: string
+}) => {
+  return $api(`/api/complaint/admin/${complaintId}/handle`, {
+    method: 'PUT',
+    body: data
+  })
+}

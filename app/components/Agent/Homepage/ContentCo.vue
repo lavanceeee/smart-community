@@ -23,6 +23,12 @@
                 </div>
             </div>
 
+            <!-- Tool Calls History (只在最新的 assistant 消息中显示) -->
+            <div v-if="msg.role === 'assistant' && toolCalls && toolCalls.length > 0 && index === messages.length - 1" 
+                 class="max-w-[85%] mb-3">
+                <AgentHomepageToolCallHistory :tool-calls="toolCalls" />
+            </div>
+
             <!-- Message Bubble -->
             <div class="max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm transition-all"
                 :class="[
@@ -54,6 +60,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ToolCall } from '~/composables/agent/useAgent'
+
 export interface Message {
     role: 'user' | 'assistant'
     content: string
@@ -62,7 +70,8 @@ export interface Message {
 
 const props = defineProps<{
     messages: Message[],
-    agentStatus?: string // New prop
+    agentStatus?: string,
+    toolCalls?: ToolCall[]
 }>()
 
 const containerRef = ref<HTMLElement | null>(null)
@@ -103,6 +112,10 @@ watch(() => props.messages, () => {
 watch(() => props.agentStatus, () => {
     nextTick(scrollToBottom)
 })
+
+watch(() => props.toolCalls, () => {
+    nextTick(scrollToBottom)
+}, { deep: true })
 
 onMounted(scrollToBottom)
 </script>
