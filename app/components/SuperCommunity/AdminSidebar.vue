@@ -7,8 +7,8 @@
         <div class="h-16 flex items-center border-b border-slate-800 px-4">
             <div class="flex items-center flex-1 min-w-0">
                 <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-                    <Icon name="lucide:layout-dashboard" class="text-white" size="20" />
-                </div>
+                <Icon name="lucide:layout-dashboard" class="text-white" size="20" />
+            </div>
                 <Transition name="fade-slide">
                     <span v-if="!isCollapsed" class="text-white font-bold text-lg tracking-wide ml-3 truncate">
                         社区智管后台
@@ -67,8 +67,8 @@
                         </p>
                         <p class="text-xs text-slate-500 truncate">
                             {{ userStore.userInfo?.email || 'admin@community.com' }}
-                        </p>
-                    </div>
+                    </p>
+                </div>
                 </Transition>
                 
                 <button 

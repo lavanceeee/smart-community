@@ -1,5 +1,18 @@
 import { agentApi, agentStreamApi } from '~/utils/API/agent'
 
+// 工具调用记录类型
+export interface ToolCall {
+    id: string
+    toolName: string
+    displayName: string
+    message: string
+    icon: string
+    category: string
+    status: 'calling' | 'completed'
+    startTime: Date
+    endTime?: Date
+}
+
 export const useAgent = () => {
     const userStore = useUserStore()
     const loading = ref(false)
@@ -10,6 +23,29 @@ export const useAgent = () => {
     const wsConnection = ref<WebSocket | null>(null)
     const streamingMessage = ref<string>('') // 流式消息累积
     const isStreaming = ref(false)
+    
+    // 工具调用记录
+    const toolCalls = ref<ToolCall[]>([])
+    
+    // 工具元数据缓存
+    const toolMetadata = ref<Record<string, any>>({})
+    
+    // 加载工具元数据
+    const loadToolMetadata = async () => {
+        try {
+            const response = await agentApi.getToolMetadata() as any
+            if (response?.success && response?.data) {
+                toolMetadata.value = response.data
+            }
+        } catch (err) {
+            console.error('Failed to load tool metadata:', err)
+        }
+    }
+    
+    // 在初始化时加载元数据
+    if (import.meta.client) {
+        loadToolMetadata()
+    }
 
     // 原有的普通消息发送（保留作为备用）
     const sendMessage = async (query: string) => {
@@ -69,6 +105,7 @@ export const useAgent = () => {
         agentStatus.value = '' // 重置 agent 状态
         error.value = null
         isStreaming.value = true
+        toolCalls.value = [] // 清空工具调用记录
 
         try {
             // 如果已有连接，先关闭
@@ -96,9 +133,42 @@ export const useAgent = () => {
                             if (data.status === 'thinking') {
                                 agentStatus.value = '正在思考...'
                             } else if (data.status === 'tool_calling') {
-                                agentStatus.value = `正在使用工具: ${data.data?.tool || '未知工具'}`
+                                // 使用工具元数据中的友好信息
+                                const toolData = data.data || {}
+                                const toolName = toolData.tool || '未知工具'
+                                const displayName = toolData.display_name || toolName
+                                const message = toolData.message || `正在调用 ${displayName}`
+                                const icon = toolData.icon || 'tool'
+                                const category = toolData.category || 'other'
+                                
+                                // 更新状态为用户友好的描述
+                                agentStatus.value = message
+                                
+                                // 添加工具调用记录
+                                toolCalls.value.push({
+                                    id: `${toolName}-${Date.now()}`,
+                                    toolName,
+                                    displayName,
+                                    message,
+                                    icon,
+                                    category,
+                                    status: 'calling',
+                                    startTime: new Date()
+                                })
                             } else if (data.status === 'tool_completed') {
-                                agentStatus.value = '工具调用完成'
+                                const toolData = data.data || {}
+                                const toolName = toolData.tool
+                                
+                                // 更新工具调用记录状态
+                                const targetCall = toolCalls.value.find(
+                                    call => call.toolName === toolName && call.status === 'calling'
+                                )
+                                if (targetCall) {
+                                    targetCall.status = 'completed'
+                                    targetCall.endTime = new Date()
+                                }
+                                
+                                agentStatus.value = ''
                             } else if (data.status === 'completed') {
                                 agentStatus.value = '' // 完成后清除状态
 
@@ -218,6 +288,10 @@ export const useAgent = () => {
         isStreaming,
         closeStream,
         wsConnection,
-        agentStatus
+        agentStatus,
+        
+        // 工具调用相关
+        toolCalls,
+        toolMetadata
     }
 }
