@@ -1,5 +1,5 @@
 // 创建专门用于 Agent API 的 fetch 实例
-const $agentApi = $fetch.create({
+export const $agentApi = $fetch.create({
     onRequest({ options }) {
         const config = useRuntimeConfig()
         const userStore = useUserStore()
@@ -41,6 +41,7 @@ export const agentStreamApi = {
      */
     createChatStream: (
         userId: string,
+        sessionId: string | number | undefined,
         onMessage: (data: any) => void,
         onError?: (error: Event) => void,
         onClose?: (event: CloseEvent) => void
@@ -50,7 +51,17 @@ export const agentStreamApi = {
 
         // 将 http/https 转换为 ws/wss
         const wsBase = config.public.agentBase.replace(/^http/, 'ws')
-        const wsUrl = `${wsBase}/ws/chat`
+        let wsUrl = `${wsBase}/ws/chat`
+
+        // Add query parameters
+        const params = new URLSearchParams()
+        if (sessionId) {
+            params.append('session_id', String(sessionId))
+        }
+
+        if (params.toString()) {
+            wsUrl += `?${params.toString()}`
+        }
 
         console.log('Connecting to WebSocket:', wsUrl)
 
@@ -103,12 +114,16 @@ export const agentStreamApi = {
      * @param ws WebSocket 实例
      * @param query 用户查询
      */
-    sendMessage: (ws: WebSocket, query: string) => {
+    sendMessage: (ws: WebSocket, query: string, sessionId?: number | string) => {
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({
+            const payload: any = {
                 type: 'message',
                 query: query
-            }))
+            }
+            if (sessionId) {
+                payload.session_id = sessionId
+            }
+            ws.send(JSON.stringify(payload))
         } else {
             console.error('WebSocket is not open. ReadyState:', ws.readyState)
             throw new Error('WebSocket connection is not open')

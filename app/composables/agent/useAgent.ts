@@ -1,15 +1,21 @@
 import { agentApi, agentStreamApi } from '~/utils/API/agent'
+import { useAgentStore } from '~/stores/agent'
+import { useSession } from '~/composables/agent/useSession'
 
 export const useAgent = () => {
     const userStore = useUserStore()
+    const agentStore = useAgentStore()
+    const { historyList } = useSession()
+
     const loading = ref(false)
     const error = ref<any>(null)
     const chatResult = ref<any>(null)
 
-    // WebSocket 相关状态
-    const wsConnection = ref<WebSocket | null>(null)
-    const streamingMessage = ref<string>('') // 流式消息累积
-    const isStreaming = ref(false)
+    // WebSocket 相关状态 - 使用 useState 以支持跨页面流保持
+    const wsConnection = useState<WebSocket | null>('agent_ws_connection', () => null)
+    const streamingMessage = useState<string>('agent_streaming_message', () => '')
+    const isStreaming = useState<boolean>('agent_is_streaming', () => false)
+    const agentStatus = useState<string>('agent_status', () => '')
 
     // 原有的普通消息发送（保留作为备用）
     const sendMessage = async (query: string) => {
@@ -52,9 +58,8 @@ export const useAgent = () => {
     }
 
     // WebSocket 流式消息发送
-    const agentStatus = ref<string>('') // 增加状态显示
 
-    const sendStreamMessage = (query: string) => {
+    const sendStreamMessage = (query: string, explicitSessionId?: number | string) => {
         if (!query.trim()) return
 
         if (!userStore.userInfo?.userId) {
@@ -63,6 +68,8 @@ export const useAgent = () => {
             }
             return
         }
+
+        const effectiveSessionId = explicitSessionId || agentStore.sessionId || undefined
 
         // 重置状态
         streamingMessage.value = ''
@@ -79,6 +86,7 @@ export const useAgent = () => {
             // 创建新的 WebSocket 连接
             wsConnection.value = agentStreamApi.createChatStream(
                 String(userStore.userInfo.userId),
+                effectiveSessionId, // 使用有效 Session ID
                 // onMessage 回调
                 (data) => {
                     console.log('Received WebSocket message:', data)
@@ -91,6 +99,41 @@ export const useAgent = () => {
 
                     // 2. 处理 JSON 结构消息
                     switch (data.type) {
+
+                        case 'session_created':
+                            const { sessionId: newSessionId, title } = data.data;
+                            console.log('🎉 Session Created:', newSessionId, title);
+
+                            // 1. Update Pinia Store
+                            agentStore.setSession(newSessionId, title);
+
+                            // 2. Update History List (unshift to top)
+                            if (userStore.userInfo?.userId) {
+                                historyList.value.unshift({
+                                    id: newSessionId,
+                                    user_id: Number(userStore.userInfo.userId),
+                                    title: title || '新对话',
+                                    created_at: new Date().toISOString()
+                                });
+                            }
+                            break;
+
+                        case 'session_updated':
+                            const { sessionId: updatedId, title: newTitle } = data.data;
+                            console.log('📝 Title Updated:', newTitle);
+
+                            // 1. Update Pinia Store (if current)
+                            if (agentStore.sessionId == updatedId) {
+                                agentStore.updateTitle(newTitle);
+                            }
+
+                            // 2. Update History List
+                            const sessionItem = historyList.value.find(s => s.id === updatedId);
+                            if (sessionItem) {
+                                sessionItem.title = newTitle;
+                            }
+                            break;
+
                         case 'status':
                             // 处理状态更新 (thinking, tool_calling, etc.)
                             if (data.status === 'thinking') {
@@ -177,7 +220,7 @@ export const useAgent = () => {
             // 等待连接建立后发送消息
             wsConnection.value.addEventListener('open', () => {
                 if (wsConnection.value) {
-                    agentStreamApi.sendMessage(wsConnection.value, query)
+                    agentStreamApi.sendMessage(wsConnection.value, query, effectiveSessionId)
                 }
             })
 
@@ -200,10 +243,10 @@ export const useAgent = () => {
         }
     }
 
-    // 组件卸载时清理
-    onUnmounted(() => {
+    // 组件卸载时清理 - Commented out for persistent stream
+    /* onUnmounted(() => {
         closeStream()
-    })
+    }) */
 
     return {
         // 原有的普通消息

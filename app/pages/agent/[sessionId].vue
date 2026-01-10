@@ -29,17 +29,46 @@
 import { useAgent } from '~/composables/agent/useAgent'
 import type { Message } from '~/components/Agent/Homepage/ContentCo.vue'
 
+import { useAgentStore } from '~/stores/agent'
+
 definePageMeta({
     layout: 'agent'
 })
 
-
+const route = useRoute()
+const sessionId = route.params.sessionId as string
 const colorMode = useColorMode()
+const agentStore = useAgentStore()
 
 // 默认设置为暗色模式
 onMounted(() => {
+    agentStore.setSession(sessionId)
+
     if (colorMode.preference !== 'dark') {
         colorMode.preference = 'dark'
+    }
+
+    // Check for initial message from index page
+    const initialMessage = route.query.initialMessage as string
+    if (initialMessage) {
+        // Check if stream is already active (from index.vue using persisted state)
+        if (isStreaming.value) {
+            // Stream active from index.vue, attach to it
+            messages.value.push({ role: 'user', content: initialMessage })
+            messages.value.push({
+                role: 'assistant',
+                content: streamingMessage.value || '',
+                isStreaming: true
+            })
+        } else {
+            // Not streaming, start fresh
+            handleSendMessage(initialMessage)
+        }
+
+        // Remove query param to clean up URL
+        const router = useRouter()
+        // Use replace to avoid browser history pollution
+        router.replace({ path: route.path, query: {} })
     }
 })
 
@@ -64,8 +93,8 @@ const handleSendMessage = (content: string) => {
         isStreaming: true
     })
 
-    // Start streaming
-    sendStreamMessage(content)
+    // Start streaming within this session
+    sendStreamMessage(content, sessionId)
 }
 
 // Watch streaming content update
@@ -88,8 +117,10 @@ watch(isStreaming, (streaming) => {
     }
 })
 
-// Clean up on unmount
+// Clean up on unmount - Commented out for persistent stream across navigation
+/* 
 onUnmounted(() => {
     closeStream()
-})
+}) 
+*/
 </script>
