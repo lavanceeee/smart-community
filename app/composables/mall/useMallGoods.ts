@@ -174,7 +174,7 @@ export const useMallGoods = () => {
             const res = await addToCartApi(data) as any
             if (res.code == 200) {
                 ElMessage.success('已加入购物车');
-                return true;
+                return res.data || true; // Return data if available, else true
             }
             else {
                 ElMessage.error(res.message);

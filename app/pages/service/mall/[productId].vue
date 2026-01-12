@@ -121,7 +121,7 @@
                                         </div>
                                         <div class="text-[10px] text-slate-400 mt-1 italic pl-5">营业时间: {{
                                             store.businessHours
-                                        }}</div>
+                                            }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                     class="flex-1 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all">
                     加入购物车
                 </button>
-                <button
+                <button @click="handleBuyNow"
                     class="flex-1 bg-gradient-to-r from-[#ff5000] to-[#ff0036] text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all">
                     立即购买
                 </button>
@@ -210,6 +210,7 @@ const product = ref<any>(null)
 const loading = ref(false)
 
 import { useMallGoods } from '@/composables/mall/useMallGoods'
+import { useGoodsOrder } from '@/composables/mall/useGoodsOrder'
 const { fetchDetail, fetchCollect, fetchCancelCollect, fetchProductImages, fetchAddToCart } = useMallGoods();
 
 const productImages = ref<any[]>([])
@@ -266,6 +267,9 @@ const handleCollect = async (productId: string) => {
     }
 }
 
+
+const { createOrder } = useGoodsOrder()
+
 const handleAddToCart = async () => {
     if (!selectedStoreId.value) {
         ElMessage.warning('请选择门店');
@@ -283,6 +287,87 @@ const handleAddToCart = async () => {
     };
 
     await fetchAddToCart(data);
+}
+
+const { cartList, fetchCartList } = useMallGoods(); // Destructure cartList and fetchCartList
+
+const handleBuyNow = async () => {
+    if (!selectedStoreId.value) {
+        ElMessage.warning('请选择门店');
+        return;
+    }
+    if (quantity.value < 1) {
+        ElMessage.warning('请选择购买数量');
+        return;
+    }
+
+    const data = {
+        productId: productId,
+        storeId: selectedStoreId.value,
+        quantity: quantity.value
+    };
+
+    // 1. Add to cart first
+    loading.value = true;
+    const res = await fetchAddToCart(data); // Returns data or true
+
+    let cartItemId: number | null = null
+
+    // Try to get cartItemId from response (if backend returns it)
+    if (typeof res === 'object') {
+        if (res.cartId) cartItemId = res.cartId;
+        else if (res.id) cartItemId = res.id;
+        // Some backends return data directly
+    }
+
+    // If not found, fetch cart list to find the item matching product and store
+    // This is a fallback strategy if API doesn't return the ID
+    if (!cartItemId) {
+        await fetchCartList()
+        const found = cartList.value.find((item: any) =>
+            String(item.productId) === String(productId) &&
+            Number(item.storeId) === Number(selectedStoreId.value)
+        )
+        if (found) {
+            cartItemId = found.cartId
+        }
+    }
+
+    loading.value = false;
+
+    if (!cartItemId) {
+        ElMessage.error('结算失败：无法获取购物车商品信息');
+        return;
+    }
+
+    // 2. Confirm Checkout
+    try {
+        await ElMessageBox.confirm(
+            `确定要立即购买该商品吗？`,
+            '购买确认',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }
+        )
+
+        // 3. Create Order
+        // Assuming createOrder takes cartItemIds array
+        const orderRes = await createOrder(Number(selectedStoreId.value), [cartItemId], '立即购买')
+
+        if (orderRes) {
+            // Success
+            ElMessage.success('下单成功');
+            navigateTo('/service/mall/mo')
+        }
+
+    } catch (e) {
+        // Cancelled or error
+        if (e !== 'cancel') {
+            console.error(e)
+        }
+    }
 }
 
 </script>

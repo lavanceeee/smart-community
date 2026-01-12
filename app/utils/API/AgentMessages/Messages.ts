@@ -12,3 +12,23 @@ export const MessagesApi = {
         })
     }
 }
+
+export const get_session_messages = (sessionId: string | number) => {
+    return $agentApi('/message/get-all-messages', {
+        method: 'GET',
+        query: {
+            session_id: sessionId
+        }
+    });
+}
+
+//删除会话
+export const deleteSession = (session_id: string | number) => {
+    return $agentApi('/delete-session', {
+        method: 'DELETE',
+        query: {
+            session_id: session_id
+        }
+    });
+}
+

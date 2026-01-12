@@ -36,14 +36,17 @@
 
             <!-- List -->
             <div v-else class="flex-1 overflow-y-auto px-2 py-2 space-y-1">
-                <div v-for="item in historyList" :key="item.id"
-                    class="p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#2A2B2D] cursor-pointer group transition-all border border-transparent hover:border-gray-100 dark:hover:border-gray-700/50">
+                <div v-for="item in historyList" :key="item.id" @click="handleSessionClick(item.id)"
+                    class="p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#2A2B2D] cursor-pointer group transition-all border border-transparent hover:border-gray-100 dark:hover:border-gray-700/50 relative pr-8">
                     <div class="text-xs text-gray-700 dark:text-gray-200 truncate font-medium">
                         {{ item.title || 'New Chat' }}
                     </div>
                     <div class="text-[10px] text-gray-400 mt-1 flex justify-between items-center opacity-70">
                         <span>{{ formatDate(item.created_at) }}</span>
                     </div>
+
+                    <!-- Session context menu -->
+                    <AgentSiderBarSessionRelated :session-id="item.id" />
                 </div>
             </div>
         </div>
@@ -56,6 +59,10 @@ import dayjs from 'dayjs'
 
 const isExpanded = ref(false)
 const { historyList, loading, error, fetchHistory } = useSession()
+
+const handleSessionClick = (id: number) => {
+    navigateTo(`/agent/${id}`)
+}
 
 const toggleSidebar = async () => {
     isExpanded.value = !isExpanded.value
