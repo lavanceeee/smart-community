@@ -3,30 +3,6 @@
         <!-- Main Detail Container -->
         <div class="max-w-[1190px] mx-auto pt-4 px-4 md:px-0">
 
-            <!-- 1. Shop Header (Simplified) -->
-            <div
-                class="bg-white dark:bg-slate-800 rounded p-4 mb-2 flex items-center justify-between shadow-sm border border-slate-100 dark:border-slate-700">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center overflow-hidden border border-orange-100">
-                        <Icon name="lucide:store" class="text-[#ff5000]" size="24" />
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-slate-800 dark:text-white">智慧社区自营精品网点</span>
-                        <div class="flex items-center gap-2 mt-0.5">
-                            <span class="text-[10px] bg-[#ff5000] text-white px-1 rounded-sm">官方</span>
-                            <span class="text-xs text-slate-400">产地直供 · 社区速达</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button @click="router.back()"
-                        class="px-4 py-1.5 rounded-full border border-slate-200 dark:border-slate-600 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors">
-                        返回
-                    </button>
-                </div>
-            </div>
-
             <!-- 2. Main Product Content -->
             <div class="flex flex-col md:flex-row gap-6 bg-white dark:bg-slate-800 rounded p-6 shadow-sm min-h-[500px]">
 
@@ -92,8 +68,6 @@
                             <div class="flex-1 flex flex-col gap-3">
                                 <div class="flex items-center gap-2">
                                     <span class="text-slate-500 shrink-0">配送说明</span>
-                                    <span class="text-slate-800 dark:text-slate-200 font-medium">预计2小时内送达 |
-                                        产地直接发货</span>
                                 </div>
                                 <!-- Available Stores -->
                                 <div v-if="product?.availableStores?.length" class="space-y-2">
@@ -119,9 +93,9 @@
                                         <div class="flex items-center gap-1 text-xs text-slate-500 pl-5">
                                             <Icon name="lucide:map-pin" size="12" /> {{ store.address }}
                                         </div>
-                                        <div class="text-[10px] text-slate-400 mt-1 italic pl-5">营业时间: {{
+                                        <div class="text-[10px] text-slate-400 mt-1 pl-5">营业时间: {{
                                             store.businessHours
-                                            }}</div>
+                                        }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -217,6 +191,10 @@ const productImages = ref<any[]>([])
 const activeImage = ref('')
 const quantity = ref(1)
 const selectedStoreId = ref<number | null>(null)
+
+definePageMeta({
+    layout: 'mall'
+})
 
 const loadData = async () => {
     loading.value = true

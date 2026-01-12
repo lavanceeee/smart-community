@@ -1,14 +1,6 @@
 <template>
   <header
-    class="w-full bg-white dark:bg-[oklch(13%_0.028_261.692)] shadow-sm sticky top-10 z-[40] transition-colors duration-300">
-    <div
-      class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 h-8 flex items-center text-[11px] text-slate-500">
-      <div class="w-full px-4 flex justify-end gap-4">
-        <NuxtLink to="/service/mall/mo" class="hover:text-[#ff5000]">我的订单</NuxtLink>
-        <NuxtLink to="/service/mall/chart" class="hover:text-[#ff5000]">购物车</NuxtLink>
-      </div>
-    </div>
-
+    class="w-full bg-white dark:bg-[oklch(13%_0.028_261.692)] shadow-sm sticky top-18 z-[40] transition-colors duration-300">
     <div class="max-w-[1200px] mx-auto px-4 py-4 flex flex-col items-center justify-center gap-3">
 
       <div class="flex w-full max-w-[850px]">
@@ -32,7 +24,21 @@
 </template>
 
 <script setup lang="ts">
-const searchQuery = ref('')
+import { useMallGoods } from '@/composables/mall/useMallGoods'
+
+const { handleSearch: executeSearch, searchKeyword } = useMallGoods()
+
+// Sync local state maybe? Or just use local ref. 
+// Let's keep local ref to avoid constant fetching while typing if not debounced.
+const searchQuery = ref(searchKeyword.value || '')
+
+// Watch external changes to keyword?
+watch(() => searchKeyword.value, (newVal) => {
+  if (newVal !== searchQuery.value) {
+    searchQuery.value = newVal
+  }
+})
+
 const colorMode = useColorMode()
 
 // 根据你提供的数据和文件名进行配置
@@ -48,8 +54,10 @@ const mallIcons = [
 ]
 
 const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    console.log('正在搜索:', searchQuery.value)
-  }
+  // Navigate to search page with query
+  navigateTo({
+    path: '/service/mall/search',
+    query: { q: searchQuery.value }
+  })
 }
 </script>
