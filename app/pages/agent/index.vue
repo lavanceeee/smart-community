@@ -4,8 +4,9 @@
         <InspiraCoSrartsbackground v-if="$colorMode.value === 'dark'" :factor="0.05" :speed="50" star-color="#fff"
             class="h-full">
             <div class="h-full flex flex-col relative">
-                <AgentHomepageSiderBarCo />
-                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls" class="flex-1 z-10" />
+                <AgentSiderBarSiderBarCo />
+                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls"
+                    class="flex-1 z-10" />
                 <div
                     class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-[#131314] via-[#131314]">
                     <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
@@ -15,8 +16,9 @@
 
         <!-- Plain White Background (Light Mode) -->
         <div v-else class="h-full flex flex-col relative bg-white">
-            <AgentHomepageSiderBarCo />
-            <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls" class="flex-1 z-10" />
+            <AgentSiderBarSiderBarCo />
+            <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls"
+                class="flex-1 z-10" />
             <div
                 class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-white via-white">
                 <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
@@ -28,6 +30,7 @@
 <script setup lang="ts">
 import { useAgent } from '~/composables/agent/useAgent'
 import type { Message } from '~/components/Agent/Homepage/ContentCo.vue'
+import AgentSiderBarSiderBarCo from '~/components/Agent/SiderBar/SiderBarCo.vue'
 
 definePageMeta({
     layout: 'agent'

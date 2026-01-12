@@ -1,6 +1,6 @@
 <template>
     <div class="pt-8 pb-4 mb-6">
-        <div class="max-w-[1000px] mx-auto px-4 flex items-center justify-between">
+        <div class="max-w-[1300px] mx-auto px-4 flex items-center justify-between">
             <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">访客登记</h1>
 
             <button @click="$emit('create')"

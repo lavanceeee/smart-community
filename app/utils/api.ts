@@ -244,6 +244,80 @@ export const updateCartQuantityApi = (data: any) => {
   })
 }
 
+//搜索商品
+//api/mall/list
+/**
+ * 查询接口{
+  "categoryId": 0,
+  "keyword": "荔枝",
+  "pageNum": 0,
+  "pageSize": 0
+}
+
+响应
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "pages": 1,
+    "total": 1,
+    "list": [
+      {
+        "productId": 34,
+        "productName": "妃子笑荔枝（3斤装）",
+        "description": "海南妃子笑，核小肉厚，当季新鲜采摘",
+        "price": 49.9,
+        "coverImg": "https://xxx.com/img/litchi.jpg",
+        "sales": null,
+        "isCollected": false
+      }
+    ]
+  },
+  "timestamp": 1768185908640
+}
+ */
+export const searchMallProductApi = (data: any) => {
+  return $api('/api/mall/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 
+ * 查询商品的所有可自提门店
+ * 
+/api/mall/stores
+
+ * 请求参数{
+  "productId": 35,
+  "pageNum": 0,
+  "pageSize": 0
+}
+ * 返回
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": [
+    {
+      "storeId": 1,
+      "storeName": "智慧社区-花城店2",
+      "address": "智慧社区-花城店2",
+      "businessHours": "",
+      "contactPhone": "",
+      "status": null
+    }
+  ],
+  "timestamp": 1768188037165
+}
+ */
+
+export const searchMallStoreApi = (data: any) => {
+  return $api('/api/mall/stores', {
+    method: 'POST',
+    body: data
+  })
+}
 
 
 
@@ -1068,10 +1142,10 @@ export const getMyCollectedForumPostApi = (params: any) => {
  * }
  */
 export const getFriendListApi = (params: any) => {
-    return $api('/api/friend/list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/friend/list', {
+    method: 'GET',
+    params
+  })
 }
 
 /**
@@ -1085,10 +1159,10 @@ export const getFriendListApi = (params: any) => {
  * 返回：同好友列表格式
  */
 export const getFriendRequestsApi = (params: any) => {
-    return $api('/api/friend/requests', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/friend/requests', {
+    method: 'GET',
+    params
+  })
 }
 
 /**
@@ -1120,10 +1194,10 @@ export const getFriendRequestsApi = (params: any) => {
  * }
  */
 export const searchUsersApi = (data: any) => {
-    return $api('/api/friend/search', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/friend/search', {
+    method: 'POST',
+    body: data
+  })
 }
 
 /**
@@ -1137,10 +1211,10 @@ export const searchUsersApi = (data: any) => {
  * }
  */
 export const sendFriendRequestApi = (data: any) => {
-    return $api('/api/friend/request', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/friend/request', {
+    method: 'POST',
+    body: data
+  })
 }
 
 /**
@@ -1151,9 +1225,9 @@ export const sendFriendRequestApi = (data: any) => {
  * - friendId: 好友关系ID
  */
 export const acceptFriendRequestApi = (friendId: string | number) => {
-    return $api(`/api/friend/${friendId}/accept`, {
-        method: 'POST'
-    })
+  return $api(`/api/friend/${friendId}/accept`, {
+    method: 'POST'
+  })
 }
 
 /**
@@ -1164,9 +1238,9 @@ export const acceptFriendRequestApi = (friendId: string | number) => {
  * - friendId: 好友关系ID
  */
 export const rejectFriendRequestApi = (friendId: string | number) => {
-    return $api(`/api/friend/${friendId}/reject`, {
-        method: 'POST'
-    })
+  return $api(`/api/friend/${friendId}/reject`, {
+    method: 'POST'
+  })
 }
 
 /**
@@ -1177,9 +1251,9 @@ export const rejectFriendRequestApi = (friendId: string | number) => {
  * - friendUserId: 好友用户ID
  */
 export const deleteFriendApi = (friendUserId: string | number) => {
-    return $api(`/api/friend/${friendUserId}`, {
-        method: 'DELETE'
-    })
+  return $api(`/api/friend/${friendUserId}`, {
+    method: 'DELETE'
+  })
 }
 
 
@@ -1194,10 +1268,10 @@ export const deleteFriendApi = (friendUserId: string | number) => {
  * - pageSize: 每页大小
  */
 export const getNotificationListApi = (params: { pageNum?: number; pageSize?: number }) => {
-    return $api('/api/notification/list', {
-        method: 'GET',
-        params
-    })
+  return $api('/api/notification/list', {
+    method: 'GET',
+    params
+  })
 }
 
 /**
@@ -1208,9 +1282,9 @@ export const getNotificationListApi = (params: { pageNum?: number; pageSize?: nu
  * - notificationId: 通知ID
  */
 export const markNotificationReadApi = (notificationId: number) => {
-    return $api(`/api/notification/${notificationId}/read`, {
-        method: 'POST'
-    })
+  return $api(`/api/notification/${notificationId}/read`, {
+    method: 'POST'
+  })
 }
 
 // ==================== 私信管理 ====================
@@ -1226,10 +1300,10 @@ export const markNotificationReadApi = (notificationId: number) => {
  * }
  */
 export const sendMessageApi = (data: any) => {
-    return $api('/api/message/send', {
-        method: 'POST',
-        body: data
-    })
+  return $api('/api/message/send', {
+    method: 'POST',
+    body: data
+  })
 }
 
 /**
@@ -1242,10 +1316,10 @@ export const sendMessageApi = (data: any) => {
  * - pageSize: 每页大小
  */
 export const getChatHistoryApi = (otherUserId: string | number, params: any) => {
-    return $api(`/api/message/chat/${otherUserId}`, {
-        method: 'GET',
-        params
-    })
+  return $api(`/api/message/chat/${otherUserId}`, {
+    method: 'GET',
+    params
+  })
 }
 
 /**
@@ -1253,9 +1327,9 @@ export const getChatHistoryApi = (otherUserId: string | number, params: any) => 
  * POST /api/message/{messageId}/read
  */
 export const markMessageReadApi = (messageId: string | number) => {
-    return $api(`/api/message/${messageId}/read`, {
-        method: 'POST'
-    })
+  return $api(`/api/message/${messageId}/read`, {
+    method: 'POST'
+  })
 }
 
 /**
@@ -1263,9 +1337,9 @@ export const markMessageReadApi = (messageId: string | number) => {
  * POST /api/message/read-all/{otherUserId}
  */
 export const markAllMessagesReadApi = (otherUserId: string | number) => {
-    return $api(`/api/message/read-all/${otherUserId}`, {
-        method: 'POST'
-    })
+  return $api(`/api/message/read-all/${otherUserId}`, {
+    method: 'POST'
+  })
 }
 
 /**
@@ -1273,9 +1347,9 @@ export const markAllMessagesReadApi = (otherUserId: string | number) => {
  * GET /api/message/unread-count
  */
 export const getUnreadCountApi = () => {
-    return $api('/api/message/unread-count', {
-        method: 'GET'
-    })
+  return $api('/api/message/unread-count', {
+    method: 'GET'
+  })
 }
 
 /**
@@ -1283,9 +1357,9 @@ export const getUnreadCountApi = () => {
  * GET /api/message/online/{userId}
  */
 export const checkUserOnlineApi = (userId: string | number) => {
-    return $api(`/api/message/online/${userId}`, {
-        method: 'GET'
-    })
+  return $api(`/api/message/online/${userId}`, {
+    method: 'GET'
+  })
 }
 
 /**
@@ -1293,9 +1367,9 @@ export const checkUserOnlineApi = (userId: string | number) => {
  * DELETE /api/message/{messageId}
  */
 export const deleteMessageApi = (messageId: string | number) => {
-    return $api(`/api/message/${messageId}`, {
-        method: 'DELETE'
-    })
+  return $api(`/api/message/${messageId}`, {
+    method: 'DELETE'
+  })
 }
 
 

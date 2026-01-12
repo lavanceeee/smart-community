@@ -1,5 +1,5 @@
 import { agentApi } from '~/utils/API/agent'
-import { MessagesApi } from '~/utils/API/AgentMessages/Messages'
+import { MessagesApi, get_session_messages, deleteSession } from '~/utils/API/AgentMessages/Messages'
 
 export interface Session {
     id: number
@@ -83,11 +83,43 @@ export const useSession = () => {
         }
     }
 
+    const fetchSessionMessages = async (sessionId: string | number) => {
+        try {
+            const res = await get_session_messages(sessionId) as any
+            if (res.code == 200 || res.code === '200') {
+                return res.data
+            }
+            return []
+        } catch (err) {
+            console.error('Failed to fetch session messages:', err)
+            return []
+        }
+    }
+
+    const removeSession = async (sessionId: number) => {
+        try {
+            const res = await deleteSession(sessionId) as any
+            if (res.code === 200 || res.code === '200') {
+                historyList.value = historyList.value.filter(s => s.id !== sessionId)
+                ElMessage.success('会话删除成功')
+                return true
+            }
+            ElMessage.error(res.message || '删除失败')
+            return false
+        } catch (e: any) {
+            console.error(e)
+            ElMessage.error(e.message || '删除失败')
+            return false
+        }
+    }
+
     return {
         historyList,
         loading,
         error,
         fetchHistory,
-        createSession
+        createSession,
+        fetchSessionMessages,
+        removeSession
     }
 }

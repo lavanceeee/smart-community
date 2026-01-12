@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <div class="max-w-[1000px] mx-auto px-4">
+        <div class="max-w-[1300px] mx-auto px-4">
             <AllParking @apply="handleApply" />
         </div>
 

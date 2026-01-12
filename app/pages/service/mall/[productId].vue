@@ -3,30 +3,6 @@
         <!-- Main Detail Container -->
         <div class="max-w-[1190px] mx-auto pt-4 px-4 md:px-0">
 
-            <!-- 1. Shop Header (Simplified) -->
-            <div
-                class="bg-white dark:bg-slate-800 rounded p-4 mb-2 flex items-center justify-between shadow-sm border border-slate-100 dark:border-slate-700">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center overflow-hidden border border-orange-100">
-                        <Icon name="lucide:store" class="text-[#ff5000]" size="24" />
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-slate-800 dark:text-white">智慧社区自营精品网点</span>
-                        <div class="flex items-center gap-2 mt-0.5">
-                            <span class="text-[10px] bg-[#ff5000] text-white px-1 rounded-sm">官方</span>
-                            <span class="text-xs text-slate-400">产地直供 · 社区速达</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button @click="router.back()"
-                        class="px-4 py-1.5 rounded-full border border-slate-200 dark:border-slate-600 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors">
-                        返回
-                    </button>
-                </div>
-            </div>
-
             <!-- 2. Main Product Content -->
             <div class="flex flex-col md:flex-row gap-6 bg-white dark:bg-slate-800 rounded p-6 shadow-sm min-h-[500px]">
 
@@ -92,8 +68,6 @@
                             <div class="flex-1 flex flex-col gap-3">
                                 <div class="flex items-center gap-2">
                                     <span class="text-slate-500 shrink-0">配送说明</span>
-                                    <span class="text-slate-800 dark:text-slate-200 font-medium">预计2小时内送达 |
-                                        产地直接发货</span>
                                 </div>
                                 <!-- Available Stores -->
                                 <div v-if="product?.availableStores?.length" class="space-y-2">
@@ -119,7 +93,7 @@
                                         <div class="flex items-center gap-1 text-xs text-slate-500 pl-5">
                                             <Icon name="lucide:map-pin" size="12" /> {{ store.address }}
                                         </div>
-                                        <div class="text-[10px] text-slate-400 mt-1 italic pl-5">营业时间: {{
+                                        <div class="text-[10px] text-slate-400 mt-1 pl-5">营业时间: {{
                                             store.businessHours
                                         }}</div>
                                     </div>
@@ -191,7 +165,7 @@
                     class="flex-1 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all">
                     加入购物车
                 </button>
-                <button
+                <button @click="handleBuyNow"
                     class="flex-1 bg-gradient-to-r from-[#ff5000] to-[#ff0036] text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all">
                     立即购买
                 </button>
@@ -210,12 +184,17 @@ const product = ref<any>(null)
 const loading = ref(false)
 
 import { useMallGoods } from '@/composables/mall/useMallGoods'
+import { useGoodsOrder } from '@/composables/mall/useGoodsOrder'
 const { fetchDetail, fetchCollect, fetchCancelCollect, fetchProductImages, fetchAddToCart } = useMallGoods();
 
 const productImages = ref<any[]>([])
 const activeImage = ref('')
 const quantity = ref(1)
 const selectedStoreId = ref<number | null>(null)
+
+definePageMeta({
+    layout: 'mall'
+})
 
 const loadData = async () => {
     loading.value = true
@@ -266,6 +245,9 @@ const handleCollect = async (productId: string) => {
     }
 }
 
+
+const { createOrder } = useGoodsOrder()
+
 const handleAddToCart = async () => {
     if (!selectedStoreId.value) {
         ElMessage.warning('请选择门店');
@@ -283,6 +265,87 @@ const handleAddToCart = async () => {
     };
 
     await fetchAddToCart(data);
+}
+
+const { cartList, fetchCartList } = useMallGoods(); // Destructure cartList and fetchCartList
+
+const handleBuyNow = async () => {
+    if (!selectedStoreId.value) {
+        ElMessage.warning('请选择门店');
+        return;
+    }
+    if (quantity.value < 1) {
+        ElMessage.warning('请选择购买数量');
+        return;
+    }
+
+    const data = {
+        productId: productId,
+        storeId: selectedStoreId.value,
+        quantity: quantity.value
+    };
+
+    // 1. Add to cart first
+    loading.value = true;
+    const res = await fetchAddToCart(data); // Returns data or true
+
+    let cartItemId: number | null = null
+
+    // Try to get cartItemId from response (if backend returns it)
+    if (typeof res === 'object') {
+        if (res.cartId) cartItemId = res.cartId;
+        else if (res.id) cartItemId = res.id;
+        // Some backends return data directly
+    }
+
+    // If not found, fetch cart list to find the item matching product and store
+    // This is a fallback strategy if API doesn't return the ID
+    if (!cartItemId) {
+        await fetchCartList()
+        const found = cartList.value.find((item: any) =>
+            String(item.productId) === String(productId) &&
+            Number(item.storeId) === Number(selectedStoreId.value)
+        )
+        if (found) {
+            cartItemId = found.cartId
+        }
+    }
+
+    loading.value = false;
+
+    if (!cartItemId) {
+        ElMessage.error('结算失败：无法获取购物车商品信息');
+        return;
+    }
+
+    // 2. Confirm Checkout
+    try {
+        await ElMessageBox.confirm(
+            `确定要立即购买该商品吗？`,
+            '购买确认',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }
+        )
+
+        // 3. Create Order
+        // Assuming createOrder takes cartItemIds array
+        const orderRes = await createOrder(Number(selectedStoreId.value), [cartItemId], '立即购买')
+
+        if (orderRes) {
+            // Success
+            ElMessage.success('下单成功');
+            navigateTo('/service/mall/mo')
+        }
+
+    } catch (e) {
+        // Cancelled or error
+        if (e !== 'cancel') {
+            console.error(e)
+        }
+    }
 }
 
 </script>

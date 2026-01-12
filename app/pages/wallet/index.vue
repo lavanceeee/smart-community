@@ -1,26 +1,21 @@
 <template>
     <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
         <!-- Header -->
-        <div
-            class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-4 py-4 sticky top-0 z-10">
-            <div class="max-w-[1500px] mx-auto flex items-center gap-4">
-                <NuxtLink to="/profile"
-                    class="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full text-slate-500 transition-colors">
-                    <Icon name="lucide:arrow-left" size="20" />
-                </NuxtLink>
+        <div class="bg-white dark:bg-slate-900 px-4 py-4 sticky top-10 z-10">
+            <div class="max-w-[1300px] mx-auto flex items-center gap-4">
                 <h1 class="text-lg font-bold text-slate-800 dark:text-slate-100">我的钱包</h1>
             </div>
         </div>
 
-        <div class="max-w-[1500px] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="max-w-[1300px] mx-auto py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Balance Card -->
             <div class="lg:col-span-1 space-y-6">
                 <div
-                    class="bg-gradient-to-br from-[#ff5000] to-[#ff8c00] rounded-[2rem] p-8 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden h-[300px] flex flex-col justify-between">
+                    class="bg-gradient-to-br from-[#ff5000] to-[#ff8c00] rounded-3xl p-8 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden h-[300px] flex flex-col justify-between">
                     <div class="absolute top-0 right-0 p-8 opacity-20">
                         <Icon name="lucide:wallet" size="120" />
                     </div>
-                    <div class="relative z-10">
+                    <div class="relative z-5">
                         <p class="text-sm font-medium opacity-80 mb-2">账户余额 (元)</p>
                         <h2 class="text-4xl font-black mb-2">
                             {{ loading && !walletInfo ? '---' : (walletInfo?.balance || 0).toFixed(2) }}
@@ -29,7 +24,7 @@
                             冻结金额: ¥{{ walletInfo.frozenAmount.toFixed(2) }}
                         </p>
                     </div>
-                    <div class="relative z-10 flex gap-4">
+                    <div class="relative z-5 flex gap-4">
                         <button @click="showRecharge = true"
                             class="flex-1 py-3 px-6 bg-white text-[#ff5000] rounded-2xl font-bold hover:bg-slate-50 transition-colors shadow-lg">充值</button>
                         <button
@@ -45,7 +40,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总消费</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalExpense || 0
-                        }}</p>
+                            }}</p>
                     </div>
                     <div
                         class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
@@ -53,7 +48,7 @@
                             class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2 text-opacity-80">
                             总充值</p>
                         <p class="text-xl font-black text-slate-800 dark:text-white">¥{{ walletInfo?.totalRecharge || 0
-                        }}</p>
+                            }}</p>
                     </div>
                 </div>
             </div>
@@ -67,13 +62,6 @@
                             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">账单明细</h3>
                             <p class="text-[10px] text-slate-400 font-medium uppercase tracking-[0.2em] mt-0.5">
                                 Transaction History</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs text-slate-500 cursor-pointer hover:bg-slate-100 transition-colors border border-slate-100 dark:border-slate-700">
-                                <Icon name="lucide:list-filter" size="14" />
-                                <span>全部类型</span>
-                            </div>
                         </div>
                     </div>
 

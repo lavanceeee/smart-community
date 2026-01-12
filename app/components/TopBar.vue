@@ -5,7 +5,7 @@
       <nuxt-link to="/">
         <div class="text-sm font-bold text-[#ff5000] flex items-center gap-2">
           <Icon name="lucide:layout-grid" size="14" class="shrink-0" />
-          <div class="flex items-center w-[150px]">
+          <div class="flex items-center w-[190px]">
             <span>{{ titleParts.base }}</span>
             <Transition name="title-slide" mode="out-in">
               <span :key="titleParts.sub" class="whitespace-nowrap block">{{ titleParts.sub }}</span>

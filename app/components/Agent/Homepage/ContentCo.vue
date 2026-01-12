@@ -24,8 +24,8 @@
             </div>
 
             <!-- Tool Calls History (只在最新的 assistant 消息中显示) -->
-            <div v-if="msg.role === 'assistant' && toolCalls && toolCalls.length > 0 && index === messages.length - 1" 
-                 class="max-w-[85%] mb-3">
+            <div v-if="msg.role === 'assistant' && toolCalls && toolCalls.length > 0 && index === messages.length - 1"
+                class="max-w-[85%] mb-3">
                 <AgentHomepageToolCallHistory :tool-calls="toolCalls" />
             </div>
 
@@ -43,11 +43,9 @@
                 <span v-if="msg.role === 'assistant' && msg.isStreaming && !agentStatus"
                     class="inline-block w-1.5 h-4 ml-0.5 align-middle bg-emerald-500 animate-pulse rounded-full"></span>
             </div>
-
-
         </div>
 
-        <!-- Empty State -->
+        <!-- 消息为空 -->
         <div v-if="messages.length === 0"
             class="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 space-y-6 pb-20">
             <div
@@ -56,6 +54,7 @@
             </div>
             <InspiraCoTextGenerateEffect words="Ready to help, ask me anything!" class="font-medium text-2xl" />
         </div>
+
     </div>
 </template>
 

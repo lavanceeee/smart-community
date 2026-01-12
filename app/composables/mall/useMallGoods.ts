@@ -3,14 +3,17 @@ import { getCategoryListApi } from '@/utils/API/goods'
 
 export const useMallGoods = () => {
     // State
-    const goodsList = ref<any[]>([])
-    const subsidyList = ref<any[]>([])
-    const cartList = ref<any[]>([])
-    const categoryList = ref<any[]>([])
+    // State - Converted to useState for global sharing across components (TopBar <-> GoodsList)
+    const goodsList = useState<any[]>('mall_goods_list', () => [])
+    const subsidyList = useState<any[]>('mall_subsidy_list', () => [])
+    const cartList = useState<any[]>('mall_cart_list', () => [])
+    const categoryList = useState<any[]>('mall_category_list', () => [])
+    const searchKeyword = useState<string>('mall_search_keyword', () => '')
+    const searchCategoryId = useState<number | null>('mall_search_category_id', () => null)
 
-    const loading = ref(false)
-    const currentPage = ref(1)
-    const total = ref(0)
+    const loading = useState<boolean>('mall_loading', () => false)
+    const currentPage = useState<number>('mall_current_page', () => 1)
+    const total = useState<number>('mall_total', () => 0)
     const pageSize = 25
 
     // --- Actions ---
@@ -54,10 +57,14 @@ export const useMallGoods = () => {
         const targetSize = size || pageSize
 
         try {
-            const res = await getMallGoodsListApi({
+            const payload: any = {
                 pageNum: targetPage,
-                pageSize: targetSize
-            }) as any
+                pageSize: targetSize,
+            }
+            if (searchKeyword.value) payload.keyword = searchKeyword.value
+            if (searchCategoryId.value) payload.categoryId = searchCategoryId.value
+
+            const res = await getMallGoodsListApi(payload) as any
 
             const data = res.data || res
 
@@ -93,6 +100,17 @@ export const useMallGoods = () => {
     }
 
     const hasMore = computed(() => goodsList.value.length < total.value)
+
+    const handleSearch = (keyword?: string, categoryId?: number | null) => {
+        // If keyword is specifically passed (even empty string), update it. 
+        // If undefined, keep current (allows for separate category filter update).
+        if (keyword !== undefined) searchKeyword.value = keyword
+
+        // Similar logic for category
+        if (categoryId !== undefined) searchCategoryId.value = categoryId
+
+        fetchGoodsList(1, false)
+    }
 
     // Fetch Detail
     const fetchDetail = async (productId: string | number) => {
@@ -174,7 +192,7 @@ export const useMallGoods = () => {
             const res = await addToCartApi(data) as any
             if (res.code == 200) {
                 ElMessage.success('已加入购物车');
-                return true;
+                return res.data || true; // Return data if available, else true
             }
             else {
                 ElMessage.error(res.message);
@@ -269,6 +287,9 @@ export const useMallGoods = () => {
         fetchCartList,
         fetchRemoveCart,
         fetchUpdateCartQuantity,
-        fetchCategories
+        fetchCategories,
+        handleSearch,
+        searchKeyword,
+        searchCategoryId
     }
 }
