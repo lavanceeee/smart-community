@@ -5,7 +5,7 @@
             class="h-full">
             <div class="h-full flex flex-col relative">
                 <AgentHomepageSiderBarCo />
-                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1 z-10" />
+                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls" class="flex-1 z-10" />
                 <div
                     class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-[#131314] via-[#131314]">
                     <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
@@ -16,7 +16,7 @@
         <!-- Plain White Background (Light Mode) -->
         <div v-else class="h-full flex flex-col relative bg-white">
             <AgentHomepageSiderBarCo />
-            <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1 z-10" />
+            <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls" class="flex-1 z-10" />
             <div
                 class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-white via-white">
                 <AgentHomepageInputCo :loading="isProcessing" @send="handleSendMessage" />
@@ -72,7 +72,7 @@ onMounted(() => {
     }
 })
 
-const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus } = useAgent()
+const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus, toolCalls } = useAgent()
 
 const messages = ref<Message[]>([])
 
