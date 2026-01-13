@@ -21,6 +21,25 @@
         <!-- Navigation -->
         <nav
             class="flex-1 overflow-y-auto py-6 px-3 space-y-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            
+            <!-- 数据看板入口 -->
+            <NuxtLink to="/superCommunity"
+                class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 mb-3"
+                :class="[
+                    isCollapsed ? 'justify-center' : '',
+                    isExactActive('/superCommunity') 
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25' 
+                        : 'bg-slate-800/50 hover:bg-slate-800 text-slate-300 hover:text-white'
+                ]">
+                <Icon name="lucide:bar-chart-3" size="18" class="shrink-0"
+                    :class="isExactActive('/superCommunity') ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'" />
+                <Transition name="fade-slide">
+                    <span v-if="!isCollapsed" class="ml-3">数据看板</span>
+                </Transition>
+            </NuxtLink>
+
+            <div v-if="!isCollapsed" class="border-t border-slate-700/50 my-3"></div>
+
             <SuperCommunitySiderBarCommunity :collapsed="isCollapsed" />
             <SuperCommunitySiderBarMall :collapsed="isCollapsed" />
             <SuperCommunitySiderBarProperty :collapsed="isCollapsed" />
@@ -85,7 +104,11 @@
 <script setup lang="ts">
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const { isCollapsed, toggleSidebar } = useSidebarCollapse()
+
+// 精确匹配路由（用于数据看板）
+const isExactActive = (path: string) => route.path === path
 
 const handleLogout = () => {
     userStore.logout()
