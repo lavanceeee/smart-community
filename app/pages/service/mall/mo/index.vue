@@ -2,15 +2,10 @@
     <div class="min-h-screen bg-[#f5f7fa] dark:bg-slate-900 pb-24 transition-colors duration-300">
         <!-- Header -->
         <div
-            class="sticky top-0 z-[40] bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
-            <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between gap-6">
+            class="sticky top-10 z-[40] bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
+            <div class="max-w-[1300px] mx-auto px-6 h-20 flex items-center justify-between gap-6">
                 <!-- Left: Title Section -->
                 <div class="flex items-center gap-4 shrink-0">
-                    <NuxtLink to="/service/mall"
-                        class="group flex items-center justify-center w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 hover:text-[#ff5000] transition-all duration-300">
-                        <Icon name="lucide:arrow-left" size="18"
-                            class="group-hover:-translate-x-0.5 transition-transform" />
-                    </NuxtLink>
                     <h1 class="text-xl font-bold text-slate-900 dark:text-white">全部订单</h1>
                 </div>
 
@@ -22,8 +17,7 @@
                             filters.orderType === t.value
                                 ? 'text-[#ff5000] font-bold bg-orange-50 dark:bg-orange-900/20'
                                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                        ]"
-                            class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
+                        ]" class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
                             {{ t.label }}
                         </button>
                     </div>
@@ -37,8 +31,7 @@
                             filters.status === s.value
                                 ? 'text-[#ff5000] font-bold bg-orange-50 dark:bg-orange-900/20'
                                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                        ]"
-                            class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
+                        ]" class="px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 whitespace-nowrap">
                             {{ s.label }}
                         </button>
                     </div>
@@ -78,17 +71,14 @@
                     <div class="p-5">
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 flex-1 min-w-0">
-                                <!-- Subtle Store Icon -->
-                                <div
-                                    class="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-900/10 flex items-center justify-center text-orange-500 shrink-0 border border-orange-100/50 dark:border-orange-500/10">
-                                    <Icon name="lucide:store" size="18" />
-                                </div>
                                 <div class="min-w-0">
                                     <h3
                                         class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate flex items-center gap-2">
-                                        {{ order.storeName || '智慧社区服务' }}
-                                        <Icon v-if="order.storeName" name="lucide:chevron-right" size="12"
-                                            class="text-slate-300" />
+                                        <span>{{ order.storeName || '智慧社区服务' }}<span
+                                                v-if="order.orderTypeDesc === '商品订单'">的商品</span></span>
+                                        <Icon v-if="order.storeName" name="lucide:chevron-right" size="17"
+                                            class="text-slate-300 cursor-pointer"
+                                            @click="handleViewDetail(order.orderId)" />
                                     </h3>
                                     <p class="text-[12px] text-slate-400 truncate mt-0.5">{{ order.description }}</p>
                                 </div>

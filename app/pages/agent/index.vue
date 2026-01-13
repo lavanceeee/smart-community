@@ -36,13 +36,11 @@ definePageMeta({
     layout: 'agent'
 })
 
-
 const colorMode = useColorMode()
 
 import { useAgentStore } from '~/stores/agent'
 
 const agentStore = useAgentStore()
-const router = useRouter()
 const lastUserMessage = ref('')
 
 // 默认设置为暗色模式
@@ -55,7 +53,7 @@ onMounted(() => {
     }
 })
 
-const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus, toolCalls } = useAgent()
+const { sendStreamMessage, streamingMessage, isStreaming, loading, agentStatus, toolCalls } = useAgent()
 
 const messages = ref<Message[]>([])
 
@@ -78,7 +76,7 @@ const handleSendMessage = (content: string) => {
         isStreaming: true
     })
 
-    // Start streaming immediately (backend auto-creates session)
+    // Start streaming - 连接由 layout 管理，这里只发送消息
     sendStreamMessage(content)
 }
 
@@ -111,9 +109,4 @@ watch(isStreaming, (streaming) => {
         }
     }
 })
-
-// Clean up on unmount - Commented out to prevent closing stream on navigation
-/* onUnmounted(() => {
-    closeStream()
-}) */
 </script>

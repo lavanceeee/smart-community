@@ -34,7 +34,7 @@
           <div
             class="h-full px-3 flex items-center gap-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-[#ff5000] transition-all text-xs font-semibold cursor-pointer">
             <Icon name="lucide:grid" size="14" />
-            服务
+            社区服务
             <Icon name="lucide:chevron-down" size="12" class="transition-transform group-hover:rotate-180 opacity-50" />
           </div>
 

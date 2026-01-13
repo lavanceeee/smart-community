@@ -10,13 +10,13 @@
             <span class="text-[10px] text-slate-400">买贵必赔</span>
         </div>
 
-        <!-- Product List (Vertical) -->
-        <div class="flex flex-col gap-3 flex-1 overflow-hidden">
-            <div v-if="loading" v-for="i in 3" :key="i"
-                class="bg-gray-200 dark:bg-slate-700 rounded animate-pulse h-24 w-full"></div>
+        <!-- Product List (Vertical Scrollable) -->
+        <div class="flex flex-col gap-3 flex-1 overflow-y-auto scrollbar-hide">
+            <div v-if="loading" v-for="i in 5" :key="i"
+                class="bg-gray-200 dark:bg-slate-700 rounded animate-pulse h-24 w-full shrink-0"></div>
 
             <div v-else v-for="item in subsidyList" :key="item.productId" @click="goToDetail(item.productId)"
-                class="flex items-center gap-2 p-2 bg-white dark:bg-slate-700/50 rounded-lg cursor-pointer hover:shadow-sm border border-transparent hover:border-orange-100 transition-all h-full">
+                class="flex items-center gap-2 p-2 bg-white dark:bg-slate-700/50 rounded-lg cursor-pointer hover:shadow-sm border border-transparent hover:border-orange-100 transition-all shrink-0">
                 <!-- Image Area -->
                 <div
                     class="w-20 h-20 shrink-0 bg-white dark:bg-slate-700 rounded-md p-1 overflow-hidden flex justify-center items-center">
@@ -55,5 +55,13 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
-```
+<style scoped>
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+</style>

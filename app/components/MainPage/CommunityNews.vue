@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-white dark:bg-white/5 rounded p-5 border border-slate-100 dark:border-white/5 shadow-sm">
+  <div class="bg-white dark:bg-white/5 rounded p-4 border border-slate-100 dark:border-white/5 shadow-sm h-full">
 
-    <div class="flex items-center justify-between mb-5 px-1">
+    <div class="flex items-center justify-between mb-3 px-1">
       <div class="flex items-center gap-2">
         <span class="w-1 h-4 bg-[#ff5000] rounded-full"></span>
-        <h2 class="text-lg font-bold text-slate-800 dark:text-white">社区公告</h2>
+        <h2 class="text-base font-bold text-slate-800 dark:text-white">社区公告</h2>
       </div>
       <NuxtLink to="/service/community/news"
         class="flex items-center gap-1 text-xs text-slate-400 hover:text-[#ff5000] transition-colors cursor-pointer select-none">
@@ -25,17 +25,17 @@
 
       <!-- Carousel (Banner) -->
       <div v-if="bannerList && bannerList.length > 0"
-        class="w-full md:w-[45%] h-[340px] rounded-xl overflow-hidden relative group shrink-0">
-        <el-carousel trigger="click" height="340px" :interval="5000" arrow="hover">
+        class="w-full h-[180px] rounded-lg overflow-hidden relative group shrink-0">
+        <el-carousel trigger="click" height="180px" :interval="5000" arrow="hover">
           <el-carousel-item v-for="item in bannerList" :key="item.id">
             <div class="relative w-full h-full cursor-pointer">
               <img :src="item.image"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div
-                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-16">
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 pt-8">
                 <span
                   class="bg-[#ff5000] text-white text-[10px] px-1.5 py-0.5 rounded mb-1.5 inline-block font-medium">热点</span>
-                <h3 class="text-white font-bold text-base leading-relaxed line-clamp-2 tracking-wide">
+                <h3 class="text-white font-bold text-sm leading-snug line-clamp-1">
                   {{ item.title }}
                 </h3>
               </div>
@@ -58,7 +58,7 @@
         <!-- List -->
         <div v-else class="flex flex-col gap-4">
 
-          <ul class="flex flex-col gap-3.5">
+          <ul class="flex flex-col gap-2.5">
             <li v-for="(news, i) in displayedNews" :key="news.announceId"
               class="flex items-center justify-between group cursor-pointer">
               <NuxtLink :to="`/service/community/news/${news.announceId}`"
@@ -101,7 +101,7 @@ const bannerList = ref<Banner[]>([])
 
 // Display top 8 news items
 const displayedNews = computed(() => {
-  return newsList.value.slice(0, 8)
+  return newsList.value.slice(0, 6)
 })
 
 const formatDate = (timeStr?: string | null) => {

@@ -50,12 +50,7 @@
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
             <el-form :model="queryForm" inline class="flex flex-wrap gap-4">
                 <el-form-item label="投诉类型" class="!mb-0">
-                    <el-select
-                        v-model="queryForm.complaintType"
-                        placeholder="全部类型"
-                        clearable
-                        style="width: 160px;"
-                    >
+                    <el-select v-model="queryForm.complaintType" placeholder="全部类型" clearable style="width: 160px;">
                         <el-option label="全部类型" :value="undefined" />
                         <el-option label="噪音扰民" value="噪音扰民" />
                         <el-option label="违规停车" value="违规停车" />
@@ -67,12 +62,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="处理状态" class="!mb-0">
-                    <el-select
-                        v-model="queryForm.status"
-                        placeholder="全部状态"
-                        clearable
-                        style="width: 150px;"
-                    >
+                    <el-select v-model="queryForm.status" placeholder="全部状态" clearable style="width: 150px;">
                         <el-option label="全部状态" :value="undefined" />
                         <el-option label="待处理" :value="0" />
                         <el-option label="处理中" :value="1" />
@@ -81,21 +71,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户ID" class="!mb-0">
-                    <el-input-number
-                        v-model="queryForm.userId"
-                        placeholder="用户ID"
-                        :controls="false"
-                        style="width: 120px;"
-                    />
+                    <el-input-number v-model="queryForm.userId" placeholder="用户ID" :controls="false"
+                        style="width: 120px;" />
                 </el-form-item>
                 <el-form-item label="关键词" class="!mb-0">
-                    <el-input
-                        v-model="queryForm.keyword"
-                        placeholder="搜索描述或位置"
-                        clearable
-                        style="width: 200px;"
-                        @keyup.enter="handleSearch"
-                    >
+                    <el-input v-model="queryForm.keyword" placeholder="搜索描述或位置" clearable style="width: 200px;"
+                        @keyup.enter="handleSearch">
                         <template #prefix>
                             <Icon name="lucide:search" size="16" class="text-slate-400" />
                         </template>
@@ -116,11 +97,7 @@
 
         <!-- 投诉列表 -->
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <el-table
-                :data="complaintList"
-                v-loading="loading"
-                style="width: 100%"
-            >
+            <el-table :data="complaintList" v-loading="loading" style="width: 100%">
                 <el-table-column prop="complaintId" label="ID" width="80" align="center" />
                 <el-table-column prop="userId" label="用户ID" width="100" align="center" />
                 <el-table-column label="投诉类型" width="120">
@@ -136,10 +113,7 @@
                 <el-table-column prop="location" label="位置" width="180" />
                 <el-table-column label="状态" width="100" align="center">
                     <template #default="{ row }">
-                        <el-tag 
-                            :type="getStatusType(row.status)" 
-                            size="small"
-                        >
+                        <el-tag :type="getStatusType(row.status)" size="small">
                             {{ row.statusText }}
                         </el-tag>
                     </template>
@@ -152,12 +126,8 @@
                 </el-table-column>
                 <el-table-column label="操作" width="140" fixed="right">
                     <template #default="{ row }">
-                        <el-button
-                            type="primary"
-                            size="small"
-                            @click="handleProcess(row)"
-                            :disabled="row.status === 2 || row.status === 3"
-                        >
+                        <el-button type="primary" size="small" @click="handleProcess(row)"
+                            :disabled="row.status === 2 || row.status === 3">
                             <Icon name="lucide:settings" size="14" class="mr-1" />
                             处理
                         </el-button>
@@ -167,25 +137,15 @@
 
             <!-- 分页 -->
             <div class="p-4 flex justify-end border-t border-slate-200 dark:border-slate-700">
-                <el-pagination
-                    v-model:current-page="pagination.current"
-                    v-model:page-size="pagination.size"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :total="pagination.total"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    @size-change="fetchComplaintList"
-                    @current-change="fetchComplaintList"
-                />
+                <el-pagination v-model:current-page="pagination.current" v-model:page-size="pagination.size"
+                    :page-sizes="[10, 20, 50, 100]" :total="pagination.total"
+                    layout="total, sizes, prev, pager, next, jumper" @size-change="fetchComplaintList"
+                    @current-change="fetchComplaintList" />
             </div>
         </div>
 
         <!-- 处理弹窗 -->
-        <el-dialog
-            v-model="processDialogVisible"
-            title="处理投诉"
-            width="600px"
-            :close-on-click-modal="false"
-        >
+        <el-dialog v-model="processDialogVisible" title="处理投诉" width="600px" :close-on-click-modal="false">
             <div v-if="currentComplaint" class="space-y-4">
                 <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-4">
                     <div class="grid grid-cols-2 gap-3 text-sm">
@@ -230,14 +190,8 @@
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="处理结果" required>
-                        <el-input
-                            v-model="processForm.handleResult"
-                            type="textarea"
-                            :rows="4"
-                            placeholder="请填写处理结果"
-                            maxlength="500"
-                            show-word-limit
-                        />
+                        <el-input v-model="processForm.handleResult" type="textarea" :rows="4" placeholder="请填写处理结果"
+                            maxlength="500" show-word-limit />
                     </el-form-item>
                 </el-form>
             </div>
@@ -333,7 +287,7 @@ const fetchComplaintList = async () => {
         if (response.code === 200 && response.data) {
             complaintList.value = response.data.records || []
             pagination.total = response.data.total || 0
-            
+
             // 计算统计数据
             statistics.total = response.data.total || 0
             statistics.pending = complaintList.value.filter(c => c.status === 0).length
@@ -393,7 +347,7 @@ const handleProcess = (complaint: Complaint) => {
 // 提交处理
 const handleSubmitProcess = async () => {
     if (!currentComplaint.value) return
-    
+
     if (!processForm.handleResult.trim()) {
         ElMessage.warning('请填写处理结果')
         return
@@ -405,7 +359,7 @@ const handleSubmitProcess = async () => {
             status: processForm.status,
             handleResult: processForm.handleResult
         })
-        
+
         ElMessage.success('处理成功')
         processDialogVisible.value = false
         fetchComplaintList()
@@ -422,4 +376,3 @@ onMounted(() => {
     fetchComplaintList()
 })
 </script>
-

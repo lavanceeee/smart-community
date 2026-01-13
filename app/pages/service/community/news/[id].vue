@@ -1,44 +1,47 @@
 <template>
-    <div class="min-h-screen bg-white dark:bg-slate-900">
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
         <!-- Breadcrumb -->
-        <div class="bg-[#f5f7fa] dark:bg-slate-900 py-3 border-b border-slate-100 dark:border-slate-800 mb-8">
-            <div class="max-w-[1000px] mx-auto px-4 flex items-center gap-2 text-sm text-slate-500">
-                <NuxtLink to="/" class="hover:text-[#1e40af]">首页</NuxtLink>
+        <div class="sticky top-10 z-10 bg-white dark:bg-slate-800 py-3 border-b border-slate-200 dark:border-slate-700">
+            <div class="max-w-[1300px] mx-auto flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <NuxtLink to="/" class="hover:text-blue-600 dark:hover:text-blue-400">首页</NuxtLink>
                 <Icon name="lucide:chevron-right" size="14" />
-                <NuxtLink to="/service/community/news" class="hover:text-[#1e40af]">社区公告</NuxtLink>
+                <NuxtLink to="/service/community/news" class="hover:text-blue-600 dark:hover:text-blue-400">社区公告
+                </NuxtLink>
                 <Icon name="lucide:chevron-right" size="14" />
-                <span class="text-slate-800">公告详情</span>
+                <span class="text-slate-700 dark:text-slate-300">公告详情</span>
             </div>
         </div>
 
-        <div class="max-w-[1000px] mx-auto px-4 pb-20">
+        <div class="max-w-[1300px] mx-auto px-6 py-5">
             <!-- Loading State -->
-            <div v-if="loading" class="animate-pulse space-y-8 mt-10">
-                <div class="h-10 bg-slate-100 rounded w-3/4 mx-auto"></div>
-                <div class="flex justify-center gap-8">
-                    <div class="h-4 bg-slate-100 rounded w-32"></div>
-                    <div class="h-4 bg-slate-100 rounded w-32"></div>
+            <div v-if="loading" class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-sm animate-pulse">
+                <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mx-auto mb-6"></div>
+                <div class="flex justify-center gap-6 mb-8">
+                    <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-32"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-32"></div>
                 </div>
-                <div class="space-y-4 pt-8">
-                    <div class="h-4 bg-slate-100 rounded w-full"></div>
-                    <div class="h-4 bg-slate-100 rounded w-full"></div>
-                    <div class="h-4 bg-slate-100 rounded w-2/3"></div>
+                <div class="space-y-4">
+                    <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
                 </div>
             </div>
 
             <!-- Content -->
-            <article v-else-if="detail" class="bg-white dark:bg-slate-800 dark:text-gray-200">
-                <header class="mb-10 text-center border-b border-slate-100 dark:border-slate-700 pb-6">
-                    <h1
-                        class="text-3xl md:text-[34px] font-medium text-[#333] dark:text-gray-100 mb-8 leading-tight tracking-tight">
+            <article v-else-if="detail"
+                class="min-h-[600px] bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
+                <header class="px-8 py-6 border-b border-slate-100 dark:border-slate-700 text-center">
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 leading-snug">
                         {{ detail.title }}
                     </h1>
 
                     <div
-                        class="flex flex-wrap items-center justify-between gap-4 text-sm text-[#999] dark:text-slate-400">
-                        <div class="flex items-center gap-6">
-                            <span>{{ detail.publishTime }}</span>
-                            <span>来源：物业服务中心</span>
+                        class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-1.5">
+                                <Icon name="lucide:calendar" size="14" />
+                                {{ detail.publishTime }}
+                            </span>
                         </div>
 
                         <!-- Tools Bar -->
@@ -47,31 +50,23 @@
                     </div>
                 </header>
 
-                <div class="prose dark:prose-invert max-w-none text-[#333] dark:text-gray-200 font-serif" :class="{
-                    'prose-base': currentFontSize === 'normal',
-                    'prose-lg': currentFontSize === 'large',
-                    'prose-xl': currentFontSize === 'xlarge'
+                <div class="px-8 py-6" :class="{
+                    'text-base': currentFontSize === 'normal',
+                    'text-lg': currentFontSize === 'large',
+                    'text-xl': currentFontSize === 'xlarge'
                 }">
-                    <!-- Using content logic similar to standard prose but with customized indent and spacing -->
-                    <div class="space-y-6 leading-8">
+                    <div class="space-y-5 text-slate-700 dark:text-slate-300 leading-relaxed">
                         <p v-for="(paragraph, index) in formattedContent" :key="index" class="indent-8 text-justify">
                             {{ paragraph }}
                         </p>
                     </div>
                 </div>
-
-                <footer class="mt-16 pt-8 border-t border-slate-100 dark:border-slate-700 flex justify-center">
-                    <button @click="goBack"
-                        class="px-8 py-2 bg-[#f5f7fa] dark:bg-slate-700 hover:bg-[#ff5000] dark:hover:bg-[#ff5000] text-slate-600 dark:text-slate-200 hover:text-white rounded transition-colors text-sm">
-                        关闭窗口
-                    </button>
-                </footer>
             </article>
 
             <!-- Error/Empty State -->
-            <div v-else class="text-center py-20">
-                <p class="text-slate-400">未找到该公告信息</p>
-                <button @click="goBack" class="mt-4 text-[#1e40af] hover:underline">返回列表</button>
+            <div v-else class="bg-white dark:bg-slate-800 rounded-xl p-12 text-center shadow-sm">
+                <Icon name="lucide:file-x" size="48" class="text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                <p class="text-slate-500 dark:text-slate-400 mb-4">未找到该公告信息</p>
             </div>
         </div>
     </div>
@@ -105,8 +100,6 @@ useHead({
 })
 
 const goBack = () => {
-    // navigateTo('/service/community/news')
-    // Ideally close window if opened in new tab, or back if SPA
     navigateTo('/service/community/news')
 }
 </script>

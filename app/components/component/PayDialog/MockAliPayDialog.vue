@@ -166,7 +166,6 @@ onMounted(async () => {
     if (success) {
         isSuccess.value = true;
         ElMessage.success('支付成功');
-        router.push({ path: '/wallet', query: { orderNo } });
     }
 });
 
@@ -193,7 +192,8 @@ const handleSubmit = async () => {
     // So we should set isSuccess = true here assuming the user "committed" to pay.
     isSuccess.value = true;
 
-    router.push({ path: '/wallet', query: { orderNo } });
+    // router.push({ path: '/wallet', query: { orderNo } });
+    router.back();
 };
 </script>
 

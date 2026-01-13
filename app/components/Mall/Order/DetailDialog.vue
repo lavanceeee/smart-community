@@ -100,11 +100,11 @@ const getStatusIcon = (status: number) => {
 
 const getStatusIconClass = (status: number) => {
     switch (status) {
-        case 0: return 'bg-orange-50 text-orange-500'
-        case 1: return 'bg-blue-50 text-blue-500 animate-spin-slow'
-        case 2: return 'bg-green-50 text-green-500'
-        case 3: return 'bg-red-50 text-red-500'
-        default: return 'bg-slate-50 text-slate-500'
+        case 0: return 'bg-orange-50 dark:bg-orange-500/20 text-orange-500'
+        case 1: return 'bg-blue-50 dark:bg-blue-500/20 text-blue-500 animate-spin-slow'
+        case 2: return 'bg-green-50 dark:bg-green-500/20 text-green-500'
+        case 3: return 'bg-red-50 dark:bg-red-500/20 text-red-500'
+        default: return 'bg-slate-50 dark:bg-slate-500/20 text-slate-500'
     }
 }
 </script>
@@ -121,8 +121,13 @@ const getStatusIconClass = (status: number) => {
     margin-right: 0;
 }
 
+.dark .order-detail-dialog :deep(.el-dialog) {
+    background-color: #1e293b;
+}
+
 .dark .order-detail-dialog :deep(.el-dialog__header) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #1e293b;
 }
 
 .order-detail-dialog :deep(.el-dialog__title) {
@@ -133,8 +138,24 @@ const getStatusIconClass = (status: number) => {
     letter-spacing: -0.025em;
 }
 
+.dark .order-detail-dialog :deep(.el-dialog__title) {
+    color: #e2e8f0;
+}
+
 .order-detail-dialog :deep(.el-dialog__body) {
     padding: 32px;
+}
+
+.dark .order-detail-dialog :deep(.el-dialog__body) {
+    background-color: #1e293b;
+}
+
+.dark .order-detail-dialog :deep(.el-dialog__headerbtn .el-dialog__close) {
+    color: #94a3b8;
+}
+
+.dark .order-detail-dialog :deep(.el-dialog__headerbtn:hover .el-dialog__close) {
+    color: #f1f5f9;
 }
 
 .animate-spin-slow {

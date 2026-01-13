@@ -191,7 +191,6 @@ export const useWallet = () => {
         try {
             const res = await changePayMethodApi(orderNo, method) as any;
             if (res.code === 200) {
-                ElMessage.success('支付方式已更新');
                 return true;
             } else {
                 ElMessage.error(res.message || '切换支付方式失败,请稍后重试');

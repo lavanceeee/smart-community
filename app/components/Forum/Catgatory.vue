@@ -1,89 +1,96 @@
 <template>
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center justify-between mb-6 px-2">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-[#ff5000]">
-                    <Icon name="lucide:layout-grid" size="20" />
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">社区版块</h3>
-                    <p class="text-[11px] text-slate-400 font-medium mt-0.5">Community Sections</p>
-                </div>
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <!-- Header -->
+        <div class="px-6 py-4 dark:border-slate-800">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Explore Communities</h2>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="px-6 py-2 border-b border-slate-100 dark:border-slate-800 overflow-x-auto">
+            <div class="flex items-center gap-2">
+                <button v-for="(tab, index) in tabs" :key="tab" @click="activeTab = index"
+                    class="px-4 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors"
+                    :class="activeTab === index
+                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'">
+                    {{ tab }}
+                </button>
             </div>
         </div>
 
-        <div v-if="loading && sections.length === 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div v-for="i in 4" :key="i" class="h-32 bg-slate-50 dark:bg-slate-800/50 rounded-2xl animate-pulse"></div>
+        <!-- Loading State -->
+        <div v-if="loading && sections.length === 0" class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="i in 6" :key="i" class="h-32 bg-slate-100 dark:bg-slate-800 rounded-lg animate-pulse"></div>
+            </div>
         </div>
 
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <NuxtLink v-for="section in sections" :key="section.sectionId"
-                :to="`/service/community/forum/${section.sectionId}`"
-                class="group relative bg-slate-50 dark:bg-slate-800/30 hover:bg-white dark:hover:bg-slate-800 rounded-2xl p-5 cursor-pointer transition-all duration-300 border border-slate-100 dark:border-slate-800/50 hover:border-orange-200 dark:hover:border-orange-500/20 hover:shadow-lg hover:shadow-orange-500/5 hover:-translate-y-1">
+        <!-- Sections Grid -->
+        <div v-else class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <NuxtLink v-for="section in sections" :key="section.sectionId"
+                    :to="`/service/community/forum/${section.sectionId}`"
+                    class="group flex items-start gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
 
-                <div class="flex items-start justify-between mb-4">
-                    <div
-                        class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
-                        <img v-if="section.iconUrl" :src="section.iconUrl" class="w-full h-full object-cover"
-                            :alt="section.sectionName" />
-                        <Icon v-else :name="getFallbackIcon(section.sectionName)" size="24"
-                            :class="getIconColor(section.sectionName)" />
+                    <!-- Avatar -->
+                    <img :src="section.iconUrl || 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                        :alt="section.sectionName"
+                        class="w-10 h-10 rounded-full object-cover bg-slate-100 dark:bg-slate-700 shrink-0" />
+
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-2">
+                            <div>
+                                <h3
+                                    class="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                                    {{ section.sectionName }}
+                                </h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                    {{ formatCount(section.postCount * 13 + 520) }} weekly visitors
+                                </p>
+                            </div>
+                            <button
+                                class="px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-700 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors shrink-0">
+                                进入
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2 line-clamp-2">
+                            {{ section.sectionDesc || '暂无描述' }}
+                        </p>
                     </div>
-                    <div
-                        class="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-slate-400 group-hover:text-[#ff5000]">
-                        <Icon name="lucide:arrow-up-right" size="16" />
-                    </div>
-                </div>
+                </NuxtLink>
+            </div>
 
-                <div>
-                    <h4
-                        class="text-base font-bold text-slate-800 dark:text-slate-100 mb-1 group-hover:text-[#ff5000] transition-colors line-clamp-1">
-                        {{ section.sectionName }}
-                    </h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 min-h-[2.5em]">
-                        {{ section.sectionDesc || '暂无描述' }}
-                    </p>
-                </div>
-
-                <div
-                    class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span class="flex items-center gap-1">
-                        <Icon name="lucide:message-square" size="12" />
-                        {{ section.postCount || 0 }} 帖子
-                    </span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[#ff5000]">
-                        点击进入
-                    </span>
-                </div>
-            </NuxtLink>
+            <!-- Show More Button -->
+            <div class="flex justify-center mt-6">
+                <button
+                    class="px-6 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    Show more
+                </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-// Import implicitly from auto-imports, but confirming user wants integration
 import { useForum } from '~/composables/form/useForum';
+
 const { sections, loading, fetchSections } = useForum();
+const activeTab = ref(0);
+
+const tabs = ['All', 'Most Visited', 'Internet Culture', 'Games', 'Q&As & Stories', 'Movies & TV', 'Technology'];
+
+const formatCount = (num: number) => {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+        return Math.floor(num / 1000) + 'K';
+    }
+    return num.toString();
+};
 
 onMounted(() => {
     fetchSections();
 });
-
-const getFallbackIcon = (name: string) => {
-    if (name.includes('公告')) return 'lucide:megaphone';
-    if (name.includes('互助')) return 'lucide:heart-handshake';
-    if (name.includes('分享')) return 'lucide:coffee';
-    if (name.includes('闲置')) return 'lucide:shopping-bag';
-    if (name.includes('活动')) return 'lucide:calendar-range';
-    return 'lucide:message-square';
-};
-
-const getIconColor = (name: string) => {
-    if (name.includes('公告')) return 'text-blue-500';
-    if (name.includes('互助')) return 'text-rose-500';
-    if (name.includes('分享')) return 'text-amber-500';
-    if (name.includes('闲置')) return 'text-emerald-500';
-    return 'text-[#ff5000]';
-};
 </script>

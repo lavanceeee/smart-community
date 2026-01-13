@@ -1,35 +1,103 @@
-<script setup lang="ts">
-import * as THREE from 'three'
-
-// 获取模型后的处理函数
-const onModelLoaded = (model: any) => {
-  // 自动调整模型到中心
-  const box = new THREE.Box3().setFromObject(model.scene)
-  const center = box.getCenter(new THREE.Vector3())
-  model.scene.position.x += (model.scene.position.x - center.x)
-  model.scene.position.z += (model.scene.position.z - center.z)
-}
-</script>
-
 <template>
-  <div class="w-full h-[600px] bg-[oklch(13%_0.028_261.692)] relative">
-    <TresCanvas shadows alpha>
-      <TresOrthographicCamera 
-        :position="[200, 200, 200]" 
-        :zoom="1" 
-        :look-at="[0, 0, 0]" 
-      />
-
-      <Suspense>
-        <GLTFModel 
-          path="/models/model.gltf" 
-          draco 
-          @load="onModelLoaded"
-        />
-      </Suspense>
-
-      <TresAmbientLight :intensity="1" />
-      <TresDirectionalLight :position="[100, 100, 100]" :intensity="3" color="#60a5fa" />
-      <TresPointLight :position="[-50, 50, -50]" :intensity="2" color="#ff5000" /> </TresCanvas>
-  </div>
+  <div ref="chartContainer" class="w-full h-full"></div>
 </template>
+
+<script setup lang="ts">
+import * as echarts from 'echarts'
+
+const chartContainer = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+const initChart = () => {
+  if (!chartContainer.value) return
+
+  chartInstance = echarts.init(chartContainer.value)
+
+  const option: echarts.EChartsOption = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      borderColor: '#e2e8f0',
+      textStyle: { color: '#334155', fontSize: 11 }
+    },
+    grid: {
+      left: '8%',
+      right: '8%',
+      top: '15%',
+      bottom: '20%'
+    },
+    xAxis: {
+      type: 'category',
+      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      axisLine: { lineStyle: { color: '#cbd5e1' } },
+      axisLabel: { color: '#64748b', fontSize: 10 },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: '#e2e8f0', type: 'dashed' } },
+      axisLabel: { color: '#64748b', fontSize: 10 }
+    },
+    series: [
+      {
+        name: '访客量',
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 6,
+        lineStyle: {
+          width: 3,
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: '#3b82f6' },
+            { offset: 1, color: '#8b5cf6' }
+          ])
+        },
+        itemStyle: {
+          color: '#3b82f6',
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(59, 130, 246, 0.3)' },
+            { offset: 1, color: 'rgba(59, 130, 246, 0.02)' }
+          ])
+        },
+        data: [820, 932, 901, 1290, 1330, 1520, 1680]
+      },
+      {
+        name: '活跃度',
+        type: 'bar',
+        barWidth: 8,
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#22c55e' },
+            { offset: 1, color: '#86efac' }
+          ])
+        },
+        data: [320, 432, 401, 590, 630, 720, 880]
+      }
+    ]
+  }
+
+  chartInstance.setOption(option)
+}
+
+const handleResize = () => {
+  chartInstance?.resize()
+}
+
+onMounted(() => {
+  nextTick(() => {
+    initChart()
+    window.addEventListener('resize', handleResize)
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  chartInstance?.dispose()
+})
+</script>

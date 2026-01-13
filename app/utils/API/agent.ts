@@ -127,8 +127,10 @@ export const agentStreamApi = {
                 query: query
             }
             if (sessionId) {
-                payload.session_id = sessionId
+                // 确保 session_id 是数字类型，后端可能期望数字
+                payload.session_id = typeof sessionId === 'string' ? parseInt(sessionId, 10) : sessionId
             }
+            console.log('📨 WebSocket sending payload:', JSON.stringify(payload))
             ws.send(JSON.stringify(payload))
         } else {
             console.error('WebSocket is not open. ReadyState:', ws.readyState)

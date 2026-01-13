@@ -1,11 +1,7 @@
 <template>
     <div class="flex h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
         <!-- Loading Overlay -->
-        <SuperCommunityLoader 
-            :show="shouldShowLoader" 
-            title="后台管理系统"
-            :subtitle="loadingSubtitle"
-        />
+        <SuperCommunityLoader :show="shouldShowLoader" title="后台管理系统" :subtitle="loadingSubtitle" />
 
         <!-- Sidebar -->
         <SuperCommunityAdminSidebar class="shrink-0 transition-all duration-300" />
@@ -20,10 +16,11 @@
                     <h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">
                         {{ pageTitle }}
                     </h2>
-                    
+
                     <!-- Breadcrumb hint when collapsed -->
                     <Transition name="fade">
-                        <div v-if="isCollapsed" class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <div v-if="isCollapsed"
+                            class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                             <Icon name="lucide:chevron-right" size="14" />
                             <span>{{ breadcrumbHint }}</span>
                         </div>
@@ -32,16 +29,14 @@
 
                 <!-- Quick Actions -->
                 <div class="flex items-center gap-3">
-                    <button 
+                    <button
                         class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
-                        title="刷新页面"
-                    >
+                        title="刷新页面">
                         <Icon name="lucide:refresh-cw" size="18" />
                     </button>
-                    <button 
+                    <button
                         class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
-                        title="全屏"
-                    >
+                        title="全屏">
                         <Icon name="lucide:maximize" size="18" />
                     </button>
                 </div>
