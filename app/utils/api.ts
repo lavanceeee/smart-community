@@ -2026,3 +2026,183 @@ export const handleComplaintApi = (complaintId: number, data: {
     body: data
   })
 }
+
+// ==================== 管理端-访客通行管理 API ====================
+
+/**
+ * 查询访客登记列表（管理端）
+ * @param data 查询参数
+ */
+export const queryAdminVisitorListApi = (data: {
+  status?: number
+  userId?: number
+  visitorName?: string
+  visitorPhone?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/visitor/query', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 获取访客统计信息（管理端）
+ */
+export const getAdminVisitorStatisticsApi = () => {
+  return $api('/api/admin/visitor/statistics', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取访客登记详情（管理端）
+ * @param registerId 登记ID
+ */
+export const getAdminVisitorDetailApi = (registerId: number) => {
+  return $api(`/api/admin/visitor/${registerId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 删除访客登记（管理端）
+ * @param registerId 登记ID
+ */
+export const deleteAdminVisitorApi = (registerId: number) => {
+  return $api(`/api/admin/visitor/${registerId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 批量删除访客登记（管理端）
+ * @param ids 登记ID列表
+ */
+export const batchDeleteAdminVisitorApi = (ids: number[]) => {
+  return $api('/api/admin/visitor/batch-delete', {
+    method: 'POST',
+    body: ids
+  })
+}
+
+/**
+ * 审核访客登记（管理端）
+ * @param registerId 登记ID
+ * @param data 审核数据
+ */
+export const auditAdminVisitorApi = (registerId: number, data: {
+  status: number // 1-通过 2-拒绝
+  rejectReason?: string
+}) => {
+  return $api(`/api/admin/visitor/${registerId}/audit`, {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 批量审核访客登记（管理端）
+ * @param ids 登记ID列表
+ * @param data 审核数据
+ */
+export const batchAuditAdminVisitorApi = (ids: number[], data: {
+  status: number // 1-通过 2-拒绝
+  rejectReason?: string
+}) => {
+  return $api('/api/admin/visitor/batch-audit', {
+    method: 'POST',
+    body: ids,
+    params: data
+  })
+}
+
+// ==================== 管理端-车位管理 API ====================
+
+/**
+ * 查询车位列表（管理端）
+ * @param params 查询参数
+ */
+export const queryAdminParkingListApi = (params: {
+  spaceNo?: string
+  carNumber?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/parking/list', {
+    method: 'GET',
+    params
+  })
+}
+
+/**
+ * 获取车位统计信息（管理端）
+ */
+export const getAdminParkingStatisticsApi = () => {
+  return $api('/api/admin/parking/statistics', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取车位详情（管理端）
+ * @param spaceId 车位ID
+ */
+export const getAdminParkingDetailApi = (spaceId: number) => {
+  return $api(`/api/admin/parking/${spaceId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 删除车位（管理端）
+ * @param spaceId 车位ID
+ */
+export const deleteAdminParkingApi = (spaceId: number) => {
+  return $api(`/api/admin/parking/${spaceId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 批量删除车位（管理端）
+ * @param ids 车位ID列表
+ */
+export const batchDeleteAdminParkingApi = (ids: number[]) => {
+  return $api('/api/admin/parking/batch-delete', {
+    method: 'POST',
+    body: ids
+  })
+}
+
+/**
+ * 审核车位申请（管理端）
+ * @param spaceId 车位ID
+ * @param data 审核数据
+ */
+export const auditAdminParkingApi = (spaceId: number, data: {
+  status: number // 1-通过 2-拒绝
+  rejectReason?: string
+}) => {
+  return $api(`/api/admin/parking/${spaceId}/audit`, {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 批量审核车位申请（管理端）
+ * @param ids 车位ID列表
+ * @param data 审核数据
+ */
+export const batchAuditAdminParkingApi = (ids: number[], data: {
+  status: number // 1-通过 2-拒绝
+  rejectReason?: string
+}) => {
+  return $api('/api/admin/parking/batch-audit', {
+    method: 'POST',
+    body: ids,
+    params: data
+  })
+}
