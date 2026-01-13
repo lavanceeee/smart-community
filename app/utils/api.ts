@@ -2206,3 +2206,228 @@ export const batchAuditAdminParkingApi = (ids: number[], data: {
     params: data
   })
 }
+
+// ==================== 管理端-数据看板 ====================
+
+/**
+ * 获取完整数据看板
+ * 获取后台首页所有统计数据，包含用户、订单、报修投诉、车位访客、物业费、论坛等多维度数据
+ */
+export const getAdminDashboardApi = () => {
+  return $api('/api/admin/dashboard', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取用户统计数据
+ */
+export const getAdminDashboardUserApi = () => {
+  return $api('/api/admin/dashboard/user', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取订单统计数据
+ */
+export const getAdminDashboardOrderApi = () => {
+  return $api('/api/admin/dashboard/order', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取报修投诉统计数据
+ */
+export const getAdminDashboardServiceApi = () => {
+  return $api('/api/admin/dashboard/service', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取车位访客统计数据
+ */
+export const getAdminDashboardSecurityApi = () => {
+  return $api('/api/admin/dashboard/security', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取物业费统计数据
+ */
+export const getAdminDashboardPropertyFeeApi = () => {
+  return $api('/api/admin/dashboard/property-fee', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 获取论坛统计数据
+ */
+export const getAdminDashboardForumApi = () => {
+  return $api('/api/admin/dashboard/forum', {
+    method: 'GET'
+  })
+}
+
+// ==================== 管理端-物业费管理 ====================
+
+/**
+ * 获取物业费统计数据
+ */
+export const getAdminPropertyFeeStatisticsApi = () => {
+  return $api('/api/admin/property-fee/statistics', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 查询账单列表
+ */
+export const getAdminPropertyFeeBillsApi = (data: {
+  userId?: number
+  userName?: string
+  billingPeriod?: string
+  status?: number
+  overdue?: boolean
+  startDate?: string
+  endDate?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/property-fee/bills/list', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 获取账单详情
+ */
+export const getAdminPropertyFeeBillDetailApi = (billId: number) => {
+  return $api(`/api/admin/property-fee/bills/${billId}`, {
+    method: 'GET'
+  })
+}
+
+/**
+ * 更新账单
+ */
+export const updateAdminPropertyFeeBillApi = (billId: number, data: {
+  propertyFee?: number
+  waterFee?: number
+  electricityFee?: number
+  gasFee?: number
+  parkingFee?: number
+  otherFee?: number
+  dueDate?: string
+}) => {
+  return $api(`/api/admin/property-fee/bills/${billId}`, {
+    method: 'PUT',
+    body: data
+  })
+}
+
+/**
+ * 删除账单
+ */
+export const deleteAdminPropertyFeeBillApi = (billId: number) => {
+  return $api(`/api/admin/property-fee/bills/${billId}`, {
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 生成单个账单
+ */
+export const generateAdminPropertyFeeBillApi = (data: {
+  userId: number
+  billingPeriod: string
+  propertyFee?: number
+  waterFee?: number
+  electricityFee?: number
+  gasFee?: number
+  parkingFee?: number
+  otherFee?: number
+  dueDate?: string
+}) => {
+  return $api('/api/admin/property-fee/bills/generate', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 批量生成账单
+ */
+export const batchGenerateAdminPropertyFeeBillApi = (data: {
+  userIds?: number[]
+  billingPeriod: string
+  propertyFee?: number
+  waterFee?: number
+  electricityFee?: number
+  gasFee?: number
+  parkingFee?: number
+  otherFee?: number
+  dueDate: string
+  skipExistingBill?: boolean
+}) => {
+  return $api('/api/admin/property-fee/bills/batch-generate', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 批量删除账单
+ */
+export const batchDeleteAdminPropertyFeeBillApi = (billIds: number[]) => {
+  return $api('/api/admin/property-fee/bills/batch-delete', {
+    method: 'POST',
+    body: billIds
+  })
+}
+
+/**
+ * 获取逾期账单列表
+ */
+export const getAdminPropertyFeeOverdueBillsApi = (params: {
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/property-fee/bills/overdue', {
+    method: 'GET',
+    params
+  })
+}
+
+/**
+ * 发送催缴通知
+ */
+export const sendPropertyFeeReminderApi = (billIds: number[]) => {
+  return $api('/api/admin/property-fee/bills/send-reminder', {
+    method: 'POST',
+    body: billIds
+  })
+}
+
+/**
+ * 查询缴费记录
+ */
+export const getAdminPropertyFeePaymentsApi = (data: {
+  userId?: number
+  paymentMethod?: string
+  status?: number
+  startDate?: string
+  endDate?: string
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return $api('/api/admin/property-fee/payments/list', {
+    method: 'POST',
+    body: data
+  })
+}
