@@ -5,8 +5,6 @@
             class="h-full">
             <div class="h-full flex flex-col relative">
                 <AgentSiderBarSiderBarCo />
-                <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" class="flex-1 z-10" />
-                <AgentHomepageSiderBarCo />
                 <AgentHomepageContentCo :messages="messages" :agent-status="agentStatus" :tool-calls="toolCalls" class="flex-1 z-10" />
                 <div
                     class="w-full flex justify-center px-4 pb-12 pt-2 z-10 shrink-0 bg-gradient-to-t to-transparent from-[#131314] via-[#131314]">
@@ -42,7 +40,7 @@ const sessionId = route.params.sessionId as string
 const colorMode = useColorMode()
 const agentStore = useAgentStore()
 
-const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus } = useAgent()
+const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus, toolCalls } = useAgent()
 const { fetchSessionMessages } = useSession()
 
 const messages = ref<Message[]>([])
@@ -92,14 +90,7 @@ onMounted(async () => {
         }
     }
 })
-    }
-})
 
-const { sendStreamMessage, streamingMessage, isStreaming, loading, closeStream, agentStatus, toolCalls } = useAgent()
-
-const messages = ref<Message[]>([])
-
-const isProcessing = computed(() => loading.value || isStreaming.value)
 
 // Handle sending message
 const handleSendMessage = (content: string) => {

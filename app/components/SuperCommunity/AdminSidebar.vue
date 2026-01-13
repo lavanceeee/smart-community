@@ -23,6 +23,7 @@
             <SuperCommunitySiderBarCommunity :collapsed="isCollapsed" />
             <SuperCommunitySiderBarMall :collapsed="isCollapsed" />
             <SuperCommunitySiderBarProperty :collapsed="isCollapsed" />
+            <SuperCommunitySiderBarSecurity :collapsed="isCollapsed" />
             <SuperCommunitySiderBarUserManagement :collapsed="isCollapsed" />
         </nav>
 
