@@ -153,11 +153,6 @@
                         {{ product?.isCollected ? '取消收藏' : '收藏' }}
                     </span>
                 </div>
-                <div
-                    class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 cursor-pointer hover:text-[#ff5000] relative">
-                    <Icon name="lucide:shopping-cart" size="22" />
-                    <span class="text-[10px] font-bold">购物车</span>
-                </div>
             </div>
 
             <div class="flex-1 max-w-[280px] flex h-11 rounded-xl overflow-hidden shadow-sm">

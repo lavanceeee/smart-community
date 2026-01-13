@@ -246,13 +246,43 @@ const submitPwdForm = async () => {
 }
 
 /* Custom Input Styling Override to match the 'neuedu' look more closely if needed */
+/* Custom Input Styling Override */
 :deep(.el-input__wrapper) {
     box-shadow: 0 0 0 1px #e2e8f0 inset;
     padding-top: 2px;
     padding-bottom: 2px;
 }
 
+.dark :deep(.el-input__wrapper) {
+    background-color: #1e293b;
+    /* slate-800 */
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.dark :deep(.el-input__inner) {
+    color: #e2e8f0;
+}
+
 :deep(.el-input__wrapper.is-focus) {
     box-shadow: 0 0 0 1px #ff5000 inset !important;
+}
+
+.dark :deep(.el-input-number__decrease),
+.dark :deep(.el-input-number__increase) {
+    background-color: #1e293b;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+}
+
+.dark :deep(.el-radio) {
+    color: #e2e8f0;
+}
+
+.dark :deep(.el-radio.is-bordered) {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark :deep(.el-radio.is-bordered.is-checked) {
+    border-color: #ff5000;
 }
 </style>

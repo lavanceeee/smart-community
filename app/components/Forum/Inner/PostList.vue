@@ -3,10 +3,20 @@
         <div v-for="post in posts" :key="post.postId" @click="navigateToPost(post.postId)"
             class="p-5 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
 
-            <!-- Title -->
+            <!-- Title with Tags -->
             <h3
-                class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-[#175199] dark:group-hover:text-blue-400 transition-colors leading-snug">
-                {{ post.title }}
+                class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-[#175199] dark:group-hover:text-blue-400 transition-colors leading-snug flex items-center gap-2 flex-wrap">
+                <!-- 置顶标签 -->
+                <span v-if="post.isTop"
+                    class="shrink-0 px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded">
+                    置顶
+                </span>
+                <!-- 精华标签 -->
+                <span v-if="post.isEssence"
+                    class="shrink-0 px-1.5 py-0.5 text-[10px] font-bold bg-amber-500 text-white rounded">
+                    精华
+                </span>
+                <span>{{ post.title }}</span>
             </h3>
 
             <!-- User Info (Small, optional, maybe like "Author: Name") or Content -->
@@ -32,7 +42,7 @@
                 </div>
 
                 <div v-if="post.firstImage" class="shrink-0">
-                    <img :src="post.firstImage" class="w-32 h-24 object-cover rounded" />
+                    <img :src="post.firstImage" class="w-40 h-21 object-cover rounded" />
                 </div>
             </div>
 

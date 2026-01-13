@@ -7,9 +7,9 @@
     </div>
 
     <!-- Goods Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
       <!-- Skeleton Loading -->
-      <div v-if="loading && list.length === 0" v-for="i in 6" :key="`skeleton-${i}`"
+      <div v-if="loading && list.length === 0" v-for="i in 5" :key="`skeleton-${i}`"
         class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
         <div class="aspect-square bg-slate-200 dark:bg-slate-700"></div>
         <div class="p-3 space-y-2">
@@ -53,8 +53,8 @@
 
     <!-- Loading More Skeleton -->
     <div v-if="loading && list.length > 0" class="mt-6">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
-        <div v-for="i in 6" :key="`loading-${i}`"
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
+        <div v-for="i in 5" :key="`loading-${i}`"
           class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
           <div class="aspect-square bg-slate-200 dark:bg-slate-700"></div>
           <div class="p-3 space-y-2">

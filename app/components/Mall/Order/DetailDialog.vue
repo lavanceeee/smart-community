@@ -49,7 +49,7 @@
                 <div class="flex justify-between text-sm py-1">
                     <span class="text-slate-400">商户名称</span>
                     <span class="text-slate-800 dark:text-slate-100 font-medium">{{ orderData.storeName || '平台服务'
-                        }}</span>
+                    }}</span>
                 </div>
                 <div class="flex justify-between text-sm py-1">
                     <span class="text-slate-400">订单类型</span>
@@ -58,12 +58,12 @@
                 <div class="flex justify-between text-sm py-1">
                     <span class="text-slate-400">支付方式</span>
                     <span class="text-slate-800 dark:text-slate-100 font-medium">{{ orderData.paymentMethodDesc || '未指定'
-                        }}</span>
+                    }}</span>
                 </div>
                 <div v-if="orderData.description" class="flex justify-between text-sm py-1">
                     <span class="text-slate-400">订单备注</span>
                     <span class="text-slate-800 dark:text-slate-100 font-medium italic">{{ orderData.description
-                        }}</span>
+                    }}</span>
                 </div>
                 <div v-if="orderData.expireTime && orderData.status === 0" class="flex justify-between text-sm py-1">
                     <span class="text-slate-400">过期时间</span>
@@ -109,28 +109,21 @@ const getStatusIconClass = (status: number) => {
 }
 </script>
 
-<style scoped>
-.order-detail-dialog :deep(.el-dialog) {
-    border-radius: 20px;
+<style>
+/* 移除 scoped，因为 el-dialog 默认 teleport 到 body，scoped 样式无法穿透 */
+.order-detail-dialog {
+    border-radius: 20px !important;
     overflow: hidden;
+    background-color: #ffffff;
 }
 
-.order-detail-dialog :deep(.el-dialog__header) {
+.order-detail-dialog .el-dialog__header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     padding: 20px 24px;
     margin-right: 0;
 }
 
-.dark .order-detail-dialog :deep(.el-dialog) {
-    background-color: #1e293b;
-}
-
-.dark .order-detail-dialog :deep(.el-dialog__header) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background-color: #1e293b;
-}
-
-.order-detail-dialog :deep(.el-dialog__title) {
+.order-detail-dialog .el-dialog__title {
     font-size: 16px;
     font-weight: bold;
     color: #94a3b8;
@@ -138,23 +131,34 @@ const getStatusIconClass = (status: number) => {
     letter-spacing: -0.025em;
 }
 
-.dark .order-detail-dialog :deep(.el-dialog__title) {
-    color: #e2e8f0;
+.order-detail-dialog .el-dialog__body {
+    padding: 32px !important;
 }
 
-.order-detail-dialog :deep(.el-dialog__body) {
-    padding: 32px;
+/* Dark Mode Styles */
+.dark .order-detail-dialog {
+    background-color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.dark .order-detail-dialog :deep(.el-dialog__body) {
+.dark .order-detail-dialog .el-dialog__header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background-color: #1e293b;
 }
 
-.dark .order-detail-dialog :deep(.el-dialog__headerbtn .el-dialog__close) {
+.dark .order-detail-dialog .el-dialog__title {
+    color: #e2e8f0;
+}
+
+.dark .order-detail-dialog .el-dialog__body {
+    background-color: #1e293b;
+}
+
+.dark .order-detail-dialog .el-dialog__headerbtn .el-dialog__close {
     color: #94a3b8;
 }
 
-.dark .order-detail-dialog :deep(.el-dialog__headerbtn:hover .el-dialog__close) {
+.dark .order-detail-dialog .el-dialog__headerbtn:hover .el-dialog__close {
     color: #f1f5f9;
 }
 
