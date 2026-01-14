@@ -33,12 +33,6 @@
                     <Icon name="lucide:chevron-right" size="20" />
                 </button>
             </div>
-
-            <!-- 右侧可视化区域 -->
-            <div
-                class="w-[280px] h-[280px] shrink-0 rounded-xl border border-blue-200/50 dark:border-blue-500/20 bg-white/50 dark:bg-slate-800/50 overflow-hidden">
-                <MainPageCommunityCanvas />
-            </div>
         </div>
 
         <!-- 轮播指示器 -->
