@@ -30,14 +30,15 @@
             </div>
 
             <!-- Message Bubble -->
-            <div class="max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm transition-all"
-                :class="[
-                    msg.role === 'user'
-                        ? 'bg-blue-600 text-white rounded-tr-sm'
-                        : 'bg-white dark:bg-[#1E1F20] text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-gray-800 rounded-tl-sm'
-                ]">
-                <div v-if="msg.role === 'assistant'" v-html="formatMessage(msg.content)"></div>
-                <div v-else>{{ msg.content }}</div>
+            <div class="max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-sm transition-all" :class="[
+                msg.role === 'user'
+                    ? 'bg-blue-600 text-white rounded-tr-sm'
+                    : 'bg-white dark:bg-[#1E1F20] text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-gray-800 rounded-tl-sm'
+            ]">
+                <div v-if="msg.role === 'assistant'" v-html="formatMessage(msg.content)"
+                    class="prose prose-sm dark:prose-invert max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0 prose-headings:my-0 prose-pre:my-0">
+                </div>
+                <div v-else class="whitespace-pre-wrap">{{ msg.content }}</div>
 
                 <!-- 光标动画 -->
                 <span v-if="msg.role === 'assistant' && msg.isStreaming && !agentStatus"
@@ -74,27 +75,54 @@ const props = defineProps<{
 }>()
 
 const containerRef = ref<HTMLElement | null>(null)
+import MarkdownIt from 'markdown-it'
+import hljs from 'highlight.js'
+// 引入代码高亮样式（这里以 Github 暗色风格为例，你也可以选其他的）
+import 'highlight.js/styles/github-dark.css'
 
-// Simple formatter
+// // Simple formatter
+// const formatMessage = (content: string) => {
+//     if (!content) return ''
+
+//     // 1. Basic HTML Escape (prevent injection)
+//     let safe = content
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;")
+//         .replace(/"/g, "&quot;")
+//         .replace(/'/g, "&#039;");
+
+//     // 2. Bold: **text** -> <strong>text</strong>
+//     safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+//     // 3. List: - item -> • item (Visual improvement)
+//     safe = safe.replace(/^- /gm, '• ');
+
+//     return safe;
+// }
+
+const md: MarkdownIt = new MarkdownIt({
+    html: true,
+    linkify: true,
+    typographer: true,
+    breaks: true,
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return '<pre class="hljs"><code>' +
+                    hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+                    '</code></pre>';
+            } catch (__) { }
+        }
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+    }
+})
+
 const formatMessage = (content: string) => {
     if (!content) return ''
-
-    // 1. Basic HTML Escape (prevent injection)
-    let safe = content
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    // 2. Bold: **text** -> <strong>text</strong>
-    safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    // 3. List: - item -> • item (Visual improvement)
-    safe = safe.replace(/^- /gm, '• ');
-
-    return safe;
+    return md.render(content)
 }
+
 
 // Auto scroll to bottom
 const scrollToBottom = () => {
@@ -138,19 +166,46 @@ div::-webkit-scrollbar-thumb:hover {
     background-color: rgba(156, 163, 175, 0.4);
 }
 
-/* Basic Markdown Styling mimics */
-:deep(strong) {
-    font-weight: 600;
+/* Aggressive spacing reset for markdown content */
+:deep(.prose) {
+    line-height: 2;
 }
 
-:deep(ul) {
-    list-style-type: disc;
-    padding-left: 1.5em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+:deep(.prose p) {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-:deep(li) {
-    margin-bottom: 0.25em;
+:deep(.prose ul),
+:deep(.prose ol) {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 1.2em;
+}
+
+:deep(.prose li) {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+:deep(.prose li > p) {
+    margin-top: 0;
+    margin-bottom: 1;
+}
+
+:deep(.prose pre) {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.75em;
+}
+
+:deep(.prose h1),
+:deep(.prose h2),
+:deep(.prose h3),
+:deep(.prose h4) {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1.1em;
+    line-height: 1.4;
 }
 </style>

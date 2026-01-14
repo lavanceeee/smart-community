@@ -27,6 +27,7 @@ interface SearchState {
         forum: SearchResult[]
     }
     isOpen: boolean
+    hasSearched: boolean // 新增：是否执行过搜索
 }
 
 /**
@@ -44,17 +45,20 @@ const staticServices = [
     { name: '个人信息', path: '/profile', icon: 'lucide:user-circle', desc: '个人资料设置' }
 ]
 
+// 全局共享状态
+const searchState = reactive<SearchState>({
+    query: '',
+    loading: false,
+    results: {
+        services: [],
+        news: [],
+        forum: []
+    },
+    isOpen: false,
+    hasSearched: false // 新增：是否执行过搜索
+})
+
 export const useGlobalSearch = () => {
-    const searchState = reactive<SearchState>({
-        query: '',
-        loading: false,
-        results: {
-            services: [],
-            news: [],
-            forum: []
-        },
-        isOpen: false
-    })
 
     // 搜索静态服务
     const searchStaticServices = async (keyword: string): Promise<SearchResult[]> => {
@@ -126,13 +130,20 @@ export const useGlobalSearch = () => {
     }
 
     // 执行搜索
-    const performSearch = async (keyword: string) => {
+    const performSearch = async () => {
+        const keyword = searchState.query
         if (!keyword.trim()) {
             searchState.results = { services: [], news: [], forum: [] }
             return
         }
 
         searchState.loading = true
+        searchState.hasSearched = true
+        searchState.isOpen = true
+
+        // 模拟长时间加载效果
+        await new Promise(resolve => setTimeout(resolve, 1500))
+
         try {
             const [servicesResults, newsResults, forumResults] = await Promise.all([
                 searchStaticServices(keyword),
@@ -152,30 +163,17 @@ export const useGlobalSearch = () => {
         }
     }
 
-    // 防抖处理
-    const debouncedSearch = useDebounceFn((keyword: string) => {
-        performSearch(keyword)
-    }, 300)
-
-    // 监听输入变化
-    watch(() => searchState.query, (newVal) => {
-        if (newVal) {
-            searchState.isOpen = true
-            debouncedSearch(newVal)
-        } else {
-            searchState.results = { services: [], news: [], forum: [] }
-        }
-    })
-
     // 清空搜索
     const clearSearch = () => {
         searchState.query = ''
         searchState.results = { services: [], news: [], forum: [] }
         searchState.isOpen = false
+        searchState.hasSearched = false
     }
 
     return {
         searchState,
+        performSearch,
         clearSearch
     }
 }
