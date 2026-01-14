@@ -1,6 +1,10 @@
 <template>
     <div
         class="w-full rounded border border-blue-200/50 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 to-white dark:from-slate-800/50 dark:to-slate-900 p-3 shadow-sm">
+
+        <!-- 搜索组件 -->
+        <Search class="mb-3" />
+
         <div class="flex gap-3">
             <!-- 左侧轮播区域 -->
             <div class="flex-1 min-w-0 h-[280px] relative rounded-xl overflow-hidden">
@@ -48,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import Search from './Search.vue'
+
 interface BannerItem {
     id: number
     title: string
