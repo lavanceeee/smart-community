@@ -79,10 +79,6 @@ const loadSessionHistory = async (sessionId: string) => {
 
 // 默认设置为暗色模式并加载历史
 onMounted(async () => {
-    if (colorMode.preference !== 'dark') {
-        colorMode.preference = 'dark'
-    }
-
     const sessionId = currentSessionId.value
 
     // Check for initial message from index page

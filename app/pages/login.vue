@@ -42,13 +42,13 @@
 
           <div
             class="w-40 h-40 border border-slate-200 rounded-lg p-2 bg-white relative group cursor-pointer shadow-sm hover:shadow-md transition-all">
-            <div class="w-full h-full bg-slate-800 flex items-center justify-center text-white text-xs">
-              QR CODE
-            </div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.neuedu.com"
+              alt="Login QR Code"
+              class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
           </div>
 
           <p class="mt-6 text-sm text-slate-500 hover:text-[#ff5000] cursor-pointer">
-            打开 <span class="text-[#ff5000]">淘宝APP</span> — 点击左上角扫一扫
+            打开 <span class="text-[#ff5000]">移动端智慧社区</span> — 点击左上角扫一扫
           </p>
         </div>
 

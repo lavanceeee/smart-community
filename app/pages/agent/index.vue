@@ -47,10 +47,6 @@ const lastUserMessage = ref('')
 onMounted(() => {
     // Clear previous session state
     agentStore.clearSession()
-
-    if (colorMode.preference !== 'dark') {
-        colorMode.preference = 'dark'
-    }
 })
 
 const { sendStreamMessage, streamingMessage, isStreaming, loading, agentStatus, toolCalls } = useAgent()
