@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
             body: new URLSearchParams({ text })
         });
 
+        // response is orginal json string
         return response;
     } catch (error) {
         console.log(error);

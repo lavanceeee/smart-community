@@ -1,4 +1,4 @@
-//内容审查
+// app/utils/moderation.ts
 export async function checkText(text: string) {
     try {
         const res = await $fetch('/api/moderation', {

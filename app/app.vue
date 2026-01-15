@@ -1,18 +1,18 @@
 <script setup lang="ts">
-const colorMode = useColorMode()
+const colorMode = useColorMode();
 
 useHead({
-  htmlAttrs: {
-    class: computed(() => colorMode.value === 'dark' ? 'dark' : '')
-  }
-})
+    htmlAttrs: {
+        class: computed(() => (colorMode.value === "dark" ? "dark" : "")),
+    },
+});
 </script>
 
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+    <div>
+        <NuxtRouteAnnouncer />
+        <NuxtLayout>
+            <NuxtPage />
+        </NuxtLayout>
+    </div>
 </template>
