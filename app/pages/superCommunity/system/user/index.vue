@@ -11,35 +11,20 @@
         <!-- 搜索和筛选 -->
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <el-input
-                    v-model="queryParams.keyword"
-                    placeholder="搜索用户名/手机号/邮箱"
-                    clearable
-                    @clear="handleSearch"
-                    @keyup.enter="handleSearch"
-                >
+                <el-input v-model="queryParams.keyword" placeholder="搜索用户名/手机号/邮箱" clearable @clear="handleSearch"
+                    @keyup.enter="handleSearch">
                     <template #prefix>
                         <Icon name="lucide:search" size="18" class="text-slate-400" />
                     </template>
                 </el-input>
 
-                <el-select
-                    v-model="queryParams.status"
-                    placeholder="用户状态"
-                    clearable
-                    @change="handleSearch"
-                >
+                <el-select v-model="queryParams.status" placeholder="用户状态" clearable @change="handleSearch">
                     <el-option label="全部状态" :value="null" />
                     <el-option label="正常" :value="1" />
                     <el-option label="冻结" :value="0" />
                 </el-select>
 
-                <el-select
-                    v-model="queryParams.userType"
-                    placeholder="用户类型"
-                    clearable
-                    @change="handleSearch"
-                >
+                <el-select v-model="queryParams.userType" placeholder="用户类型" clearable @change="handleSearch">
                     <el-option label="全部类型" :value="null" />
                     <el-option label="业主" :value="1" />
                     <el-option label="租户" :value="2" />
@@ -55,12 +40,8 @@
 
         <!-- 用户列表 -->
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <el-table
-                :data="userList"
-                v-loading="loading"
-                style="width: 100%"
-                :header-cell-style="{ background: '#f8fafc', color: '#475569' }"
-            >
+            <el-table :data="userList" v-loading="loading" style="width: 100%"
+                :header-cell-style="{ background: '#f8fafc', color: '#475569' }">
                 <el-table-column label="用户信息" min-width="250">
                     <template #default="{ row }">
                         <div class="flex items-center gap-3">
@@ -120,12 +101,7 @@
                 <el-table-column label="角色" min-width="150">
                     <template #default="{ row }">
                         <div class="flex flex-wrap gap-1">
-                            <el-tag
-                                v-for="role in row.roles"
-                                :key="role"
-                                size="small"
-                                type="info"
-                            >
+                            <el-tag v-for="role in row.roles" :key="role" size="small" type="info">
                                 {{ role }}
                             </el-tag>
                             <span v-if="!row.roles || row.roles.length === 0" class="text-slate-400 text-sm">-</span>
@@ -152,39 +128,20 @@
                 <el-table-column label="操作" width="280" fixed="right">
                     <template #default="{ row }">
                         <div class="flex gap-2">
-                            <el-button
-                                type="primary"
-                                size="small"
-                                link
-                                @click="handleView(row)"
-                            >
+                            <el-button type="primary" size="small" link @click="handleView(row)">
                                 <Icon name="lucide:eye" size="16" class="mr-1" />
                                 查看
                             </el-button>
-                            <el-button
-                                type="success"
-                                size="small"
-                                link
-                                @click="handleAssignRole(row)"
-                            >
+                            <el-button type="success" size="small" link @click="handleAssignRole(row)">
                                 <Icon name="lucide:shield-check" size="16" class="mr-1" />
                                 分配角色
                             </el-button>
-                            <el-button
-                                type="warning"
-                                size="small"
-                                link
-                                @click="handleToggleStatus(row)"
-                            >
-                                <Icon :name="row.status === 1 ? 'lucide:lock' : 'lucide:unlock'" size="16" class="mr-1" />
+                            <el-button type="warning" size="small" link @click="handleToggleStatus(row)">
+                                <Icon :name="row.status === 1 ? 'lucide:lock' : 'lucide:unlock'" size="16"
+                                    class="mr-1" />
                                 {{ row.status === 1 ? '冻结' : '解冻' }}
                             </el-button>
-                            <el-button
-                                type="danger"
-                                size="small"
-                                link
-                                @click="handleDelete(row)"
-                            >
+                            <el-button type="danger" size="small" link @click="handleDelete(row)">
                                 <Icon name="lucide:trash-2" size="16" class="mr-1" />
                                 删除
                             </el-button>
@@ -195,24 +152,14 @@
 
             <!-- 分页 -->
             <div class="p-4 border-t border-slate-100 dark:border-slate-700">
-                <el-pagination
-                    v-model:current-page="queryParams.page"
-                    v-model:page-size="queryParams.size"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :total="total"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    @size-change="handleSearch"
-                    @current-change="handleSearch"
-                />
+                <el-pagination v-model:current-page="queryParams.page" v-model:page-size="queryParams.size"
+                    :page-sizes="[10, 20, 50, 100]" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                    @size-change="handleSearch" @current-change="handleSearch" />
             </div>
         </div>
 
         <!-- 用户详情弹窗 -->
-        <el-dialog
-            v-model="detailDialogVisible"
-            title="用户详情"
-            width="800px"
-        >
+        <el-dialog v-model="detailDialogVisible" title="用户详情" width="800px">
             <div v-if="currentUser" class="space-y-6">
                 <!-- 基本信息 -->
                 <div>
@@ -239,7 +186,8 @@
                             <div><span class="text-slate-500">年龄：</span>{{ currentUser.age || '-' }}</div>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div><span class="text-slate-500">用户类型：</span>{{ getUserTypeText(currentUser.userType) }}</div>
+                            <div><span class="text-slate-500">用户类型：</span>{{ getUserTypeText(currentUser.userType) }}
+                            </div>
                             <div><span class="text-slate-500">状态：</span>
                                 <el-tag :type="currentUser.status === 1 ? 'success' : 'danger'" size="small">
                                     {{ currentUser.status === 1 ? '正常' : '冻结' }}
@@ -256,12 +204,7 @@
                         角色信息
                     </h3>
                     <div class="flex flex-wrap gap-2">
-                        <el-tag
-                            v-for="role in currentUser.roles"
-                            :key="role.roleId"
-                            size="large"
-                            type="info"
-                        >
+                        <el-tag v-for="role in currentUser.roles" :key="role.roleId" size="large" type="info">
                             {{ role.roleName }}
                         </el-tag>
                     </div>
@@ -300,12 +243,7 @@
         </el-dialog>
 
         <!-- 分配角色弹窗 -->
-        <el-dialog
-            v-model="roleDialogVisible"
-            title="分配角色"
-            width="500px"
-            @close="handleRoleDialogClose"
-        >
+        <el-dialog v-model="roleDialogVisible" title="分配角色" width="500px" @close="handleRoleDialogClose">
             <div v-if="selectedUser" class="mb-4">
                 <div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
                     <el-avatar :size="48" :src="selectedUser.avatar">
@@ -321,13 +259,9 @@
             <div v-loading="roleLoading" style="min-height: 200px;">
                 <div class="mb-3 text-sm text-slate-500">请选择要分配给该用户的角色：</div>
                 <el-checkbox-group v-model="selectedRoleIds" class="flex flex-col gap-3">
-                    <el-checkbox
-                        v-for="role in allRoles"
-                        :key="role.roleId"
-                        :label="role.roleId"
+                    <el-checkbox v-for="role in allRoles" :key="role.roleId" :label="role.roleId"
                         :disabled="role.roleCode === 'ROLE_SUPER_ADMIN'"
-                        class="!flex items-center p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-blue-400 transition-colors"
-                    >
+                        class="!flex items-center p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-blue-400 transition-colors">
                         <div class="flex flex-col ml-2">
                             <span class="font-medium">{{ role.roleName }}</span>
                             <span class="text-xs text-slate-400">{{ role.roleCode }}</span>
@@ -335,7 +269,8 @@
                     </el-checkbox>
                 </el-checkbox-group>
 
-                <div v-if="!roleLoading && allRoles.length === 0" class="flex flex-col items-center justify-center py-8 text-slate-400">
+                <div v-if="!roleLoading && allRoles.length === 0"
+                    class="flex flex-col items-center justify-center py-8 text-slate-400">
                     <Icon name="lucide:shield-off" size="40" class="mb-2 opacity-30" />
                     <span class="text-sm">暂无可分配的角色</span>
                 </div>
@@ -426,9 +361,9 @@ const fetchUserList = async () => {
                 'Authorization': `Bearer ${useUserStore().token}`
             }
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             userList.value = res.data.records || []
             total.value = res.data.total || 0
@@ -458,9 +393,9 @@ const handleView = async (user: User) => {
                 'Authorization': `Bearer ${useUserStore().token}`
             }
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             currentUser.value = res.data
             detailDialogVisible.value = true
@@ -476,7 +411,7 @@ const handleView = async (user: User) => {
 // 切换状态
 const handleToggleStatus = async (user: User) => {
     const action = user.status === 1 ? '冻结' : '解冻'
-    
+
     try {
         await ElMessageBox.confirm(
             `确定要${action}用户 ${user.userName} 吗？`,
@@ -487,7 +422,7 @@ const handleToggleStatus = async (user: User) => {
                 type: 'warning'
             }
         )
-        
+
         const config = useRuntimeConfig()
         const response = await fetch(`${config.public.apiBase}/api/admin/users/${user.userId}/status`, {
             method: 'PUT',
@@ -497,9 +432,9 @@ const handleToggleStatus = async (user: User) => {
             },
             body: JSON.stringify({ status: user.status === 1 ? 0 : 1 })
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             ElMessage.success(`${action}成功`)
             fetchUserList()
@@ -526,7 +461,7 @@ const handleDelete = async (user: User) => {
                 type: 'error'
             }
         )
-        
+
         const config = useRuntimeConfig()
         const response = await fetch(`${config.public.apiBase}/api/admin/users/${user.userId}`, {
             method: 'DELETE',
@@ -534,9 +469,9 @@ const handleDelete = async (user: User) => {
                 'Authorization': `Bearer ${useUserStore().token}`
             }
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             ElMessage.success('删除成功')
             fetchUserList()
@@ -561,9 +496,9 @@ const fetchAllRoles = async () => {
                 'Authorization': `Bearer ${useUserStore().token}`
             }
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             allRoles.value = (res.data || []).filter((r: Role) => r.status === 1)
         } else {
@@ -582,9 +517,9 @@ const handleAssignRole = async (user: User) => {
     selectedUser.value = user
     selectedRoleIds.value = []
     roleDialogVisible.value = true
-    
+
     await fetchAllRoles()
-    
+
     // 设置用户当前的角色
     if (user.roles && user.roles.length > 0) {
         // roles 可能是字符串数组或对象数组，需要处理
@@ -603,7 +538,7 @@ const handleAssignRole = async (user: User) => {
 // 提交角色分配
 const handleSubmitRoles = async () => {
     if (!selectedUser.value) return
-    
+
     roleSubmitting.value = true
     try {
         const config = useRuntimeConfig()
@@ -618,9 +553,9 @@ const handleSubmitRoles = async () => {
                 roleIds: selectedRoleIds.value
             })
         })
-        
+
         const res = await response.json()
-        
+
         if (res.code === 200) {
             ElMessage.success('角色分配成功')
             roleDialogVisible.value = false
@@ -669,4 +604,3 @@ onMounted(() => {
     fetchUserList()
 })
 </script>
-

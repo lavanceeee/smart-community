@@ -64,7 +64,7 @@
           <div class="flex items-center gap-2" v-if="userInfo?.gender || userInfo?.age">
             <div class="flex items-center gap-1">
               <Icon v-if="userInfo?.gender === '1'" name="lucide:user" size="14" class="text-blue-500" />
-              <Icon v-else-if="userInfo?.gender === '2'" name="lucide:user" size="14" class="text-pink-500" />
+              <Icon v-else-if="userInfo?.gender === '0'" name="lucide:user" size="14" class="text-pink-500" />
               <Icon v-else name="lucide:user" size="14" class="opacity-70" />
               <span>{{ getGenderText(userInfo?.gender) }}</span>
             </div>
@@ -86,7 +86,7 @@ const userRoles = computed(() => userStore.userRoles)
 const getGenderText = (gender?: string) => {
   switch (gender) {
     case '1': return '男'
-    case '2': return '女'
+    case '0': return '女'
     default: return '未知'
   }
 }

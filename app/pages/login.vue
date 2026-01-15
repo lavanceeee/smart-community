@@ -199,7 +199,7 @@ const handleSendCode = async () => {
       ElMessage.error(res.message || '发送失败')
     }
   } catch (error) {
-    ElMessage.error('发送验证码失败')
+    ElMessage.error('发送失败')
   }
 }
 

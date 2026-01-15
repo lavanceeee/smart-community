@@ -82,11 +82,6 @@
                                 <Icon v-else name="lucide:hourglass" size="12" />
                                 {{ item.statusText }}
                             </div>
-                            <button
-                                class="text-slate-400 hover:text-[#ff5000] transition-colors text-xs flex items-center gap-1">
-                                查看详情
-                                <Icon name="lucide:chevron-right" size="12" />
-                            </button>
                         </div>
                     </div>
                 </div>

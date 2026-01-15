@@ -39,7 +39,7 @@
                             {{ getSpotData(i).userName }}
                         </div>
                         <div v-if="getSpotData(i).statusText"
-                            class="mt-1 text-[10px] scale-90 px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/20 font-medium whitespace-nowrap">
+                            class="mt-1 text-xs scale-90 px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/20 font-medium whitespace-nowrap">
                             {{ getSpotData(i).statusText }}
                         </div>
                     </div>
@@ -102,9 +102,15 @@ const getSpotLabel = (index: number) => {
 
 const getSpotStatusClass = (index: number) => {
     const data = getSpotData(index)
+
     if (data) {
-        // Occupied style (Keep Red)
-        return 'border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400'
+        if (data.status === 0) {
+            // Pending (0) - Amber/Orange
+            return 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-400'
+        } else {
+            // Occupied/Approved (1) - Red
+            return 'border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400'
+        }
     } else {
         // Empty style (Light Green)
         return 'border-emerald-100 bg-emerald-50/50 dark:border-emerald-900/30 dark:bg-emerald-900/10 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-sm'

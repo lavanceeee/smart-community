@@ -29,22 +29,6 @@
         </div>
 
         <span class="text-slate-200 dark:text-slate-700">|</span>
-
-        <!-- Social Share (Mock) -->
-        <div class="flex items-center gap-2 text-slate-400">
-            <button
-                class="hover:text-[#ff5000] transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
-                <Icon name="lucide:share-2" size="12" />
-            </button>
-            <button
-                class="hover:text-green-500 transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
-                <Icon name="lucide:message-circle" size="12" />
-            </button>
-            <button
-                class="hover:text-amber-500 transition-colors bg-slate-100 dark:bg-slate-700 rounded-full w-6 h-6 flex items-center justify-center">
-                <Icon name="lucide:star" size="12" />
-            </button>
-        </div>
     </div>
 </template>
 
