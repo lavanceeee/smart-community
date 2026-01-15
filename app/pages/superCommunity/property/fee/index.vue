@@ -230,8 +230,39 @@
         <!-- 生成单个账单弹窗 -->
         <el-dialog v-model="generateDialogVisible" title="生成账单" width="550px" :close-on-click-modal="false">
             <el-form :model="generateForm" label-width="100px" class="space-y-2">
-                <el-form-item label="用户ID" required>
-                    <el-input-number v-model="generateForm.userId" :min="1" placeholder="请输入用户ID" style="width: 100%;" />
+                <el-form-item label="选择用户" required>
+                    <el-select
+                        v-model="generateForm.userId"
+                        filterable
+                        remote
+                        reserve-keyword
+                        placeholder="输入用户名/手机号/邮箱搜索"
+                        :remote-method="searchUsers"
+                        :loading="userSearchLoading"
+                        style="width: 100%;"
+                        clearable
+                    >
+                        <el-option
+                            v-for="user in userSearchResults"
+                            :key="user.userId"
+                            :label="`${user.userName} (${user.phone || user.email || 'ID:' + user.userId})`"
+                            :value="user.userId"
+                        >
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <el-avatar :size="24" :src="user.avatar">{{ user.userName?.charAt(0) }}</el-avatar>
+                                    <span>{{ user.userName }}</span>
+                                </div>
+                                <span class="text-xs text-slate-400">{{ user.phone || user.email }}</span>
+                            </div>
+                        </el-option>
+                        <template #empty>
+                            <div class="py-4 text-center text-slate-400">
+                                <Icon name="lucide:search" size="24" class="mb-2 opacity-50" />
+                                <p class="text-sm">请输入关键词搜索用户</p>
+                            </div>
+                        </template>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="账期" required>
                     <el-date-picker v-model="generateForm.billingPeriod" type="month" placeholder="选择账期"
@@ -491,6 +522,60 @@ const generateForm = reactive({
     dueDate: ''
 })
 
+// 用户搜索相关
+interface SearchUser {
+    userId: number
+    userName: string
+    phone: string
+    email: string
+    avatar: string
+}
+const userSearchLoading = ref(false)
+const userSearchResults = ref<SearchUser[]>([])
+const config = useRuntimeConfig()
+const userStore = useUserStore()
+
+// 远程搜索用户
+const searchUsers = async (query: string) => {
+    if (!query || query.length < 1) {
+        userSearchResults.value = []
+        return
+    }
+    
+    userSearchLoading.value = true
+    try {
+        const params = new URLSearchParams()
+        params.append('page', '1')
+        params.append('size', '20')
+        params.append('keyword', query)
+        
+        const response = await fetch(`${config.public.apiBase}/api/admin/users?${params.toString()}`, {
+            headers: {
+                'Authorization': `Bearer ${userStore.token}`
+            }
+        })
+        
+        const res = await response.json()
+        
+        if (res.code === 200 && res.data?.records) {
+            userSearchResults.value = res.data.records.map((u: any) => ({
+                userId: u.userId,
+                userName: u.userName,
+                phone: u.phone,
+                email: u.email,
+                avatar: u.avatar
+            }))
+        } else {
+            userSearchResults.value = []
+        }
+    } catch (error) {
+        console.error('搜索用户失败:', error)
+        userSearchResults.value = []
+    } finally {
+        userSearchLoading.value = false
+    }
+}
+
 // 批量生成账单表单
 const batchGenerateDialogVisible = ref(false)
 const batchGenerateForm = reactive({
@@ -626,6 +711,7 @@ const showGenerateDialog = () => {
         otherFee: 0,
         dueDate: ''
     })
+    userSearchResults.value = []
     generateDialogVisible.value = true
 }
 

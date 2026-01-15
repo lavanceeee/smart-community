@@ -2431,3 +2431,38 @@ export const getAdminPropertyFeePaymentsApi = (data: {
     body: data
   })
 }
+
+// ========== 用户角色管理 ==========
+
+/**
+ * 获取所有角色列表
+ */
+export const getRoleListApi = () => {
+  return $api('/api/permission/role/list', {
+    method: 'GET'
+  })
+}
+
+/**
+ * 为用户分配角色
+ * @param data 包含 userId 和 roleIds 的请求体
+ */
+export const assignUserRolesApi = (data: {
+  userId: number
+  roleIds: number[]
+}) => {
+  return $api('/api/permission/user/assign-roles', {
+    method: 'POST',
+    body: data
+  })
+}
+
+/**
+ * 获取用户的角色列表
+ * @param userId 用户ID
+ */
+export const getUserRolesApi = (userId: number) => {
+  return $api(`/api/permission/user/${userId}/roles`, {
+    method: 'GET'
+  })
+}
