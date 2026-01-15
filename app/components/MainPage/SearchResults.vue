@@ -73,7 +73,7 @@
                         <div class="flex items-center gap-2 mt-1">
                             <span v-if="item.category"
                                 class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-500">{{
-                                item.category }}</span>
+                                    item.category }}</span>
                             <div class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{{ item.description }}
                             </div>
                         </div>

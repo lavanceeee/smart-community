@@ -86,11 +86,11 @@ export const useGlobalSearch = () => {
             })
             if (res.code === 200 && res.data?.records) {
                 return res.data.records.map((item: any) => ({
-                    id: item.announcementId,
+                    id: item.announcementId || item.announceId || item.id,
                     type: 'news',
                     title: item.title,
                     description: item.summary || item.content?.substring(0, 50),
-                    path: `/service/community/news/${item.announcementId}`,
+                    path: `/service/community/news/${item.announcementId || item.announceId || item.id}`,
                     timestamp: item.createTime
                 }))
             }
@@ -117,7 +117,7 @@ export const useGlobalSearch = () => {
                     type: 'forum',
                     title: item.title,
                     description: item.contentSummary,
-                    path: `/service/community/forum/${item.sectionId}/post/${item.postId}`,
+                    path: `/service/community/forum/post/${item.postId}`,
                     image: item.firstImage,
                     category: item.sectionName
                 }))
