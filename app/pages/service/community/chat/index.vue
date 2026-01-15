@@ -178,7 +178,8 @@ const {
     sending,
     getChatHistory,
     sendMessage,
-    checkUserOnline
+    checkUserOnline,
+    openChat
 } = useChat()
 
 const searchQuery = ref('')
@@ -208,8 +209,12 @@ const selectFriend = async (friend: Friend) => {
     currentFriend.value = friend
     messageInput.value = ''
 
-    // 加载聊天记录
-    await getChatHistory(friend.friendUserId)
+    // 使用 openChat 方法，它会设置 currentChatUser 并加载聊天记录
+    await openChat({
+        userId: friend.friendUserId,
+        userName: friend.friendUserName,
+        avatar: friend.friendAvatar
+    })
 
     // 滚动到底部
     nextTick(() => {
