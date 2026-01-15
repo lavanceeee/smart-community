@@ -7,7 +7,7 @@
                 </div>
                 论坛统计
             </h3>
-            <NuxtLink to="/superCommunity/forum"
+            <NuxtLink to="/superCommunity/community/forum"
                 class="text-xs text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
                 论坛管理
                 <Icon name="lucide:chevron-right" size="14" />

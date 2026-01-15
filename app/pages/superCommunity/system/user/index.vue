@@ -149,7 +149,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" width="200" fixed="right">
+                <el-table-column label="操作" width="280" fixed="right">
                     <template #default="{ row }">
                         <div class="flex gap-2">
                             <el-button
@@ -160,6 +160,15 @@
                             >
                                 <Icon name="lucide:eye" size="16" class="mr-1" />
                                 查看
+                            </el-button>
+                            <el-button
+                                type="success"
+                                size="small"
+                                link
+                                @click="handleAssignRole(row)"
+                            >
+                                <Icon name="lucide:shield-check" size="16" class="mr-1" />
+                                分配角色
                             </el-button>
                             <el-button
                                 type="warning"
@@ -289,11 +298,61 @@
                 </div>
             </div>
         </el-dialog>
+
+        <!-- 分配角色弹窗 -->
+        <el-dialog
+            v-model="roleDialogVisible"
+            title="分配角色"
+            width="500px"
+            @close="handleRoleDialogClose"
+        >
+            <div v-if="selectedUser" class="mb-4">
+                <div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                    <el-avatar :size="48" :src="selectedUser.avatar">
+                        {{ selectedUser.userName?.charAt(0) }}
+                    </el-avatar>
+                    <div>
+                        <div class="font-semibold text-slate-800 dark:text-white">{{ selectedUser.userName }}</div>
+                        <div class="text-sm text-slate-500">ID: {{ selectedUser.userId }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-loading="roleLoading" style="min-height: 200px;">
+                <div class="mb-3 text-sm text-slate-500">请选择要分配给该用户的角色：</div>
+                <el-checkbox-group v-model="selectedRoleIds" class="flex flex-col gap-3">
+                    <el-checkbox
+                        v-for="role in allRoles"
+                        :key="role.roleId"
+                        :label="role.roleId"
+                        :disabled="role.roleCode === 'ROLE_SUPER_ADMIN'"
+                        class="!flex items-center p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-blue-400 transition-colors"
+                    >
+                        <div class="flex flex-col ml-2">
+                            <span class="font-medium">{{ role.roleName }}</span>
+                            <span class="text-xs text-slate-400">{{ role.roleCode }}</span>
+                        </div>
+                    </el-checkbox>
+                </el-checkbox-group>
+
+                <div v-if="!roleLoading && allRoles.length === 0" class="flex flex-col items-center justify-center py-8 text-slate-400">
+                    <Icon name="lucide:shield-off" size="40" class="mb-2 opacity-30" />
+                    <span class="text-sm">暂无可分配的角色</span>
+                </div>
+            </div>
+
+            <template #footer>
+                <el-button @click="roleDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="handleSubmitRoles" :loading="roleSubmitting">
+                    确定分配
+                </el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 definePageMeta({
@@ -325,6 +384,22 @@ const userList = ref<User[]>([])
 const total = ref(0)
 const detailDialogVisible = ref(false)
 const currentUser = ref<User | null>(null)
+
+// 分配角色相关
+interface Role {
+    roleId: number
+    roleName: string
+    roleCode: string
+    description: string
+    status: number
+}
+
+const roleDialogVisible = ref(false)
+const roleLoading = ref(false)
+const roleSubmitting = ref(false)
+const selectedUser = ref<User | null>(null)
+const allRoles = ref<Role[]>([])
+const selectedRoleIds = ref<number[]>([])
 
 const queryParams = reactive({
     page: 1,
@@ -474,6 +549,98 @@ const handleDelete = async (user: User) => {
             ElMessage.error('删除失败')
         }
     }
+}
+
+// 获取所有角色
+const fetchAllRoles = async () => {
+    roleLoading.value = true
+    try {
+        const config = useRuntimeConfig()
+        const response = await fetch(`${config.public.apiBase}/api/permission/role/list`, {
+            headers: {
+                'Authorization': `Bearer ${useUserStore().token}`
+            }
+        })
+        
+        const res = await response.json()
+        
+        if (res.code === 200) {
+            allRoles.value = (res.data || []).filter((r: Role) => r.status === 1)
+        } else {
+            ElMessage.error(res.message || '获取角色列表失败')
+        }
+    } catch (error) {
+        console.error('获取角色列表失败:', error)
+        ElMessage.error('获取角色列表失败')
+    } finally {
+        roleLoading.value = false
+    }
+}
+
+// 打开分配角色弹窗
+const handleAssignRole = async (user: User) => {
+    selectedUser.value = user
+    selectedRoleIds.value = []
+    roleDialogVisible.value = true
+    
+    await fetchAllRoles()
+    
+    // 设置用户当前的角色
+    if (user.roles && user.roles.length > 0) {
+        // roles 可能是字符串数组或对象数组，需要处理
+        selectedRoleIds.value = allRoles.value
+            .filter((r: Role) => {
+                if (typeof user.roles[0] === 'string') {
+                    return user.roles.includes(r.roleName)
+                } else {
+                    return user.roles.some((ur: any) => ur.roleId === r.roleId)
+                }
+            })
+            .map((r: Role) => r.roleId)
+    }
+}
+
+// 提交角色分配
+const handleSubmitRoles = async () => {
+    if (!selectedUser.value) return
+    
+    roleSubmitting.value = true
+    try {
+        const config = useRuntimeConfig()
+        const response = await fetch(`${config.public.apiBase}/api/permission/user/assign-roles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${useUserStore().token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: selectedUser.value.userId,
+                roleIds: selectedRoleIds.value
+            })
+        })
+        
+        const res = await response.json()
+        
+        if (res.code === 200) {
+            ElMessage.success('角色分配成功')
+            roleDialogVisible.value = false
+            fetchUserList()
+        } else {
+            ElMessage.error(res.message || '角色分配失败')
+        }
+    } catch (error) {
+        console.error('角色分配失败:', error)
+        ElMessage.error('角色分配失败')
+    } finally {
+        roleSubmitting.value = false
+    }
+}
+
+// 关闭分配角色弹窗
+const handleRoleDialogClose = () => {
+    selectedUser.value = null
+    selectedRoleIds.value = []
+    allRoles.value = []
 }
 
 // 辅助函数

@@ -7,7 +7,7 @@
                 </div>
                 订单统计
             </h3>
-            <NuxtLink to="/superCommunity/mall/orders"
+            <NuxtLink to="/superCommunity/mall/order"
                 class="text-xs text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
                 查看详情
                 <Icon name="lucide:chevron-right" size="14" />

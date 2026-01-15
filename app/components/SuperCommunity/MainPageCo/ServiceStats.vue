@@ -7,10 +7,15 @@
                 </div>
                 报修投诉统计
             </h3>
-            <div class="flex gap-2">
+            <div class="flex gap-3">
                 <NuxtLink to="/superCommunity/property/repair"
                     class="text-xs text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
                     报修管理
+                    <Icon name="lucide:chevron-right" size="14" />
+                </NuxtLink>
+                <NuxtLink to="/superCommunity/property/complaint"
+                    class="text-xs text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
+                    投诉管理
                     <Icon name="lucide:chevron-right" size="14" />
                 </NuxtLink>
             </div>

@@ -49,6 +49,18 @@
 
         <!-- User Profile / Bottom Actions -->
         <div class="p-4 border-t border-slate-800 space-y-2">
+            <!-- 返回用户端按钮 -->
+            <NuxtLink to="/"
+                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600/20 to-teal-600/20 hover:from-emerald-600/30 hover:to-teal-600/30 border border-emerald-500/30 transition-all duration-200 group"
+                :class="isCollapsed ? 'justify-center' : ''" title="返回用户端首页">
+                <Icon name="lucide:home" class="text-emerald-400 group-hover:text-emerald-300 transition-colors shrink-0" size="18" />
+                <Transition name="fade-slide">
+                    <span v-if="!isCollapsed" class="text-sm font-medium text-emerald-300 group-hover:text-emerald-200 transition-colors">
+                        返回用户端
+                    </span>
+                </Transition>
+            </NuxtLink>
+
             <!-- Toggle Button -->
             <button @click="toggleSidebar"
                 class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all duration-200 group"
