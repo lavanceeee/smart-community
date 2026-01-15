@@ -33,6 +33,8 @@ export const useComments = () => {
                 }
 
                 commentsPage.value = res.data.current;
+
+                // commentsHasMore 已经加载的数据总数 是否小于总数
                 commentsHasMore.value = commentsList.value.length < res.data.total;
             }
         } catch (e) {
