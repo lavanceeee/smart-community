@@ -2,7 +2,7 @@
     <div class="mb-2">
         <button 
             @click="toggle"
-            class="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+            class="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
             :class="collapsed && 'justify-center'"
             :title="collapsed ? title : ''"
         >
@@ -12,7 +12,7 @@
             
             <!-- Collapsed: Show icon, Expanded: Show chevron -->
             <template v-if="collapsed">
-                <Icon :name="icon || 'lucide:folder'" size="18" class="text-slate-400" />
+                <Icon :name="icon || 'lucide:folder'" size="18" class="text-slate-400 dark:text-slate-400" />
             </template>
             <template v-else>
                 <Icon name="lucide:chevron-down" size="14" class="transition-transform duration-200"
