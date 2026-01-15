@@ -29,23 +29,27 @@ export interface ChatSession {
     isOnline?: boolean
 }
 
+// ========== 全局共享状态 ==========
+const loading = ref(false)
+const sending = ref(false)
+
+// 当前聊天对象（全局共享）
+const currentChatUser = ref<{ userId: number; userName: string; avatar: string } | null>(null)
+
+// 聊天记录（全局共享）
+const messages = ref<ChatMessage[]>([])
+const total = ref(0)
+
+// 未读消息数
+const unreadCount = ref(0)
+
+// 是否已注册 WebSocket 监听（防止重复注册）
+let webSocketListenerRegistered = false
+
 export const useChat = () => {
-    const loading = ref(false)
-    const sending = ref(false)
-    
-    // 当前聊天对象
-    const currentChatUser = ref<{ userId: number; userName: string; avatar: string } | null>(null)
-    
-    // 聊天记录
-    const messages = ref<ChatMessage[]>([])
-    const total = ref(0)
-    
-    // 未读消息数
-    const unreadCount = ref(0)
-    
     // WebSocket 实例
     const { isConnected, connect, disconnect, sendReadReceipt, onMessage } = useWebSocket()
-    
+
     /**
      * 获取聊天记录
      */
@@ -56,7 +60,7 @@ export const useChat = () => {
                 pageNum: params.pageNum || 1,
                 pageSize: params.pageSize || 50
             }) as any
-            
+
             if (res.code === 200) {
                 // 按时间倒序排列（最新的在最后）
                 messages.value = (res.data.records || []).reverse()
@@ -72,7 +76,7 @@ export const useChat = () => {
             loading.value = false
         }
     }
-    
+
     /**
      * 发送消息
      */
@@ -81,17 +85,17 @@ export const useChat = () => {
             ElMessage.warning('消息内容不能为空')
             return
         }
-        
+
         sending.value = true
         try {
             const res = await sendMessageApi({
                 toUserId,
                 content: content.trim()
             }) as any
-            
+
             if (res.code === 200) {
                 const userStore = useUserStore()
-                
+
                 // 立即添加到消息列表（乐观更新）
                 const newMessage: ChatMessage = {
                     messageId: res.data?.messageId || Date.now(), // 使用返回的ID或临时ID
@@ -105,10 +109,10 @@ export const useChat = () => {
                     isRead: 0,
                     createTime: new Date().toISOString()
                 }
-                
+
                 // 添加到消息列表
                 messages.value.push(newMessage)
-                
+
                 return res.data
             } else {
                 throw new Error(res.message || '发送消息失败')
@@ -120,7 +124,7 @@ export const useChat = () => {
             sending.value = false
         }
     }
-    
+
     /**
      * 标记消息已读
      */
@@ -129,20 +133,20 @@ export const useChat = () => {
             const userStore = useUserStore()
             const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
             const message = messages.value.find(m => m.messageId === messageId)
-            
+
             // 只标记"我收到的"消息为已读（不标记我发送的消息）
             if (!message || message.fromUserId === currentUserId) {
                 return
             }
-            
+
             const res = await markMessageReadApi(messageId) as any
-            
+
             if (res.code === 200) {
                 // 更新本地消息状态
                 if (message) {
                     message.isRead = 1
                 }
-                
+
                 // 发送已读回执
                 if (isConnected.value) {
                     sendReadReceipt(messageId, toUserId)
@@ -152,7 +156,7 @@ export const useChat = () => {
             console.error('标记消息已读失败:', error)
         }
     }
-    
+
     /**
      * 标记所有消息已读
      */
@@ -161,7 +165,7 @@ export const useChat = () => {
             const res = await markAllMessagesReadApi(otherUserId) as any
             const userStore = useUserStore()
             const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
-            
+
             if (res.code === 200) {
                 // 只更新"我收到的"消息状态（fromUserId是对方，toUserId是我）
                 messages.value.forEach(message => {
@@ -169,7 +173,7 @@ export const useChat = () => {
                         message.isRead = 1
                     }
                 })
-                
+
                 // 刷新未读数
                 await getUnreadCount()
             }
@@ -177,14 +181,14 @@ export const useChat = () => {
             console.error('标记所有消息已读失败:', error)
         }
     }
-    
+
     /**
      * 获取未读消息数
      */
     const getUnreadCount = async () => {
         try {
             const res = await getUnreadCountApi() as any
-            
+
             if (res.code === 200) {
                 unreadCount.value = res.data || 0
                 return res.data
@@ -193,14 +197,14 @@ export const useChat = () => {
             console.error('获取未读消息数失败:', error)
         }
     }
-    
+
     /**
      * 检查用户在线状态
      */
     const checkUserOnline = async (userId: number) => {
         try {
             const res = await checkUserOnlineApi(userId) as any
-            
+
             if (res.code === 200) {
                 return res.data === true
             }
@@ -210,25 +214,33 @@ export const useChat = () => {
             return false
         }
     }
-    
+
+    /**
+     * 设置当前聊天用户
+     */
+    const setCurrentChatUser = (user: { userId: number; userName: string; avatar: string } | null) => {
+        currentChatUser.value = user
+        console.log('[Chat] 设置当前聊天用户:', user)
+    }
+
     /**
      * 打开聊天窗口
      */
     const openChat = async (user: { userId: number; userName: string; avatar: string }) => {
-        currentChatUser.value = user
-        
+        setCurrentChatUser(user)
+
         // 获取聊天记录
         await getChatHistory(user.userId)
-        
+
         // 标记所有消息已读
         await markAllMessagesRead(user.userId)
-        
+
         // 确保 WebSocket 已连接
         if (!isConnected.value) {
             connect()
         }
     }
-    
+
     /**
      * 关闭聊天窗口
      */
@@ -236,15 +248,17 @@ export const useChat = () => {
         currentChatUser.value = null
         messages.value = []
     }
-    
+
     /**
      * 处理 WebSocket 消息
      */
     const handleWebSocketMessage = (wsMessage: WebSocketMessage) => {
+        console.log('[Chat] 收到 WebSocket 消息:', wsMessage, '当前聊天用户:', currentChatUser.value)
+
         if (wsMessage.type === 'CHAT') {
             const userStore = useUserStore()
             const currentUserId = userStore.userInfo?.userId ? Number(userStore.userInfo.userId) : 0
-            
+
             // 新消息
             const message: ChatMessage = {
                 messageId: wsMessage.messageId!,
@@ -258,34 +272,47 @@ export const useChat = () => {
                 toUserName: '',
                 toUserAvatar: ''
             }
-            
+
             // 如果是收到的消息（不是自己发的）
             const isReceivedMessage = message.toUserId === currentUserId && message.fromUserId !== currentUserId
-            
+
+            console.log('[Chat] 消息详情:', {
+                messageId: message.messageId,
+                fromUserId: message.fromUserId,
+                toUserId: message.toUserId,
+                currentUserId,
+                currentChatUserId: currentChatUser.value?.userId,
+                isReceivedMessage
+            })
+
             // 如果是当前聊天对象的消息
-            if (currentChatUser.value && 
-                (message.fromUserId === currentChatUser.value.userId || 
-                 message.toUserId === currentChatUser.value.userId)) {
-                
+            if (currentChatUser.value &&
+                (message.fromUserId === currentChatUser.value.userId ||
+                    message.toUserId === currentChatUser.value.userId)) {
+
                 // 检查是否已存在（避免重复）
                 const exists = messages.value.some(m => m.messageId === message.messageId)
-                
+
                 if (!exists) {
+                    console.log('[Chat] 添加新消息到列表')
                     messages.value.push(message)
                 } else {
+                    console.log('[Chat] 消息已存在，更新')
                     // 如果已存在，更新消息信息（可能是临时ID被真实ID替换）
                     const index = messages.value.findIndex(m => m.messageId === message.messageId)
                     if (index !== -1) {
                         messages.value[index] = message
                     }
                 }
-                
+
                 // 如果是收到的消息，自动标记已读
                 if (isReceivedMessage) {
                     markMessageRead(message.messageId, message.fromUserId)
                 }
+            } else {
+                console.log('[Chat] 消息不属于当前聊天，忽略实时更新')
             }
-            
+
             // 刷新未读数
             getUnreadCount()
         } else if (wsMessage.type === 'READ_RECEIPT') {
@@ -296,29 +323,39 @@ export const useChat = () => {
             }
         }
     }
-    
-    // 注册 WebSocket 消息监听
+
+    // 注册 WebSocket 消息监听（只注册一次）
+    const registerWebSocketListener = () => {
+        if (!webSocketListenerRegistered) {
+            onMessage(handleWebSocketMessage)
+            webSocketListenerRegistered = true
+            console.log('[Chat] WebSocket 消息监听已注册')
+        }
+    }
+
+    // 初始化
     onMounted(() => {
-        onMessage(handleWebSocketMessage)
-        
+        registerWebSocketListener()
+
         // 获取未读消息数
         getUnreadCount()
-        
+
         // 连接 WebSocket
         connect()
     })
-    
+
     // 清理
     onUnmounted(() => {
-        disconnect()
+        // 不要在这里断开连接，因为可能还有其他组件在使用
+        // disconnect()
     })
-    
+
     return {
         loading: readonly(loading),
         sending: readonly(sending),
         isConnected,
         currentChatUser: readonly(currentChatUser),
-        messages: readonly(messages),
+        messages,  // 不使用 readonly，以便页面可以监听变化
         total: readonly(total),
         unreadCount: readonly(unreadCount),
         getChatHistory,
@@ -327,6 +364,7 @@ export const useChat = () => {
         markAllMessagesRead,
         getUnreadCount,
         checkUserOnline,
+        setCurrentChatUser,
         openChat,
         closeChat
     }
