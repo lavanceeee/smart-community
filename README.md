@@ -24,16 +24,3 @@ my-nuxt-project/
 ├── package.json
 └── tsconfig.json
 ```
-
-
-
-Tailwind 类名	对应的 CSS 样式	适用场景
-rounded-none	border-radius: 0px	取消圆角（直角）
-rounded-sm	border-radius: 0.125rem (2px)	极小圆角（精细控件）
-rounded	border-radius: 0.25rem (4px)	默认圆角（按钮、卡片基础款）
-rounded-md	border-radius: 0.375rem (6px)	中等圆角（表单、弹窗）
-rounded-lg	border-radius: 0.5rem (8px)	大圆角（卡片、面板）
-rounded-xl	border-radius: 0.75rem (12px)	超大圆角（头像、卡片）
-rounded-2xl	border-radius: 1rem (16px)	特大圆角（突出展示的模块）
-rounded-3xl	border-radius: 1.5rem (24px)	极特大圆角（特殊设计元素）
-rounded-full	border-radius: 9999px	圆形（头像、圆形按钮）
